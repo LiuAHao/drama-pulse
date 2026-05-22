@@ -1,0 +1,293 @@
+{
+  "meta": {
+    "project": "Drama Pulse",
+    "sourceStyle": "short-drama platform",
+    "adaptationStrategy": "retain reference vibe, simplify for project-specific playback and interaction",
+    "pages": ["drama_selection", "player", "profile"],
+    "bottom_nav": ["选剧", "播放", "我的"]
+  },
+  "design_tokens": {
+    "colors": {
+      "page_bg": "#F7F8FA",
+      "card_bg": "#FFFFFF",
+      "text_primary": "#111111",
+      "text_secondary": "#8A8F98",
+      "divider": "#E9ECF1",
+      "accent": "#FF7A2F",
+      "accent_soft": "#FFF3E8",
+      "active_dot": "#FF8C2E",
+      "player_overlay": "rgba(0,0,0,0.32)"
+    },
+    "radius": {
+      "card": 20,
+      "chip": 10,
+      "bottom_nav": 0
+    },
+    "spacing": {
+      "page_horizontal": 16,
+      "module_gap": 20,
+      "component_gap": 12
+    },
+    "typography": {
+      "page_title": "30sp/bold",
+      "section_title": "20sp/bold",
+      "card_title": "17sp/semibold",
+      "body": "14sp/regular",
+      "caption": "12sp/regular",
+      "tag": "11-12sp/medium"
+    }
+  },
+  "shared_rules": {
+    "must_keep": [
+      "large visual-first cards",
+      "high information density with clean grouping",
+      "rounded white cards on light background",
+      "three-tab bottom navigation only"
+    ],
+    "must_remove": [
+      "mall",
+      "earn money",
+      "order system",
+      "message center",
+      "unrelated content categories",
+      "heavy commercial banners"
+    ]
+  },
+  "pages": {
+    "drama_selection": {
+      "goal": "help user quickly pick a drama and enter playback",
+      "layout": [
+        {
+          "id": "status_bar",
+          "type": "system_status_placeholder",
+          "priority": "low"
+        },
+        {
+          "id": "search_bar",
+          "type": "search_input",
+          "priority": "high",
+          "props": {
+            "shape": "rounded-pill",
+            "left_icon": "search",
+            "right_action": "optional quick scan/search icon",
+            "placeholder": "搜索剧名或标签"
+          }
+        },
+        {
+          "id": "category_tabs",
+          "type": "horizontal_tabs",
+          "priority": "high",
+          "props": {
+            "items": ["找剧", "古风", "都市", "逆袭", "甜宠"],
+            "selected_style": "bold black text",
+            "unselected_style": "medium gray text"
+          }
+        },
+        {
+          "id": "quick_actions",
+          "type": "card_row",
+          "priority": "medium",
+          "props": {
+            "items": ["分类筛选", "热度排行", "最新上架"],
+            "card_style": "small rounded white cards"
+          }
+        },
+        {
+          "id": "drama_grid",
+          "type": "two_column_poster_grid",
+          "priority": "highest",
+          "props": {
+            "card_elements": [
+              "poster",
+              "heat badge on image bottom-left",
+              "title",
+              "up to 2 tags"
+            ],
+            "image_ratio": "portrait poster",
+            "card_shape": "large rounded corners"
+          }
+        },
+        {
+          "id": "bottom_nav",
+          "type": "bottom_navigation",
+          "priority": "high",
+          "props": {
+            "items": ["选剧", "播放", "我的"],
+            "selected": "选剧"
+          }
+        }
+      ],
+      "remove_noise": [
+        "movie/tv/listen/book/comic cross-content tabs",
+        "multi-layer ranking entrances",
+        "commercial campaign modules"
+      ]
+    },
+    "player": {
+      "goal": "provide immersive playback and stable stage for highlight interaction",
+      "layout": [
+        {
+          "id": "video_layer",
+          "type": "full_screen_video",
+          "priority": "highest"
+        },
+        {
+          "id": "top_bar",
+          "type": "transparent_overlay_bar",
+          "priority": "high",
+          "props": {
+            "left_action": "back_or_menu",
+            "right_action": "search_or_more",
+            "style": "white icon only"
+          }
+        },
+        {
+          "id": "side_action_rail",
+          "type": "vertical_action_group",
+          "priority": "high",
+          "props": {
+            "items": ["热度", "收藏", "评论入口", "分享"],
+            "style": "icon + small count"
+          }
+        },
+        {
+          "id": "player_info_panel",
+          "type": "content_overlay_panel",
+          "priority": "high",
+          "props": {
+            "elements": [
+              "drama title",
+              "episode number",
+              "short tags",
+              "short synopsis"
+            ],
+            "position": "lower-left",
+            "background": "translucent dark chip/card mix"
+          }
+        },
+        {
+          "id": "bottom_primary_card",
+          "type": "bottom_action_card",
+          "priority": "high",
+          "props": {
+            "main_action": "观看完整短剧 / 继续播放",
+            "secondary_action": "选集",
+            "optional_action": "尾集分支入口"
+          }
+        },
+        {
+          "id": "highlight_overlay_slot",
+          "type": "reserved_overlay_region",
+          "priority": "highest",
+          "props": {
+            "purpose": "highlight interaction, heat hint, history replay"
+          }
+        },
+        {
+          "id": "bottom_nav",
+          "type": "bottom_navigation",
+          "priority": "medium",
+          "props": {
+            "items": ["选剧", "播放", "我的"],
+            "selected": "播放"
+          }
+        }
+      ],
+      "remove_noise": [
+        "e-commerce floating widgets",
+        "excessive social counters",
+        "unrelated recommendation popups"
+      ]
+    },
+    "profile": {
+      "goal": "show viewing history, favorites and branch records without social clutter",
+      "layout": [
+        {
+          "id": "profile_header",
+          "type": "hero_header",
+          "priority": "high",
+          "props": {
+            "elements": [
+              "avatar",
+              "nickname",
+              "local device identity hint",
+              "edit profile button"
+            ],
+            "background": "soft light gradient"
+          }
+        },
+        {
+          "id": "stats_row",
+          "type": "stat_group",
+          "priority": "medium",
+          "props": {
+            "items": ["观看中", "已收藏", "已生成分支"]
+          }
+        },
+        {
+          "id": "quick_tools",
+          "type": "mini_card_row",
+          "priority": "medium",
+          "props": {
+            "items": ["继续观看", "我的收藏", "分支记录"]
+          }
+        },
+        {
+          "id": "section_tabs",
+          "type": "primary_tabs",
+          "priority": "high",
+          "props": {
+            "items": ["历史", "收藏", "我的分支"],
+            "style": "large text tab with active underline/weight"
+          }
+        },
+        {
+          "id": "sub_filters",
+          "type": "chip_filters",
+          "priority": "medium",
+          "props": {
+            "items": ["全部", "未看完", "已看完"]
+          }
+        },
+        {
+          "id": "content_grid",
+          "type": "three_column_poster_grid",
+          "priority": "highest",
+          "props": {
+            "card_elements": [
+              "poster",
+              "title",
+              "progress text or branch status"
+            ],
+            "variant_by_tab": {
+              "历史": "watch progress",
+              "收藏": "saved dramas",
+              "我的分支": "generated branch results"
+            }
+          }
+        },
+        {
+          "id": "bottom_nav",
+          "type": "bottom_navigation",
+          "priority": "high",
+          "props": {
+            "items": ["选剧", "播放", "我的"],
+            "selected": "我的"
+          }
+        }
+      ],
+      "remove_noise": [
+        "orders",
+        "messages",
+        "income/earnings",
+        "task and review systems"
+      ]
+    }
+  },
+  "implementation_notes": {
+    "first_step": "build static layout only",
+    "asset_strategy": "use project cover placeholders first",
+    "compose_hint": "stabilize grid, card and bottom-nav system before animations",
+    "player_requirement": "player page must reserve overlay region for future highlight interaction"
+  }
+}

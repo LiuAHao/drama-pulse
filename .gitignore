@@ -1,4 +1,5 @@
-.DS_Store
+**/.DS_Store
+**/Thumbs.db
 .env
 .env.local
 .env.*.local
@@ -10,10 +11,19 @@ build/
 .idea/
 *.iml
 *.log
+*.tsbuildinfo
 coverage/
+.kotlin/
+.vite/
 data/app.db
 data/*.db
 data/*.sqlite
+data/*.db-wal
+data/*.db-shm
+data/*.db-journal
+data/*.sqlite-wal
+data/*.sqlite-shm
+data/*.sqlite-journal
 data/exports/*
 !data/exports/.gitkeep
 assets/dramas/episodes/*
@@ -22,3 +32,5 @@ assets/dramas/branches/*
 !assets/dramas/branches/.gitkeep
 videos/*
 !videos/.gitkeep
+config/*.local.json
+android-app/gradle/gradle-daemon-jvm.properties

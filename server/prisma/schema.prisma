@@ -1,0 +1,208 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Drama {
+  id           String   @id @default(cuid())
+  title        String   @unique
+  description  String   @default("")
+  coverPath    String   @map("cover_path")
+  tagsJson     String   @default("[]") @map("tags_json")
+  mainGenre    String   @default("") @map("main_genre")
+  isFeatured   Boolean  @default(false) @map("is_featured")
+  displayOrder Int      @default(0) @map("display_order")
+  status       String   @default("active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  episodes        Episode[]
+  interactionEvents InteractionEvent[]
+  watchProgresses WatchProgress[]
+
+  @@map("dramas")
+}
+
+model Episode {
+  id             String   @id @default(cuid())
+  dramaId        String   @map("drama_id")
+  episodeNo      Int      @map("episode_no")
+  title          String
+  videoPath      String   @default("") @map("video_path")
+  durationMs     Int      @default(0) @map("duration_ms")
+  summary        String   @default("")
+  isFinalEpisode Boolean  @default(false) @map("is_final_episode")
+  hasBranch      Boolean  @default(false) @map("has_branch")
+  status         String   @default("active")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  drama            Drama            @relation(fields: [dramaId], references: [id], onDelete: Cascade)
+  highlights       Highlight[]
+  branchOptions    BranchOption[]
+  branchTasks      BranchTask[]
+  interactionEvents InteractionEvent[]
+  watchProgresses  WatchProgress[]
+
+  @@unique([dramaId, episodeNo])
+  @@map("episodes")
+}
+
+model Highlight {
+  id                    String   @id @default(cuid())
+  episodeId             String   @map("episode_id")
+  startTimeMs           Int      @map("start_time_ms")
+  endTimeMs             Int      @map("end_time_ms")
+  type                  String
+  title                 String   @default("")
+  description           String   @default("")
+  intensity             Int      @default(3)
+  templateId            String   @map("template_id")
+  interactionOptionsJson String  @default("[]") @map("interaction_options_json")
+  visualEffectType      String   @default("") @map("visual_effect_type")
+  source                String   @default("manual")
+  confidence            Float    @default(1.0)
+  status                String   @default("confirmed")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  episode          Episode          @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  interactionEvents InteractionEvent[]
+  highlightStats   HighlightStats?
+
+  @@index([episodeId, startTimeMs])
+  @@map("highlights")
+}
+
+model InteractionEvent {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  deviceId        String   @map("device_id")
+  dramaId         String   @map("drama_id")
+  episodeId       String   @map("episode_id")
+  highlightId     String   @map("highlight_id")
+  interactionType String   @map("interaction_type")
+  optionText      String   @default("") @map("option_text")
+  clientTimestamp BigInt   @map("client_timestamp")
+  serverTimestamp DateTime @default(now()) @map("server_timestamp")
+
+  drama     Drama     @relation(fields: [dramaId], references: [id], onDelete: Cascade)
+  episode   Episode   @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  highlight Highlight @relation(fields: [highlightId], references: [id], onDelete: Cascade)
+
+  @@index([highlightId, serverTimestamp])
+  @@index([deviceId, highlightId])
+  @@map("interaction_events")
+}
+
+model HighlightStats {
+  highlightId       String   @id @map("highlight_id")
+  totalCount        Int      @default(0) @map("total_count")
+  uniqueDeviceCount Int      @default(0) @map("unique_device_count")
+  heatLevel         Int      @default(0) @map("heat_level")
+  topOption         String   @default("") @map("top_option")
+  optionStatsJson   String   @default("{}") @map("option_stats_json")
+  recentTextsJson   String   @default("[]") @map("recent_texts_json")
+  lastEventAt       DateTime? @map("last_event_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  highlight Highlight @relation(fields: [highlightId], references: [id], onDelete: Cascade)
+
+  @@map("highlight_stats")
+}
+
+model BranchOption {
+  id               String   @id @default(cuid())
+  episodeId        String   @map("episode_id")
+  title            String
+  description      String   @default("")
+  resultType       String   @default("video") @map("result_type")
+  resultContentPath String  @default("") @map("result_content_path")
+  coverPath        String   @default("") @map("cover_path")
+  sortIndex        Int      @default(0) @map("sort_index")
+  status           String   @default("active")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@index([episodeId, sortIndex])
+  @@map("branch_options")
+}
+
+model BranchTask {
+  id                          String   @id @default(cuid())
+  userId                      String   @map("user_id")
+  deviceId                    String   @map("device_id")
+  episodeId                   String   @map("episode_id")
+  userPrompt                  String   @default("") @map("user_prompt")
+  status                      String   @default("pending")
+  resultTitle                 String   @default("") @map("result_title")
+  resultHook                  String   @default("") @map("result_hook")
+  resultStory                 String   @default("") @map("result_story")
+  storyboardJson              String   @default("[]") @map("storyboard_json")
+  resultTagsJson              String   @default("[]") @map("result_tags_json")
+  resultInteractionOptionsJson String  @default("[]") @map("result_interaction_options_json")
+  resultSource                String   @default("llm") @map("result_source")
+  failReason                  String   @default("") @map("fail_reason")
+  retryCount                  Int      @default(0) @map("retry_count")
+  createdAt                   DateTime @default(now()) @map("created_at")
+  startedAt                   DateTime? @map("started_at")
+  finishedAt                  DateTime? @map("finished_at")
+
+  episode   Episode         @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+  comments  BranchComment[]
+  likes     BranchLike[]
+
+  @@index([episodeId, createdAt])
+  @@map("branch_tasks")
+}
+
+model BranchComment {
+  id           String   @id @default(cuid())
+  branchTaskId String   @map("branch_task_id")
+  userId       String   @map("user_id")
+  deviceId     String   @map("device_id")
+  content      String
+  status       String   @default("visible")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  branchTask BranchTask @relation(fields: [branchTaskId], references: [id], onDelete: Cascade)
+
+  @@index([branchTaskId, createdAt])
+  @@map("branch_comments")
+}
+
+model BranchLike {
+  id           String   @id @default(cuid())
+  branchTaskId String   @map("branch_task_id")
+  userId       String   @map("user_id")
+  deviceId     String   @map("device_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  branchTask BranchTask @relation(fields: [branchTaskId], references: [id], onDelete: Cascade)
+
+  @@unique([branchTaskId, userId])
+  @@map("branch_likes")
+}
+
+model WatchProgress {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  deviceId   String   @map("device_id")
+  dramaId    String   @map("drama_id")
+  episodeId  String   @map("episode_id")
+  progressMs Int      @default(0) @map("progress_ms")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  drama   Drama   @relation(fields: [dramaId], references: [id], onDelete: Cascade)
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dramaId])
+  @@map("watch_progresses")
+}
