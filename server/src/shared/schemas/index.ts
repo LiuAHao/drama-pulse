@@ -49,6 +49,9 @@ const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock'] as const;
 export const updateHighlightSchema = z.object({
   startTimeMs: z.number().int().min(0).optional(),
   endTimeMs: z.number().int().min(0).optional(),
+  interactionStartMs: z.number().int().min(0).nullable().optional(),
+  interactionAppearMs: z.number().int().min(0).nullable().optional(),
+  interactionEndMs: z.number().int().min(0).nullable().optional(),
   type: z.enum(HIGHLIGHT_TYPES).optional(),
   title: z.string().optional(),
   description: z.string().optional(),

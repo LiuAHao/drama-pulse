@@ -19,6 +19,51 @@ import path from 'path';
 
 const MAX_RETRY = 3;
 
+async function fileExists(candidatePath: string): Promise<boolean> {
+  try {
+    await fs.access(candidatePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function findTranscriptPath(
+  exportsRoot: string,
+  dramaId: string,
+  episodeId: string,
+  episodeNo: number,
+): Promise<string | null> {
+  const directCandidates = [
+    path.join(exportsRoot, 'highlights', dramaId, `${episodeId}.transcript.json`),
+    path.join(exportsRoot, 'highlights', dramaId, `episode-${episodeNo}-transcript.json`),
+    path.join(exportsRoot, 'highlight-demo', `${episodeId}-transcript.json`),
+    path.join(exportsRoot, 'highlight-demo', `episode-${episodeNo}-transcript.json`),
+    path.join(exportsRoot, `${episodeId}-transcript.json`),
+  ];
+
+  for (const candidatePath of directCandidates) {
+    if (await fileExists(candidatePath)) {
+      return candidatePath;
+    }
+  }
+
+  const nestedHighlightDemoCandidates = [
+    path.join(exportsRoot, 'highlight-demo', `ep${episodeNo}`),
+    path.join(exportsRoot, 'highlight-demo', `episode-${episodeNo}`),
+    path.join(exportsRoot, 'highlight-demo', `${episodeId}`),
+  ];
+
+  for (const dir of nestedHighlightDemoCandidates) {
+    const candidatePath = path.join(dir, `episode-${episodeNo}-transcript.json`);
+    if (await fileExists(candidatePath)) {
+      return candidatePath;
+    }
+  }
+
+  return null;
+}
+
 function isLocalNetwork(ip: string | undefined): boolean {
   if (!ip) return false;
   return (
@@ -154,9 +199,42 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return;
     }
 
+    const interactionStartMs = body.interactionStartMs ?? highlight.interactionStartMs ?? startMs;
+    const interactionAppearMs = body.interactionAppearMs ?? highlight.interactionAppearMs ?? Math.min(endMs, startMs + 600);
+    const interactionEndMs = body.interactionEndMs ?? highlight.interactionEndMs ?? endMs + 1500;
+    if (interactionStartMs < 0 || interactionEndMs <= interactionStartMs) {
+      reply.status(400).send({ code: 40001, message: 'interaction window is invalid', data: null });
+      return;
+    }
+    if (interactionAppearMs < interactionStartMs) {
+      reply.status(400).send({ code: 40001, message: 'interactionAppearMs must be >= interactionStartMs', data: null });
+      return;
+    }
+    if (interactionEndMs <= interactionAppearMs) {
+      reply.status(400).send({ code: 40001, message: 'interactionEndMs must be > interactionAppearMs', data: null });
+      return;
+    }
+    if (interactionStartMs > startMs + 3000) {
+      reply.status(400).send({ code: 40001, message: 'interactionStartMs too far from startTimeMs', data: null });
+      return;
+    }
+    if (interactionAppearMs > endMs + 500) {
+      reply.status(400).send({ code: 40001, message: 'interactionAppearMs too late vs endTimeMs', data: null });
+      return;
+    }
+    if (interactionEndMs < endMs - 1000) {
+      reply.status(400).send({ code: 40001, message: 'interactionEndMs too early vs endTimeMs', data: null });
+      return;
+    }
+
     const updated = await prisma.highlight.update({
       where: { id: highlightId },
-      data: body,
+      data: {
+        ...body,
+        interactionStartMs,
+        interactionAppearMs,
+        interactionEndMs,
+      },
     });
 
     reply.send(success(updated));
@@ -222,34 +300,28 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
     try {
       const roots = getRoots();
-      const candidates = [
-        path.join(roots.exportsRoot, 'highlights', episode.dramaId, `${episode.id}.transcript.json`),
-        path.join(roots.exportsRoot, 'highlights', episode.dramaId, `episode-${episode.episodeNo}-transcript.json`),
-        path.join(roots.exportsRoot, 'highlight-demo', `${episode.id}-transcript.json`),
-        path.join(roots.exportsRoot, 'highlight-demo', `episode-${episode.episodeNo}-transcript.json`),
-        path.join(roots.exportsRoot, `${episode.id}-transcript.json`),
-      ];
+      const transcriptPath = await findTranscriptPath(
+        roots.exportsRoot,
+        episode.dramaId,
+        episode.id,
+        episode.episodeNo,
+      );
 
-      for (const candidatePath of candidates) {
-        try {
-          const raw = await fs.readFile(candidatePath, 'utf-8');
-          const transcript = JSON.parse(raw);
-          const segments = transcript.segments || [];
+      if (transcriptPath) {
+        const raw = await fs.readFile(transcriptPath, 'utf-8');
+        const transcript = JSON.parse(raw);
+        const segments = transcript.segments || [];
 
-          // Find segments within ±3 seconds of the highlight time range
-          const contextStart = highlight.startTimeMs - 3000;
-          const contextEnd = highlight.endTimeMs + 3000;
+        // Find segments within ±3 seconds of the highlight time range
+        const contextStart = highlight.startTimeMs - 3000;
+        const contextEnd = highlight.endTimeMs + 3000;
 
-          transcriptContext = segments
-            .filter((s: { startTimeMs: number; endTimeMs: number }) =>
-              s.endTimeMs >= contextStart && s.startTimeMs <= contextEnd
-            )
-            .slice(0, 20); // limit to 20 segments
-          transcriptAvailable = true;
-          break;
-        } catch {
-          // try next candidate path
-        }
+        transcriptContext = segments
+          .filter((s: { startTimeMs: number; endTimeMs: number }) =>
+            s.endTimeMs >= contextStart && s.startTimeMs <= contextEnd
+          )
+          .slice(0, 20); // limit to 20 segments
+        transcriptAvailable = true;
       }
     } catch {
       // transcript resolution failed entirely

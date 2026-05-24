@@ -190,6 +190,9 @@ describe('GET /admin/highlights/:highlightId', () => {
     expect(body.data.episode.videoUrl).toContain('/static/');
     expect(body.data.drama).toBeDefined();
     expect(body.data.drama.title).toBeDefined();
+    expect(body.data.interactionStartMs ?? body.data.startTimeMs).toBeDefined();
+    expect(body.data.interactionAppearMs ?? body.data.interactionStartMs ?? body.data.startTimeMs).toBeDefined();
+    expect(body.data.interactionEndMs ?? body.data.endTimeMs).toBeDefined();
   });
 
   it('should return 404 for non-existent highlight', async () => {
@@ -307,6 +310,9 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
     const original = await prisma.highlight.findUniqueOrThrow({
       where: { id: 'hl_001_01' },
       select: {
+        interactionStartMs: true,
+        interactionAppearMs: true,
+        interactionEndMs: true,
         reason: true,
         supportingSegmentIdsJson: true,
         speakerGuess: true,
@@ -320,6 +326,9 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
       url: '/admin/highlights/hl_001_01',
       headers: ADMIN_AUTH,
       payload: {
+        interactionStartMs: 14000,
+        interactionAppearMs: 14600,
+        interactionEndMs: 27000,
         reason: '求助被拒绝，情绪峰值明确',
         supportingSegmentIdsJson: '["seg_0029","seg_0030"]',
         speakerGuess: '女主',
@@ -330,6 +339,9 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
     });
     expect(res.statusCode).toBe(200);
     const data = res.json().data;
+    expect(data.interactionStartMs).toBe(14000);
+    expect(data.interactionAppearMs).toBe(14600);
+    expect(data.interactionEndMs).toBe(27000);
     expect(data.reason).toBe('求助被拒绝，情绪峰值明确');
     expect(data.speakerGuess).toBe('女主');
     expect(data.characterGuessConfidence).toBeCloseTo(0.72);
@@ -366,6 +378,16 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
       url: '/admin/highlights/hl_001_01',
       headers: ADMIN_AUTH,
       payload: { templateId: 'ending_branch' },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('should reject interactionAppearMs earlier than interactionStartMs', async () => {
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+      payload: { interactionStartMs: 15000, interactionAppearMs: 14999, interactionEndMs: 26000 },
     });
     expect(res.statusCode).toBe(400);
   });

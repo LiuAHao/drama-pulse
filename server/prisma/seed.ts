@@ -1,8 +1,7 @@
 import { PrismaClient } from '@prisma/client';
+import { pathToFileURL } from 'url';
 
-const prisma = new PrismaClient();
-
-async function main() {
+export async function seedDatabase(prisma: PrismaClient) {
   console.log('seeding database...');
 
   // Clean existing data
@@ -94,6 +93,9 @@ async function main() {
       episodeId: episodes1[0].id,
       startTimeMs: 15000,
       endTimeMs: 25000,
+      interactionStartMs: 15000,
+      interactionAppearMs: 15600,
+      interactionEndMs: 26500,
       type: 'feel_good',
       title: '系统绑定成功',
       description: '主角成功绑定系统，开启逆袭之路。',
@@ -113,6 +115,9 @@ async function main() {
       episodeId: episodes1[0].id,
       startTimeMs: 60000,
       endTimeMs: 70000,
+      interactionStartMs: 60000,
+      interactionAppearMs: 60700,
+      interactionEndMs: 71500,
       type: 'reversal',
       title: '村民震惊',
       description: '村民看到主角的变化，震惊不已。',
@@ -132,6 +137,9 @@ async function main() {
       episodeId: episodes1[0].id,
       startTimeMs: 120000,
       endTimeMs: 130000,
+      interactionStartMs: 120000,
+      interactionAppearMs: 120900,
+      interactionEndMs: 131500,
       type: 'suspense',
       title: '危机出现',
       description: '新的危机降临，主角将如何应对？',
@@ -152,6 +160,9 @@ async function main() {
       episodeId: episodes1[0].id,
       startTimeMs: 150000,
       endTimeMs: 160000,
+      interactionStartMs: 150000,
+      interactionAppearMs: 150600,
+      interactionEndMs: 161500,
       type: 'suspense',
       title: '示例占位高光',
       description: '用于演示的占位高光，默认不进入待复核列表。',
@@ -172,6 +183,9 @@ async function main() {
       episodeId: episodes1[1].id,
       startTimeMs: 20000,
       endTimeMs: 30000,
+      interactionStartMs: 20000,
+      interactionAppearMs: 20600,
+      interactionEndMs: 31500,
       type: 'sweet',
       title: '温馨时刻',
       description: '主角与村民分享食物。',
@@ -265,11 +279,18 @@ async function main() {
   console.log(`  branch options: 4`);
 }
 
-main()
-  .catch((e) => {
+async function main() {
+  const prisma = new PrismaClient();
+  try {
+    await seedDatabase(prisma);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main().catch((e) => {
     console.error('seed failed:', e);
     process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
   });
+}

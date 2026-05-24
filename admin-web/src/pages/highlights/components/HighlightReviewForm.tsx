@@ -18,6 +18,9 @@ const TEMPLATE_OPTIONS = [
 export interface ReviewFormState {
   startTimeMs: number;
   endTimeMs: number;
+  interactionStartMs: number;
+  interactionAppearMs: number;
+  interactionEndMs: number;
   type: string;
   title: string;
   description: string;
@@ -49,6 +52,9 @@ export function buildFormFromHighlight(h: Highlight): ReviewFormState {
   return {
     startTimeMs: h.startTimeMs,
     endTimeMs: h.endTimeMs,
+    interactionStartMs: h.interactionStartMs,
+    interactionAppearMs: h.interactionAppearMs,
+    interactionEndMs: h.interactionEndMs,
     type: h.type,
     title: h.title,
     description: h.description,
@@ -74,8 +80,14 @@ export function HighlightReviewForm({ form, onChange }: Props) {
         <TimeAdjustControls
           startTimeMs={form.startTimeMs}
           endTimeMs={form.endTimeMs}
+          interactionStartMs={form.interactionStartMs}
+          interactionAppearMs={form.interactionAppearMs}
+          interactionEndMs={form.interactionEndMs}
           onStartTimeChange={(ms) => onChange({ startTimeMs: ms })}
           onEndTimeChange={(ms) => onChange({ endTimeMs: ms })}
+          onInteractionStartTimeChange={(ms) => onChange({ interactionStartMs: ms })}
+          onInteractionAppearTimeChange={(ms) => onChange({ interactionAppearMs: ms })}
+          onInteractionEndTimeChange={(ms) => onChange({ interactionEndMs: ms })}
         />
       </section>
 

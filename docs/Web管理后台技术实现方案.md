@@ -217,10 +217,12 @@ Admin Web
 
 - 按短剧、剧集、状态、类型筛选
 - 查看 `candidate/confirmed/disabled`
+- 进入独立 `复核` 页面
 - 编辑起止时间
-- 编辑高光类型、强度、模板
+- 编辑交互窗口开始/真正出现/结束时间
+- 编辑高光类型、强度
 - 编辑互动选项
-- 启用/禁用高光
+- 确认/禁用高光
 
 ### 6.6 /interactions
 
@@ -406,8 +408,10 @@ Admin Web
 依赖接口：
 
 - `GET /admin/highlights`
+- `GET /admin/highlights/:highlightId`
+- `GET /admin/highlights/:highlightId/review-context`
 - `PATCH /admin/highlights/:highlightId`
-- `POST /admin/highlights/:highlightId/enable`
+- `POST /admin/highlights/:highlightId/confirm`
 - `POST /admin/highlights/:highlightId/disable`
 
 ### 10.4 互动数据页
@@ -446,17 +450,20 @@ Admin Web
 
 字段：
 
-- `start_time_ms`
-- `end_time_ms`
+- `startTimeMs`
+- `endTimeMs`
+- `interactionStartMs`
+- `interactionAppearMs`
+- `interactionEndMs`
 - `type`
 - `intensity`
-- `template_id`
 - `interaction_options_json`
 - `status`
 
 校验规则：
 
 - 开始时间必须小于结束时间
+- `interactionStartMs <= interactionAppearMs < interactionEndMs`
 - 强度只能是 `1-5`
 - 互动选项数量限制 `2-4`
 

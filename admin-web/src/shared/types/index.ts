@@ -49,6 +49,9 @@ export interface Highlight {
   episodeId: string;
   startTimeMs: number;
   endTimeMs: number;
+  interactionStartMs: number;
+  interactionAppearMs: number;
+  interactionEndMs: number;
   type: string;
   title: string;
   description: string;

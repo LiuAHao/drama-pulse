@@ -53,6 +53,11 @@ def build_insert_rows(candidates: list[dict[str, Any]], episode_id: str) -> list
         highlight_type = candidate.get("highlightType")
         if not highlight_type:
             raise ValueError(f"candidate[{index}] missing highlightType")
+        review_decision = candidate.get("reviewDecision")
+        if review_decision in {"reject", "merge"} or candidate.get("approved") is False:
+            raise ValueError(
+                f"candidate[{index}] is not importable (reviewDecision={review_decision}, approved={candidate.get('approved')})"
+            )
 
         row_id = f"ai_{episode_id}_{index:03d}"
         rows.append((
@@ -60,13 +65,16 @@ def build_insert_rows(candidates: list[dict[str, Any]], episode_id: str) -> list
             episode_id,
             int(candidate["startTimeMs"]),
             int(candidate["endTimeMs"]),
+            int(candidate.get("interactionStartMs", candidate["startTimeMs"])),
+            int(candidate.get("interactionAppearMs", candidate.get("interactionStartMs", candidate["startTimeMs"]))),
+            int(candidate.get("interactionEndMs", int(candidate["endTimeMs"]) + 1500)),
             str(highlight_type),
             str(candidate.get("title", "")).strip(),
             str(candidate.get("description", "")).strip(),
             int(candidate.get("intensity", 3)),
             str(candidate.get("templateId", "")).strip(),
             json.dumps(candidate.get("interactionOptions", []), ensure_ascii=False),
-            "",
+            str(candidate.get("visualEffectType", "")).strip(),
             str(candidate.get("source", "ai")).strip() or "ai",
             float(candidate.get("confidence", 0.7)),
             str(candidate.get("status", "candidate")).strip() or "candidate",
@@ -118,13 +126,15 @@ def main() -> int:
         conn.executemany(
             """
             insert into highlights (
-              id, episode_id, start_time_ms, end_time_ms, type, title, description,
+              id, episode_id, start_time_ms, end_time_ms, interaction_start_ms, interaction_appear_ms, interaction_end_ms,
+              type, title, description,
               intensity, template_id, interaction_options_json, visual_effect_type,
               source, confidence, status, reason, supporting_segment_ids_json,
               speaker_guess, target_character_guess, mentioned_characters_json,
               character_guess_confidence, created_at, updated_at
             ) values (
               ?, ?, ?, ?, ?, ?, ?,
+              ?, ?, ?,
               ?, ?, ?, ?,
               ?, ?, ?, ?, ?,
               ?, ?, ?,

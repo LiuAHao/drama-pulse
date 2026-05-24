@@ -11,16 +11,16 @@ const prisma = new PrismaClient({
 });
 
 beforeAll(async () => {
+  app = await buildTestApp();
+  await app.ready();
   await prisma.highlight.update({
     where: { id: 'hl_001_04' },
     data: { source: 'ai', status: 'candidate' },
   });
-  app = await buildTestApp();
-  await app.ready();
 });
 
 afterAll(async () => {
-  await app.close();
+  await app?.close();
   await prisma.$disconnect();
 });
 
@@ -40,6 +40,12 @@ describe('GET /episodes/:episodeId/highlights', () => {
       expect(hl.status).toBe('confirmed');
       expect(hl.stats).toBeDefined();
       expect(hl.stats.totalCount).toBeDefined();
+      expect(typeof hl.interactionStartMs).toBe('number');
+      expect(typeof hl.interactionAppearMs).toBe('number');
+      expect(typeof hl.interactionEndMs).toBe('number');
+      expect(hl.interactionAppearMs).toBeGreaterThanOrEqual(hl.interactionStartMs);
+      expect(hl.interactionEndMs).toBeGreaterThan(hl.interactionAppearMs);
+      expect(hl.interactionEndMs).toBeGreaterThan(hl.interactionStartMs);
     }
   });
 

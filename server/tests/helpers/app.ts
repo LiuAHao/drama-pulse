@@ -19,31 +19,20 @@ process.env.VIDEOS_ROOT = '../videos';
 process.env.ASSETS_ROOT = '../assets';
 process.env.EXPORTS_ROOT = '../data/exports';
 
-async function resetTestRuntimeTables() {
+async function seedTestDatabase() {
   const { PrismaClient } = await import('@prisma/client');
+  const { seedDatabase } = await import('../../prisma/seed.ts');
   const prisma = new PrismaClient({
     datasources: {
       db: { url: TEST_DATABASE_URL },
     },
   });
 
-  await prisma.branchLike.deleteMany();
-  await prisma.branchComment.deleteMany();
-  await prisma.branchTask.deleteMany();
-  await prisma.watchProgress.deleteMany();
-  await prisma.interactionEvent.deleteMany();
-  await prisma.highlightStats.updateMany({
-    data: {
-      totalCount: 0,
-      uniqueDeviceCount: 0,
-      heatLevel: 0,
-      topOption: '',
-      optionStatsJson: '{}',
-      recentTextsJson: '[]',
-    },
-  });
-
-  await prisma.$disconnect();
+  try {
+    await seedDatabase(prisma);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
 export async function buildTestApp(): Promise<FastifyInstance> {
@@ -51,7 +40,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
     fs.copyFileSync(runtimeDbPath, testDbPath);
   }
 
-  await resetTestRuntimeTables();
+  await seedTestDatabase();
 
   const { createApp } = await import('../../src/app/createApp.js');
   return createApp();

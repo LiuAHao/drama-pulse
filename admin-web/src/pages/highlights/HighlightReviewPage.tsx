@@ -54,6 +54,9 @@ export function HighlightReviewPage() {
     return {
       startTimeMs: form.startTimeMs,
       endTimeMs: form.endTimeMs,
+      interactionStartMs: form.interactionStartMs,
+      interactionAppearMs: form.interactionAppearMs,
+      interactionEndMs: form.interactionEndMs,
       type: form.type,
       title: form.title,
       description: form.description,

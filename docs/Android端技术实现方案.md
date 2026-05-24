@@ -118,11 +118,8 @@ Android 端风格统一为：
 
 - `feel_good`：橙红/金色
 - `reversal`：冷白/裂变蓝
-- `funny`：亮黄/跳动橙
 - `sweet`：暖粉/柔白
 - `conflict`：赤红/震动边缘
-- `suspense`：深蓝/暗角
-- `emotion_burst`：高对比红白冲击
 
 ## 5.3 字体与层级
 
@@ -338,13 +335,15 @@ Idle
 
 触发条件：
 
-- 当前播放进度进入 `startTimeMs..endTimeMs`
+- 当前播放进度进入 `interactionAppearMs`
 - 当前高光未在本次会话内触发过
 - 当前不处于 `Seeking`
 - 当前不处于 `Paused`
 
 触发规则：
 
+- 组件露出以 `interactionAppearMs` 为准
+- 用户可点击窗口以 `interactionStartMs..interactionEndMs` 为准
 - 每个高光点只触发 1 个主互动
 - 允许 1 个辅助反馈
 - 同屏最多 1 个主互动组件
@@ -362,23 +361,20 @@ Idle
 - 维护 `lastStrongHighlightAt`
 - 若当前高光与上一个强互动高光间隔小于阈值，则降级为 `WeakPrompt`
 
-## 8.4 互动模板
+## 8.4 互动表现
 
-第一版客户端必须支持以下模板：
+第一版客户端按高光类型固定支持以下 4 类核心表现：
 
-- `emotion_button`
-- `vote_side`
-- `boost_action`
-- `suspense_lock`
-- `ending_branch`
+- `feel_good`：`爽` 字组件
+- `reversal`：`卧槽` 字组件
+- `conflict`：火焰燃烧组件
+- `sweet`：爱心组件
 
-模板映射建议：
+强度规则：
 
-- `emotion_button`：2-4 个短按钮
-- `vote_side`：左右对立选择
-- `boost_action`：单主按钮 + 能量反馈
-- `suspense_lock`：单提示 + 点按反馈
-- `ending_branch`：尾集分支入口卡
+- `intensity 1-2`：轻量选项态或轻浮层
+- `intensity 3`：标准类别组件
+- `intensity 4-5`：强视觉类别组件
 
 ## 9. 历史互动回流设计
 
@@ -734,10 +730,10 @@ Android 端需要直接消费这些接口：
 - 建议在 Repository 层解析成 `List<HighlightOptionUiModel>`
 - 页面不允许到处手写 JSON 解析
 
-`Highlight.templateId`
+`Highlight.type`
 
-- 只能映射到固定模板组件
-- 未识别模板统一降级为 `emotion_button`
+- 只能映射到固定类别组件
+- 未识别类型统一降级为 `feel_good` 轻量态
 
 `Highlight.stats.heatLevel`
 
@@ -892,7 +888,7 @@ EnterScreen
 
 - `feature/*` 负责页面组装和事件分发
 - `ui/component/*` 不直接感知业务接口
-- `ui/overlay/*` 可感知模板类型，但不直接发请求
+- `ui/overlay/*` 可感知高光类别与强度，但不直接发请求
 
 ## 15.3 Compose 代码风格约定
 
@@ -1016,7 +1012,7 @@ EnterScreen
 ## 18.4 历史互动模块交付标准
 
 - 能根据 `heatLevel` 展示热度提示
-- 能展示至少一条模板化历史弹幕
+- 能展示至少一条历史互动弹幕
 - 不遮挡播控核心区域
 
 ## 18.5 分支模块交付标准

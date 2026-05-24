@@ -3,8 +3,14 @@ import { useEffect, useState } from 'react';
 interface Props {
   startTimeMs: number;
   endTimeMs: number;
+  interactionStartMs: number;
+  interactionAppearMs: number;
+  interactionEndMs: number;
   onStartTimeChange: (ms: number) => void;
   onEndTimeChange: (ms: number) => void;
+  onInteractionStartTimeChange: (ms: number) => void;
+  onInteractionAppearTimeChange: (ms: number) => void;
+  onInteractionEndTimeChange: (ms: number) => void;
 }
 
 function formatTimeInput(ms: number): string {
@@ -37,11 +43,20 @@ const ADJUST_STEPS = [
 export function TimeAdjustControls({
   startTimeMs,
   endTimeMs,
+  interactionStartMs,
+  interactionAppearMs,
+  interactionEndMs,
   onStartTimeChange,
   onEndTimeChange,
+  onInteractionStartTimeChange,
+  onInteractionAppearTimeChange,
+  onInteractionEndTimeChange,
 }: Props) {
   const [startInput, setStartInput] = useState(formatTimeInput(startTimeMs));
   const [endInput, setEndInput] = useState(formatTimeInput(endTimeMs));
+  const [interactionStartInput, setInteractionStartInput] = useState(formatTimeInput(interactionStartMs));
+  const [interactionAppearInput, setInteractionAppearInput] = useState(formatTimeInput(interactionAppearMs));
+  const [interactionEndInput, setInteractionEndInput] = useState(formatTimeInput(interactionEndMs));
 
   useEffect(() => {
     setStartInput(formatTimeInput(startTimeMs));
@@ -50,6 +65,18 @@ export function TimeAdjustControls({
   useEffect(() => {
     setEndInput(formatTimeInput(endTimeMs));
   }, [endTimeMs]);
+
+  useEffect(() => {
+    setInteractionStartInput(formatTimeInput(interactionStartMs));
+  }, [interactionStartMs]);
+
+  useEffect(() => {
+    setInteractionAppearInput(formatTimeInput(interactionAppearMs));
+  }, [interactionAppearMs]);
+
+  useEffect(() => {
+    setInteractionEndInput(formatTimeInput(interactionEndMs));
+  }, [interactionEndMs]);
 
   return (
     <div className="space-y-2">
@@ -118,6 +145,100 @@ export function TimeAdjustControls({
         {endTimeMs - startTimeMs > 20000 && (
           <span className="text-orange-500 ml-2">⚠ 超过 20 秒</span>
         )}
+      </div>
+
+      <div className="pt-2 border-t border-gray-100 space-y-2">
+        <div className="text-[10px] text-gray-400 pl-16">交互窗口与露出时间</div>
+
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-gray-500 w-16 shrink-0">窗口开始</label>
+          <input
+            type="text"
+            value={interactionStartInput}
+            onChange={(e) => setInteractionStartInput(e.target.value)}
+            onBlur={(e) => {
+              const ms = parseTimeInput(e.target.value);
+              if (ms !== null && ms >= 0 && ms <= interactionAppearMs) {
+                onInteractionStartTimeChange(ms);
+              } else {
+                setInteractionStartInput(formatTimeInput(interactionStartMs));
+              }
+            }}
+            className="flex-1 px-2 py-1 border border-gray-300 rounded text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <span className="text-[10px] text-gray-400 tabular-nums w-16">{interactionStartMs}ms</span>
+        </div>
+        <div className="flex gap-1 pl-16">
+          {ADJUST_STEPS.map((step) => (
+            <button
+              key={`interaction-start-${step.label}`}
+              onClick={() => onInteractionStartTimeChange(Math.max(0, Math.min(interactionAppearMs, interactionStartMs + step.delta)))}
+              className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 hover:bg-gray-100 cursor-pointer"
+            >
+              {step.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-gray-500 w-16 shrink-0">真正出现</label>
+          <input
+            type="text"
+            value={interactionAppearInput}
+            onChange={(e) => setInteractionAppearInput(e.target.value)}
+            onBlur={(e) => {
+              const ms = parseTimeInput(e.target.value);
+              if (ms !== null && ms >= interactionStartMs && ms < interactionEndMs) {
+                onInteractionAppearTimeChange(ms);
+              } else {
+                setInteractionAppearInput(formatTimeInput(interactionAppearMs));
+              }
+            }}
+            className="flex-1 px-2 py-1 border border-gray-300 rounded text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <span className="text-[10px] text-gray-400 tabular-nums w-16">{interactionAppearMs}ms</span>
+        </div>
+        <div className="flex gap-1 pl-16">
+          {ADJUST_STEPS.map((step) => (
+            <button
+              key={`interaction-appear-${step.label}`}
+              onClick={() => onInteractionAppearTimeChange(Math.max(interactionStartMs, Math.min(interactionEndMs - 1, interactionAppearMs + step.delta)))}
+              className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 hover:bg-gray-100 cursor-pointer"
+            >
+              {step.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <label className="text-xs text-gray-500 w-16 shrink-0">窗口结束</label>
+          <input
+            type="text"
+            value={interactionEndInput}
+            onChange={(e) => setInteractionEndInput(e.target.value)}
+            onBlur={(e) => {
+              const ms = parseTimeInput(e.target.value);
+              if (ms !== null && ms > interactionAppearMs) {
+                onInteractionEndTimeChange(ms);
+              } else {
+                setInteractionEndInput(formatTimeInput(interactionEndMs));
+              }
+            }}
+            className="flex-1 px-2 py-1 border border-gray-300 rounded text-xs font-mono focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+          <span className="text-[10px] text-gray-400 tabular-nums w-16">{interactionEndMs}ms</span>
+        </div>
+        <div className="flex gap-1 pl-16">
+          {ADJUST_STEPS.map((step) => (
+            <button
+              key={`interaction-end-${step.label}`}
+              onClick={() => onInteractionEndTimeChange(Math.max(interactionAppearMs + 1, interactionEndMs + step.delta))}
+              className="px-1.5 py-0.5 text-[10px] rounded border border-gray-200 hover:bg-gray-100 cursor-pointer"
+            >
+              {step.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

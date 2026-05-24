@@ -57,6 +57,9 @@ model Highlight {
   episodeId             String   @map("episode_id")
   startTimeMs           Int      @map("start_time_ms")
   endTimeMs             Int      @map("end_time_ms")
+  interactionStartMs    Int?     @map("interaction_start_ms")
+  interactionAppearMs   Int?     @map("interaction_appear_ms")
+  interactionEndMs      Int?     @map("interaction_end_ms")
   type                  String
   title                 String   @default("")
   description           String   @default("")
