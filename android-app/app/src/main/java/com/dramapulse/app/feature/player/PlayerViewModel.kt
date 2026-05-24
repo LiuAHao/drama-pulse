@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dramapulse.app.core.data.ContentRepository
 import com.dramapulse.app.core.data.InteractionRepository
+import com.dramapulse.app.core.data.PlayerCommentEntry
+import com.dramapulse.app.core.data.PlayerDanmakuEntry
+import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.model.EpisodeModel
 import com.dramapulse.app.core.model.HighlightModel
@@ -11,6 +14,8 @@ import com.dramapulse.app.core.player.PlaybackState
 import com.dramapulse.app.core.player.PlaybackUiState
 import com.dramapulse.app.core.player.PlayerController
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -34,7 +39,15 @@ data class HighlightUiState(
 data class OverlayUiState(
     val showEpisodeSelector: Boolean = false,
     val showNextEpisodeCard: Boolean = false,
-    val showBranchEntry: Boolean = false
+    val showBranchEntry: Boolean = false,
+    val showCommentsSheet: Boolean = false
+)
+
+data class PlayerSocialUiState(
+    val isFavorite: Boolean = false,
+    val comments: List<PlayerCommentEntry> = emptyList(),
+    val danmakuEnabled: Boolean = true,
+    val danmakuMessages: List<PlayerDanmakuEntry> = emptyList()
 )
 
 data class PlayerScreenUiState(
@@ -42,6 +55,7 @@ data class PlayerScreenUiState(
     val meta: PlayerMetaState = PlayerMetaState(),
     val playback: PlaybackUiState = PlaybackUiState(),
     val highlight: HighlightUiState = HighlightUiState(),
+    val social: PlayerSocialUiState = PlayerSocialUiState(),
     val overlay: OverlayUiState = OverlayUiState(),
     val errorMessage: String? = null
 )
@@ -56,10 +70,16 @@ sealed class PlayerEvent {
     data object Pause : PlayerEvent()
     data class SeekTo(val positionMs: Long) : PlayerEvent()
     data object PlayNextEpisode : PlayerEvent()
+    data object PlayPreviousEpisode : PlayerEvent()
     data class SelectEpisode(val index: Int) : PlayerEvent()
     data object ToggleEpisodeSelector : PlayerEvent()
+    data object ToggleCommentsSheet : PlayerEvent()
     data object DismissNextEpisode : PlayerEvent()
     data object DismissBranchEntry : PlayerEvent()
+    data object ToggleFavorite : PlayerEvent()
+    data class SubmitComment(val content: String) : PlayerEvent()
+    data class SetDanmakuEnabled(val enabled: Boolean) : PlayerEvent()
+    data class SubmitDanmaku(val content: String) : PlayerEvent()
     data class OnInteractionClick(val highlightId: String, val optionText: String) : PlayerEvent()
     data object GoToBranch : PlayerEvent()
 }
@@ -68,6 +88,7 @@ class PlayerViewModel(
     private val contentRepository: ContentRepository,
     private val progressRepository: ProgressRepository,
     private val interactionRepository: InteractionRepository,
+    private val playerUiRepository: PlayerUiRepository,
     private val playerController: PlayerController
 ) : ViewModel() {
 
@@ -76,6 +97,8 @@ class PlayerViewModel(
 
     private var progressSaveJob: Job? = null
     private var highlightCheckJob: Job? = null
+    private var activeEpisodeId: String? = null
+    private var shouldResumeOnSurfaceReturn: Boolean = false
 
     init {
         viewModelScope.launch {
@@ -93,25 +116,60 @@ class PlayerViewModel(
             is PlayerEvent.Pause -> playerController.pause()
             is PlayerEvent.SeekTo -> playerController.seekTo(event.positionMs)
             is PlayerEvent.PlayNextEpisode -> playNextEpisode()
+            is PlayerEvent.PlayPreviousEpisode -> playPreviousEpisode()
             is PlayerEvent.SelectEpisode -> selectEpisode(event.index)
             is PlayerEvent.ToggleEpisodeSelector -> toggleEpisodeSelector()
+            is PlayerEvent.ToggleCommentsSheet -> toggleCommentsSheet()
             is PlayerEvent.DismissNextEpisode -> dismissNextEpisode()
             is PlayerEvent.DismissBranchEntry -> dismissBranchEntry()
+            is PlayerEvent.ToggleFavorite -> toggleFavorite()
+            is PlayerEvent.SubmitComment -> submitComment(event.content)
+            is PlayerEvent.SetDanmakuEnabled -> setDanmakuEnabled(event.enabled)
+            is PlayerEvent.SubmitDanmaku -> submitDanmaku(event.content)
             is PlayerEvent.OnInteractionClick -> submitInteraction(event.highlightId, event.optionText)
             is PlayerEvent.GoToBranch -> {}
         }
     }
 
     fun onLeavePlaybackSurface() {
+        shouldResumeOnSurfaceReturn = _uiState.value.playback.isPlaying
         saveProgress()
         playerController.pause()
     }
 
     private fun loadAndPlay(dramaId: String, episodeId: String?) {
         viewModelScope.launch {
+            val currentState = _uiState.value
+            val isSameDrama = currentState.meta.dramaId == dramaId
+            val isSameEpisode = episodeId == null || currentState.meta.currentEpisode?.id == episodeId
+
+            // Already showing this drama+episode: just resume
+            if (currentState.screenState == PlayerScreenState.READY && isSameDrama && isSameEpisode) {
+                if (shouldResumeOnSurfaceReturn) {
+                    playerController.play()
+                }
+                shouldResumeOnSurfaceReturn = false
+                return@launch
+            }
+
+            // Same drama, different episode: fast switch without full reload
+            if (currentState.screenState == PlayerScreenState.READY && isSameDrama && episodeId != null) {
+                val targetIndex = currentState.meta.episodes.indexOfFirst { it.id == episodeId }
+                if (targetIndex >= 0) {
+                    selectEpisode(targetIndex)
+                    return@launch
+                }
+            }
+
             _uiState.update { it.copy(screenState = PlayerScreenState.LOADING) }
             try {
-                val episodes = contentRepository.getEpisodes(dramaId)
+                val (episodes, watchProgress) = coroutineScope {
+                    val episodesDeferred = async { contentRepository.getEpisodes(dramaId) }
+                    val watchProgressDeferred = async {
+                        progressRepository.getWatchProgress().firstOrNull { it.dramaId == dramaId }
+                    }
+                    episodesDeferred.await() to watchProgressDeferred.await()
+                }
                 if (episodes.isEmpty()) {
                     _uiState.update {
                         it.copy(
@@ -121,9 +179,6 @@ class PlayerViewModel(
                     }
                     return@launch
                 }
-
-                val watchProgress = progressRepository.getWatchProgress()
-                    .firstOrNull { it.dramaId == dramaId }
                 val targetIndex = when {
                     episodeId != null -> episodes.indexOfFirst { it.id == episodeId }.coerceAtLeast(0)
                     watchProgress != null -> episodes.indexOfFirst { it.id == watchProgress.episode.id }
@@ -150,10 +205,8 @@ class PlayerViewModel(
                     )
                 }
 
-                loadEpisodeDetail(targetEpisode.id, resumePositionMs)
-                loadHighlights(targetEpisode.id)
-
-                _uiState.update { it.copy(screenState = PlayerScreenState.READY) }
+                activeEpisodeId = targetEpisode.id
+                loadEpisodeAnd附属DataParallel(dramaId, targetEpisode.id, resumePositionMs)
 
                 startProgressAutoSave()
                 startHighlightCheck()
@@ -168,21 +221,69 @@ class PlayerViewModel(
         }
     }
 
-    private suspend fun loadEpisodeDetail(episodeId: String, startPositionMs: Long = 0L) {
-        try {
-            val episode = contentRepository.getEpisodeDetail(episodeId)
+    private suspend fun loadEpisodeAnd附属DataParallel(
+        dramaId: String,
+        episodeId: String,
+        startPositionMs: Long
+    ) {
+        coroutineScope {
+            val detailDeferred = async {
+                contentRepository.getEpisodeDetail(episodeId)
+            }
+            val highlightsDeferred = async {
+                try { contentRepository.getHighlights(episodeId) } catch (_: Exception) { emptyList() }
+            }
+            val socialDeferred = async {
+                PlayerSocialUiState(
+                    isFavorite = playerUiRepository.isFavorite(dramaId),
+                    comments = playerUiRepository.getComments(episodeId),
+                    danmakuEnabled = playerUiRepository.isDanmakuEnabled(episodeId),
+                    danmakuMessages = playerUiRepository.getDanmaku(episodeId)
+                )
+            }
+
+            // Wait for episode detail first — start the player immediately
+            val episode = try {
+                detailDeferred.await()
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(screenState = PlayerScreenState.ERROR, errorMessage = e.message ?: "加载失败")
+                }
+                return@coroutineScope
+            }
+
+            // Guard: if user already switched to a different episode, skip
+            if (activeEpisodeId != episodeId) return@coroutineScope
+
             _uiState.update {
                 it.copy(
                     meta = it.meta.copy(
                         currentEpisode = episode,
                         dramaTitle = episode.title,
                         resumePositionMs = startPositionMs
-                    )
+                    ),
+                    screenState = PlayerScreenState.READY
                 )
             }
             playerController.setIsFinalEpisode(episode.isFinalEpisode)
             playerController.attach(episode.videoUrl, startPositionMs)
-        } catch (_: Exception) {}
+
+            // Load highlights in background — non-blocking
+            val highlights = highlightsDeferred.await()
+            if (activeEpisodeId == episodeId) {
+                _uiState.update {
+                    it.copy(highlight = it.highlight.copy(highlights = highlights))
+                }
+            }
+
+            val socialState = socialDeferred.await()
+            if (activeEpisodeId == episodeId) {
+                _uiState.update { it.copy(social = socialState) }
+            }
+        }
+
+        // Trigger preload for next episode after current is ready
+        preloadAdjacentEpisode()
     }
 
     private fun loadHighlights(episodeId: String) {
@@ -193,6 +294,28 @@ class PlayerViewModel(
                     it.copy(highlight = it.highlight.copy(highlights = highlights))
                 }
             } catch (_: Exception) {}
+        }
+    }
+
+    private fun loadSocialState(dramaId: String, episodeId: String) {
+        _uiState.update {
+            it.copy(
+                social = PlayerSocialUiState(
+                    isFavorite = playerUiRepository.isFavorite(dramaId),
+                    comments = playerUiRepository.getComments(episodeId),
+                    danmakuEnabled = playerUiRepository.isDanmakuEnabled(episodeId),
+                    danmakuMessages = playerUiRepository.getDanmaku(episodeId)
+                )
+            )
+        }
+    }
+
+    private fun preloadAdjacentEpisode() {
+        val meta = _uiState.value.meta
+        val nextIndex = meta.currentEpisodeIndex + 1
+        val nextEpisode = meta.episodes.getOrNull(nextIndex)
+        if (nextEpisode != null) {
+            playerController.setPreloadCandidate(nextEpisode.videoUrl)
         }
     }
 
@@ -228,6 +351,14 @@ class PlayerViewModel(
         }
     }
 
+    private fun playPreviousEpisode() {
+        val meta = _uiState.value.meta
+        val previousIndex = meta.currentEpisodeIndex - 1
+        if (previousIndex >= 0) {
+            selectEpisode(previousIndex)
+        }
+    }
+
     private fun selectEpisode(index: Int) {
         val meta = _uiState.value.meta
         if (index !in meta.episodes.indices) return
@@ -247,8 +378,8 @@ class PlayerViewModel(
                 )
             }
 
-            loadEpisodeDetail(episode.id, 0L)
-            loadHighlights(episode.id)
+            activeEpisodeId = episode.id
+            loadEpisodeAnd附属DataParallel(meta.dramaId, episode.id, 0L)
 
             _uiState.update {
                 it.copy(overlay = it.overlay.copy(showEpisodeSelector = false))
@@ -266,6 +397,16 @@ class PlayerViewModel(
         }
     }
 
+    private fun toggleCommentsSheet() {
+        _uiState.update {
+            it.copy(
+                overlay = it.overlay.copy(
+                    showCommentsSheet = !it.overlay.showCommentsSheet
+                )
+            )
+        }
+    }
+
     private fun dismissNextEpisode() {
         _uiState.update {
             it.copy(overlay = it.overlay.copy(showNextEpisodeCard = false))
@@ -276,6 +417,32 @@ class PlayerViewModel(
         _uiState.update {
             it.copy(overlay = it.overlay.copy(showBranchEntry = false))
         }
+    }
+
+    private fun toggleFavorite() {
+        val dramaId = _uiState.value.meta.dramaId.ifBlank { return }
+        val isFavorite = playerUiRepository.toggleFavorite(dramaId)
+        _uiState.update { it.copy(social = it.social.copy(isFavorite = isFavorite)) }
+    }
+
+    private fun submitComment(content: String) {
+        val episodeId = _uiState.value.meta.currentEpisode?.id ?: return
+        if (content.isBlank()) return
+        val comments = playerUiRepository.addComment(episodeId, content.trim())
+        _uiState.update { it.copy(social = it.social.copy(comments = comments)) }
+    }
+
+    private fun setDanmakuEnabled(enabled: Boolean) {
+        val episodeId = _uiState.value.meta.currentEpisode?.id ?: return
+        playerUiRepository.setDanmakuEnabled(episodeId, enabled)
+        _uiState.update { it.copy(social = it.social.copy(danmakuEnabled = enabled)) }
+    }
+
+    private fun submitDanmaku(content: String) {
+        val episodeId = _uiState.value.meta.currentEpisode?.id ?: return
+        if (content.isBlank()) return
+        val danmakuMessages = playerUiRepository.addDanmaku(episodeId, content.trim())
+        _uiState.update { it.copy(social = it.social.copy(danmakuMessages = danmakuMessages)) }
     }
 
     private fun submitInteraction(highlightId: String, optionText: String) {

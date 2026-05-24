@@ -3,6 +3,7 @@ package com.dramapulse.app.feature.player
 import com.dramapulse.app.core.data.ContentRepository
 import com.dramapulse.app.core.data.DramaListResult
 import com.dramapulse.app.core.data.InteractionRepository
+import com.dramapulse.app.core.data.InMemoryPlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.data.WatchProgressEntry
 import com.dramapulse.app.core.model.DramaCardModel
@@ -18,6 +19,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 
@@ -52,6 +55,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
 
@@ -91,6 +95,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
 
@@ -103,10 +108,128 @@ class PlayerViewModelTest {
         viewModel.forceClearForTest()
     }
 
+    @Test
+    fun `preload is triggered for next episode after entering screen`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val episode2 = buildEpisode(id = "ep-2", dramaId = dramaId, episodeNo = 2)
+        val episode3 = buildEpisode(id = "ep-3", dramaId = dramaId, episodeNo = 3)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1, episode2, episode3),
+                episodeDetails = mapOf(
+                    episode1.id to episode1,
+                    episode2.id to episode2,
+                    episode3.id to episode3
+                )
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = "ep-1"))
+        runCurrent()
+
+        // Entering ep-1 should preload ep-2
+        assertEquals("https://example.com/ep-2.mp4", repos.playerController.preloadedUrl)
+        viewModel.forceClearForTest()
+    }
+
+    @Test
+    fun `preload is null for last episode`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val episode2 = buildEpisode(id = "ep-2", dramaId = dramaId, episodeNo = 2)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1, episode2),
+                episodeDetails = mapOf(episode1.id to episode1, episode2.id to episode2)
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = "ep-2"))
+        runCurrent()
+
+        // Last episode: preload candidate should be null
+        assertNull(repos.playerController.preloadedUrl)
+        viewModel.forceClearForTest()
+    }
+
+    @Test
+    fun `episode detail failure sets error state`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = emptyMap() // no detail available -> will throw
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = "ep-1"))
+        runCurrent()
+
+        val state = viewModel.uiState.value
+        assertEquals(PlayerScreenState.ERROR, state.screenState)
+        viewModel.forceClearForTest()
+    }
+
+    @Test
+    fun `paused playback stays paused after leaving and re-entering same episode`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1)
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = "ep-1"))
+        runCurrent()
+        repos.playerController.resetPlaybackCalls()
+
+        viewModel.onEvent(PlayerEvent.Pause)
+        viewModel.onLeavePlaybackSurface()
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = "ep-1"))
+        runCurrent()
+
+        assertEquals(0, repos.playerController.playInvocations)
+        assertTrue(repos.playerController.pauseInvocations >= 1)
+        viewModel.forceClearForTest()
+    }
+
     private data class TestPlayerDependencies(
         val contentRepository: FakeContentRepositoryForTest,
-        val progressRepository: FakeProgressRepositoryForTest,
+        val progressRepository: FakeProgressRepositoryForTest = FakeProgressRepositoryForTest(emptyList()),
         val interactionRepository: InteractionRepository = FakeInteractionRepositoryForTest(),
+        val playerUiRepository: InMemoryPlayerUiRepository = InMemoryPlayerUiRepository(),
         val playerController: RecordingPlayerController = RecordingPlayerController()
     )
 
@@ -176,6 +299,9 @@ class PlayerViewModelTest {
         var lastAttachedUrl: String? = null
         var lastAttachedStartPositionMs: Long? = null
         var isFinalEpisode: Boolean = false
+        var preloadedUrl: String? = null
+        var playInvocations: Int = 0
+        var pauseInvocations: Int = 0
 
         override fun setIsFinalEpisode(isFinal: Boolean) {
             isFinalEpisode = isFinal
@@ -186,13 +312,26 @@ class PlayerViewModelTest {
             lastAttachedStartPositionMs = startPositionMs
         }
 
-        override fun play() = Unit
+        override fun play() {
+            playInvocations += 1
+        }
 
-        override fun pause() = Unit
+        override fun pause() {
+            pauseInvocations += 1
+        }
 
         override fun seekTo(positionMs: Long) = Unit
 
         override fun release() = Unit
+
+        override fun setPreloadCandidate(mediaUrl: String?) {
+            preloadedUrl = mediaUrl
+        }
+
+        fun resetPlaybackCalls() {
+            playInvocations = 0
+            pauseInvocations = 0
+        }
     }
 
     private fun buildEpisode(

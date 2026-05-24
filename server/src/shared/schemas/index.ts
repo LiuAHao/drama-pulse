@@ -43,17 +43,26 @@ export const upsertWatchProgressSchema = z.object({
   progressMs: z.number().int().min(0),
 });
 
+const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'suspense'] as const;
+const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock'] as const;
+
 export const updateHighlightSchema = z.object({
   startTimeMs: z.number().int().min(0).optional(),
   endTimeMs: z.number().int().min(0).optional(),
-  type: z.string().optional(),
+  type: z.enum(HIGHLIGHT_TYPES).optional(),
   title: z.string().optional(),
   description: z.string().optional(),
   intensity: z.number().int().min(1).max(5).optional(),
-  templateId: z.string().optional(),
+  templateId: z.enum(TEMPLATE_IDS).optional(),
   interactionOptionsJson: z.string().optional(),
   visualEffectType: z.string().optional(),
   status: z.enum(['candidate', 'confirmed', 'disabled']).optional(),
+  reason: z.string().optional(),
+  supportingSegmentIdsJson: z.string().optional(),
+  speakerGuess: z.string().optional(),
+  targetCharacterGuess: z.string().optional(),
+  mentionedCharactersJson: z.string().optional(),
+  characterGuessConfidence: z.number().min(0).max(1).nullable().optional(),
 });
 
 export const adminHighlightFilterSchema = z.object({

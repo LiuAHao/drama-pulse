@@ -1,16 +1,27 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { FastifyInstance } from 'fastify';
-import { buildTestApp } from '../helpers/app.js';
+import { buildTestApp, TEST_DATABASE_URL } from '../helpers/app.js';
+import { PrismaClient } from '@prisma/client';
 
 let app: FastifyInstance;
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: TEST_DATABASE_URL },
+  },
+});
 
 beforeAll(async () => {
+  await prisma.highlight.update({
+    where: { id: 'hl_001_04' },
+    data: { source: 'ai', status: 'candidate' },
+  });
   app = await buildTestApp();
   await app.ready();
 });
 
 afterAll(async () => {
   await app.close();
+  await prisma.$disconnect();
 });
 
 describe('GET /episodes/:episodeId/highlights', () => {

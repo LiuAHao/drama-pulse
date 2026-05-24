@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
 
-    private const val BASE_URL = "http://10.0.2.2:8787"
+    private const val BASE_URL = "http://10.208.120.87:8787"
     private const val DEVICE_ID_HEADER = "x-device-id"
 
     private val json = Json {

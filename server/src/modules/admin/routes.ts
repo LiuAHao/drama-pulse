@@ -13,7 +13,7 @@ import {
   assetsConfigSchema,
   paginationSchema,
 } from '../../shared/schemas/index.js';
-import { getBaseUrlFromRequest, getResourceConfigPath, getResourceRoots, pathToUrl } from '../../services/resource/index.js';
+import { getBaseUrlFromRequest, getResourceConfigPath, getResourceRoots, pathToUrl, getResourceRoots as getRoots } from '../../services/resource/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -124,12 +124,184 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return;
     }
 
+    // Validate JSON string fields are valid JSON arrays
+    const jsonFields = ['interactionOptionsJson', 'supportingSegmentIdsJson', 'mentionedCharactersJson'];
+    for (const field of jsonFields) {
+      const value = body[field as keyof typeof body];
+      if (typeof value === 'string') {
+        try {
+          const parsed = JSON.parse(value);
+          if (!Array.isArray(parsed)) {
+            reply.status(400).send({ code: 40001, message: `${field} must be a JSON array`, data: null });
+            return;
+          }
+        } catch {
+          reply.status(400).send({ code: 40001, message: `${field} is not valid JSON`, data: null });
+          return;
+        }
+      }
+    }
+
+    // Validate time range
+    const startMs = body.startTimeMs ?? highlight.startTimeMs;
+    const endMs = body.endTimeMs ?? highlight.endTimeMs;
+    if (startMs >= endMs) {
+      reply.status(400).send({ code: 40001, message: 'startTimeMs must be less than endTimeMs', data: null });
+      return;
+    }
+    if (endMs - startMs > 30000) {
+      reply.status(400).send({ code: 40001, message: 'highlight duration must not exceed 30 seconds', data: null });
+      return;
+    }
+
     const updated = await prisma.highlight.update({
       where: { id: highlightId },
       data: body,
     });
 
     reply.send(success(updated));
+  });
+
+  // GET /admin/highlights/:highlightId - get single highlight detail with episode + drama
+  fastify.get('/admin/highlights/:highlightId', async (request, reply) => {
+    const { highlightId } = highlightIdParamSchema.parse(request.params);
+    const baseUrl = getBaseUrlFromRequest(request);
+
+    const highlight = await prisma.highlight.findUnique({
+      where: { id: highlightId },
+      include: {
+        episode: {
+          include: { drama: { select: { id: true, title: true } } },
+        },
+      },
+    });
+
+    if (!highlight) {
+      reply.status(404).send({ code: 40004, message: 'highlight not found', data: null });
+      return;
+    }
+
+    const { episode, ...highlightData } = highlight;
+    const { drama, ...episodeData } = episode;
+
+    reply.send(success({
+      ...highlightData,
+      episode: {
+        ...episodeData,
+        videoUrl: pathToUrl(episodeData.videoPath, baseUrl),
+      },
+      drama,
+    }));
+  });
+
+  // GET /admin/highlights/:highlightId/review-context - get review context with transcript
+  fastify.get('/admin/highlights/:highlightId/review-context', async (request, reply) => {
+    const { highlightId } = highlightIdParamSchema.parse(request.params);
+    const baseUrl = getBaseUrlFromRequest(request);
+
+    const highlight = await prisma.highlight.findUnique({
+      where: { id: highlightId },
+      include: {
+        episode: {
+          include: { drama: { select: { id: true, title: true } } },
+        },
+      },
+    });
+
+    if (!highlight) {
+      reply.status(404).send({ code: 40004, message: 'highlight not found', data: null });
+      return;
+    }
+
+    const { episode, ...highlightData } = highlight;
+    const { drama, ...episodeData } = episode;
+
+    // Try to find transcript file
+    let transcriptContext: Array<{ segmentId: string; startTimeMs: number; endTimeMs: number; text: string }> = [];
+    let transcriptAvailable = false;
+
+    try {
+      const roots = getRoots();
+      const candidates = [
+        path.join(roots.exportsRoot, 'highlights', episode.dramaId, `${episode.id}.transcript.json`),
+        path.join(roots.exportsRoot, 'highlights', episode.dramaId, `episode-${episode.episodeNo}-transcript.json`),
+        path.join(roots.exportsRoot, 'highlight-demo', `${episode.id}-transcript.json`),
+        path.join(roots.exportsRoot, 'highlight-demo', `episode-${episode.episodeNo}-transcript.json`),
+        path.join(roots.exportsRoot, `${episode.id}-transcript.json`),
+      ];
+
+      for (const candidatePath of candidates) {
+        try {
+          const raw = await fs.readFile(candidatePath, 'utf-8');
+          const transcript = JSON.parse(raw);
+          const segments = transcript.segments || [];
+
+          // Find segments within ±3 seconds of the highlight time range
+          const contextStart = highlight.startTimeMs - 3000;
+          const contextEnd = highlight.endTimeMs + 3000;
+
+          transcriptContext = segments
+            .filter((s: { startTimeMs: number; endTimeMs: number }) =>
+              s.endTimeMs >= contextStart && s.startTimeMs <= contextEnd
+            )
+            .slice(0, 20); // limit to 20 segments
+          transcriptAvailable = true;
+          break;
+        } catch {
+          // try next candidate path
+        }
+      }
+    } catch {
+      // transcript resolution failed entirely
+    }
+
+    // Get candidate neighbors (other candidates in same episode)
+    const candidateNeighbors = await prisma.highlight.findMany({
+      where: {
+        episodeId: episode.id,
+        status: 'candidate',
+        id: { not: highlightId },
+      },
+      orderBy: { startTimeMs: 'asc' },
+      select: { id: true, title: true, startTimeMs: true, endTimeMs: true, type: true, status: true },
+    });
+
+    reply.send(success({
+      highlight: {
+        ...highlightData,
+        episode: {
+          ...episodeData,
+          videoUrl: pathToUrl(episodeData.videoPath, baseUrl),
+        },
+        drama,
+      },
+      transcriptContext,
+      transcriptAvailable,
+      candidateNeighbors,
+    }));
+  });
+
+  // POST /admin/highlights/:highlightId/confirm - confirm a highlight
+  fastify.post('/admin/highlights/:highlightId/confirm', async (request, reply) => {
+    const { highlightId } = highlightIdParamSchema.parse(request.params);
+
+    const highlight = await prisma.highlight.findUnique({ where: { id: highlightId } });
+    if (!highlight) {
+      reply.status(404).send({ code: 40004, message: 'highlight not found', data: null });
+      return;
+    }
+
+    const updateData: { status: string; source?: string } = { status: 'confirmed' };
+    if (highlight.source === 'ai') {
+      updateData.source = 'ai_manual';
+    }
+
+    const updated = await prisma.highlight.update({
+      where: { id: highlightId },
+      data: updateData,
+    });
+
+    reply.send(success({ id: updated.id, status: updated.status, source: updated.source }));
   });
 
   // POST /admin/highlights/:highlightId/enable

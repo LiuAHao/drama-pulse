@@ -26,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.ui.component.*
+import com.dramapulse.app.ui.preview.PreviewData
 import com.dramapulse.app.ui.theme.Accent
+import com.dramapulse.app.ui.theme.DramaPulseTheme
 import com.dramapulse.app.ui.theme.PageBackground
 
 @Composable
@@ -43,17 +46,32 @@ fun ProfileScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
+    ProfileScreen(
+        uiState = uiState,
+        onEvent = viewModel::onEvent,
+        onDramaClick = onNavigateToPlayer,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun ProfileScreen(
+    uiState: ProfileUiState,
+    onEvent: (ProfileEvent) -> Unit,
+    onDramaClick: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     when (uiState.screenState) {
         ProfileScreenState.IDLE, ProfileScreenState.LOADING -> LoadingPanel(modifier)
         ProfileScreenState.ERROR -> ErrorPanel(
             message = uiState.errorMessage ?: "加载失败",
-            onRetry = { viewModel.onEvent(ProfileEvent.OnEnter) },
+            onRetry = { onEvent(ProfileEvent.OnEnter) },
             modifier = modifier
         )
         ProfileScreenState.CONTENT, ProfileScreenState.EMPTY -> ProfileContent(
             uiState = uiState,
-            onEvent = viewModel::onEvent,
-            onDramaClick = onNavigateToPlayer,
+            onEvent = onEvent,
+            onDramaClick = onDramaClick,
             modifier = modifier
         )
     }
@@ -248,6 +266,32 @@ private fun QuickToolsRow(
             selected = selectedSection == ProfileSection.MY_BRANCHES,
             onClick = { onSelect(ProfileSection.MY_BRANCHES) },
             modifier = Modifier.weight(1f)
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile - Empty")
+@Composable
+private fun ProfileScreenPreview() {
+    DramaPulseTheme {
+        ProfileScreen(
+            uiState = PreviewData.profileStateEmpty,
+            onEvent = {},
+            onDramaClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile - Content")
+@Composable
+private fun ProfileScreenContentPreview() {
+    DramaPulseTheme {
+        ProfileScreen(
+            uiState = PreviewData.profileState.copy(
+                dramas = listOf(PreviewData.drama1, PreviewData.drama2)
+            ),
+            onEvent = {},
+            onDramaClick = {}
         )
     }
 }

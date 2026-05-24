@@ -59,9 +59,37 @@ export interface Highlight {
   source: string;
   confidence: number;
   status: string;
-  episode?: { id: string; title: string; episodeNo: number };
+  reason: string;
+  supportingSegmentIdsJson: string;
+  speakerGuess: string;
+  targetCharacterGuess: string;
+  mentionedCharactersJson: string;
+  characterGuessConfidence: number | null;
+  episode?: { id: string; title: string; episodeNo: number; videoUrl?: string };
+  drama?: { id: string; title: string };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface TranscriptSegment {
+  segmentId: string;
+  startTimeMs: number;
+  endTimeMs: number;
+  text: string;
+}
+
+export interface HighlightReviewContext {
+  highlight: Highlight;
+  transcriptContext: TranscriptSegment[];
+  transcriptAvailable: boolean;
+  candidateNeighbors: Array<{
+    id: string;
+    title: string;
+    startTimeMs: number;
+    endTimeMs: number;
+    type: string;
+    status: string;
+  }>;
 }
 
 export interface InteractionEvent {

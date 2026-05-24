@@ -4,6 +4,7 @@ import { apiRequest } from '../../services/apiClient';
 import { queryKeys } from '../../services/queryKeys';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+import { getStatusLabel } from '../../components/ui/StatusBadge';
 import { LoadingBlock } from '../../components/ui/LoadingBlock';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
@@ -14,12 +15,12 @@ const PAGE_SIZE = 20;
 
 const STATUS_OPTIONS = [
   { label: '全部', value: '' },
-  { label: 'pending', value: 'pending' },
-  { label: 'running', value: 'running' },
-  { label: 'success', value: 'success' },
-  { label: 'failed', value: 'failed' },
-  { label: 'timeout', value: 'timeout' },
-  { label: 'blocked', value: 'blocked' },
+  { label: getStatusLabel('pending'), value: 'pending' },
+  { label: getStatusLabel('running'), value: 'running' },
+  { label: getStatusLabel('success'), value: 'success' },
+  { label: getStatusLabel('failed'), value: 'failed' },
+  { label: getStatusLabel('timeout'), value: 'timeout' },
+  { label: getStatusLabel('blocked'), value: 'blocked' },
 ];
 
 export function BranchTasksPage() {

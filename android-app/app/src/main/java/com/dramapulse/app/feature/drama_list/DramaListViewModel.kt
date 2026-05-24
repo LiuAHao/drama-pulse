@@ -16,6 +16,7 @@ data class DramaListUiState(
     val featured: List<DramaCardModel> = emptyList(),
     val alternatives: List<DramaCardModel> = emptyList(),
     val continueWatching: ContinueWatchingModel? = null,
+    val searchQuery: String = "",
     val errorMessage: String? = null
 )
 
@@ -26,6 +27,7 @@ enum class ScreenState {
 sealed class DramaListEvent {
     data object OnEnter : DramaListEvent()
     data object OnRetry : DramaListEvent()
+    data class OnSearchQueryChanged(val query: String) : DramaListEvent()
     data class OnDramaClick(val dramaId: String) : DramaListEvent()
     data object OnContinueWatchingClick : DramaListEvent()
 }
@@ -39,8 +41,15 @@ class DramaListViewModel(
 
     fun onEvent(event: DramaListEvent) {
         when (event) {
-            is DramaListEvent.OnEnter -> loadDramas()
+            is DramaListEvent.OnEnter -> {
+                if (_uiState.value.screenState == ScreenState.IDLE) {
+                    loadDramas()
+                }
+            }
             is DramaListEvent.OnRetry -> loadDramas()
+            is DramaListEvent.OnSearchQueryChanged -> {
+                _uiState.value = _uiState.value.copy(searchQuery = event.query)
+            }
             is DramaListEvent.OnDramaClick -> {}
             is DramaListEvent.OnContinueWatchingClick -> {}
         }

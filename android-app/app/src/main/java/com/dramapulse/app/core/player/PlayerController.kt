@@ -10,4 +10,5 @@ interface PlayerController {
     fun pause()
     fun seekTo(positionMs: Long)
     fun release()
+    fun setPreloadCandidate(mediaUrl: String?)
 }

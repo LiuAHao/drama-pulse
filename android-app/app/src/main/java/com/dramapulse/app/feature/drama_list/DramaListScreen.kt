@@ -11,8 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.ui.component.*
+import com.dramapulse.app.ui.preview.PreviewData
+import com.dramapulse.app.ui.theme.DramaPulseTheme
 import com.dramapulse.app.ui.theme.PageBackground
 
 @Composable
@@ -39,6 +42,7 @@ fun DramaListScreen(
         )
         ScreenState.CONTENT -> DramaListContent(
             uiState = uiState,
+            onSearchQueryChange = { onEvent(DramaListEvent.OnSearchQueryChanged(it)) },
             onDramaClick = { dramaId ->
                 onNavigateToPlayer(dramaId, null)
             },
@@ -53,6 +57,7 @@ fun DramaListScreen(
 @Composable
 private fun DramaListContent(
     uiState: DramaListUiState,
+    onSearchQueryChange: (String) -> Unit,
     onDramaClick: (String) -> Unit,
     onContinueWatchingClick: (dramaId: String, episodeId: String) -> Unit,
     modifier: Modifier = Modifier
@@ -71,7 +76,10 @@ private fun DramaListContent(
     ) {
         // Search bar - full width
         item(span = { GridItemSpan(2) }) {
-            TopSearchBar()
+            TopSearchBar(
+                value = uiState.searchQuery,
+                onValueChange = onSearchQueryChange
+            )
         }
 
         uiState.continueWatching?.let { continueWatching ->
@@ -100,7 +108,15 @@ private fun DramaListContent(
         }
 
         // Drama poster grid - 2 columns
-        items(uiState.featured + uiState.alternatives) { drama ->
+        val filteredDramas = (uiState.featured + uiState.alternatives).filter { drama ->
+            val query = uiState.searchQuery.trim()
+            query.isBlank() ||
+                drama.title.contains(query, ignoreCase = true) ||
+                drama.description.contains(query, ignoreCase = true) ||
+                drama.tags.any { it.contains(query, ignoreCase = true) }
+        }
+
+        items(filteredDramas) { drama ->
             DramaPosterCard(
                 title = drama.title,
                 coverUrl = drama.coverUrl,
@@ -109,5 +125,29 @@ private fun DramaListContent(
                 onClick = { onDramaClick(drama.id) }
             )
         }
+    }
+}
+
+@Preview(showBackground = true, name = "DramaList - Content")
+@Composable
+private fun DramaListScreenPreview() {
+    DramaPulseTheme {
+        DramaListScreen(
+            uiState = PreviewData.dramaListState,
+            onEvent = {},
+            onNavigateToPlayer = { _, _ -> }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "DramaList - Search")
+@Composable
+private fun DramaListScreenSearchPreview() {
+    DramaPulseTheme {
+        DramaListScreen(
+            uiState = PreviewData.dramaListStateWithSearch,
+            onEvent = {},
+            onNavigateToPlayer = { _, _ -> }
+        )
     }
 }

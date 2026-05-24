@@ -1,6 +1,5 @@
 package com.dramapulse.app.ui.overlay
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,16 +22,10 @@ fun HeatHintOverlay(
     val stats = highlight?.stats
     val showHeat = stats != null && stats.heatLevel > 0
 
-    AnimatedVisibility(
-        visible = showHeat,
-        enter = fadeIn(),
-        exit = fadeOut(),
-        modifier = modifier
-    ) {
-        val currentStats = stats ?: return@AnimatedVisibility
-
+    if (showHeat) {
+        val currentStats = stats ?: return
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.TopEnd

@@ -15,11 +15,32 @@ const colorMap: Record<string, string> = {
   deleted: 'bg-gray-100 text-gray-600',
 };
 
+const labelMap: Record<string, string> = {
+  active: '启用',
+  confirmed: '已确认',
+  success: '成功',
+  visible: '可见',
+  running: '运行中',
+  pending: '待处理',
+  candidate: '候选',
+  warning: '警告',
+  failed: '失败',
+  timeout: '超时',
+  disabled: '已禁用',
+  hidden: '隐藏',
+  blocked: '已阻塞',
+  deleted: '已删除',
+};
+
+export function getStatusLabel(status: string) {
+  return labelMap[status] || status;
+}
+
 export function StatusBadge({ status }: { status: string }) {
   const cls = colorMap[status] || 'bg-gray-100 text-gray-600';
   return (
     <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${cls}`}>
-      {status}
+      {getStatusLabel(status)}
     </span>
   );
 }

@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '../../services/apiClient';
 import { queryKeys } from '../../services/queryKeys';
 import { PageHeader } from '../../components/ui/PageHeader';
 import { StatusBadge } from '../../components/ui/StatusBadge';
+import { getStatusLabel } from '../../components/ui/StatusBadge';
 import { LoadingBlock } from '../../components/ui/LoadingBlock';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { toast } from '../../components/ui/Toast';
@@ -13,25 +15,21 @@ import type { Highlight, PaginatedData } from '../../shared/types';
 const TYPE_OPTIONS = [
   { value: 'feel_good', label: 'feel_good' },
   { value: 'reversal', label: 'reversal' },
-  { value: 'funny', label: 'funny' },
-  { value: 'sweet', label: 'sweet' },
   { value: 'conflict', label: 'conflict' },
+  { value: 'sweet', label: 'sweet' },
   { value: 'suspense', label: 'suspense' },
-  { value: 'emotion_burst', label: 'emotion_burst' },
 ];
 
 const TEMPLATE_OPTIONS = [
   { value: 'emotion_button', label: 'emotion_button' },
   { value: 'vote_side', label: 'vote_side' },
-  { value: 'boost_action', label: 'boost_action' },
   { value: 'suspense_lock', label: 'suspense_lock' },
-  { value: 'ending_branch', label: 'ending_branch' },
 ];
 
 const STATUS_OPTIONS = [
-  { value: 'candidate', label: 'candidate' },
-  { value: 'confirmed', label: 'confirmed' },
-  { value: 'disabled', label: 'disabled' },
+  { value: 'candidate', label: getStatusLabel('candidate') },
+  { value: 'confirmed', label: getStatusLabel('confirmed') },
+  { value: 'disabled', label: getStatusLabel('disabled') },
 ];
 
 const FILTER_STATUSES = ['all', 'candidate', 'confirmed', 'disabled'] as const;
@@ -55,8 +53,9 @@ function formatTime(ms: number): string {
 
 export function HighlightsPage() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('candidate');
   const [episodeIdFilter, setEpisodeIdFilter] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 20;
@@ -164,7 +163,7 @@ export function HighlightsPage() {
                   : 'bg-white border border-gray-300 text-gray-600 hover:bg-gray-50'
               }`}
             >
-              {s === 'all' ? '全部' : s}
+              {s === 'all' ? '全部' : getStatusLabel(s)}
             </button>
           ))}
         </div>
@@ -190,11 +189,12 @@ export function HighlightsPage() {
                 <tr className="bg-gray-50 text-left text-gray-500">
                   <th className="px-4 py-3 font-medium">ID</th>
                   <th className="px-4 py-3 font-medium">剧集</th>
+                  <th className="px-4 py-3 font-medium">标题</th>
+                  <th className="px-4 py-3 font-medium">来源</th>
                   <th className="px-4 py-3 font-medium">类型</th>
-                  <th className="px-4 py-3 font-medium">起始时间</th>
-                  <th className="px-4 py-3 font-medium">结束时间</th>
+                  <th className="px-4 py-3 font-medium">时间</th>
                   <th className="px-4 py-3 font-medium">强度</th>
-                  <th className="px-4 py-3 font-medium">模板</th>
+                  <th className="px-4 py-3 font-medium">置信度</th>
                   <th className="px-4 py-3 font-medium">状态</th>
                   <th className="px-4 py-3 font-medium">操作</th>
                 </tr>
@@ -206,16 +206,31 @@ export function HighlightsPage() {
                     <td className="px-4 py-3">
                       {h.episode ? `E${h.episode.episodeNo} ${h.episode.title}` : h.episodeId}
                     </td>
+                    <td className="px-4 py-3 max-w-[200px] truncate">{h.title || '-'}</td>
+                    <td className="px-4 py-3">
+                      <span className={`px-2 py-0.5 rounded text-xs ${
+                        h.source === 'ai' || h.source === 'ai_manual'
+                          ? 'bg-blue-50 text-blue-700'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}>
+                        {h.source}
+                      </span>
+                    </td>
                     <td className="px-4 py-3">{h.type}</td>
-                    <td className="px-4 py-3 tabular-nums">{formatTime(h.startTimeMs)}</td>
-                    <td className="px-4 py-3 tabular-nums">{formatTime(h.endTimeMs)}</td>
+                    <td className="px-4 py-3 tabular-nums text-xs">{formatTime(h.startTimeMs)} ~ {formatTime(h.endTimeMs)}</td>
                     <td className="px-4 py-3">{h.intensity}</td>
-                    <td className="px-4 py-3">{h.templateId}</td>
+                    <td className="px-4 py-3">{h.confidence.toFixed(2)}</td>
                     <td className="px-4 py-3">
                       <StatusBadge status={h.status} />
                     </td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => navigate(`/highlights/${h.id}/review`)}
+                          className="px-2 py-1 text-xs rounded bg-blue-50 text-blue-700 border border-blue-200 hover:bg-blue-100 cursor-pointer"
+                        >
+                          复核
+                        </button>
                         <button
                           onClick={() => openEdit(h)}
                           className="px-2 py-1 text-xs rounded border border-gray-300 hover:bg-gray-50 cursor-pointer"

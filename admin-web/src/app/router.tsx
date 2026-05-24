@@ -5,6 +5,7 @@ import { DashboardPage } from '../pages/dashboard/DashboardPage';
 import { DramasPage } from '../pages/dramas/DramasPage';
 import { EpisodesPage } from '../pages/episodes/EpisodesPage';
 import { HighlightsPage } from '../pages/highlights/HighlightsPage';
+import { HighlightReviewPage } from '../pages/highlights/HighlightReviewPage';
 import { InteractionsPage } from '../pages/interactions/InteractionsPage';
 import { BranchTasksPage } from '../pages/branchTasks/BranchTasksPage';
 import { AssetsConfigPage } from '../pages/assetsConfig/AssetsConfigPage';
@@ -21,6 +22,7 @@ export const router = createBrowserRouter([
       { path: 'dramas', element: <DramasPage /> },
       { path: 'episodes', element: <EpisodesPage /> },
       { path: 'highlights', element: <HighlightsPage /> },
+      { path: 'highlights/:highlightId/review', element: <HighlightReviewPage /> },
       { path: 'interactions', element: <InteractionsPage /> },
       { path: 'branch-tasks', element: <BranchTasksPage /> },
       { path: 'assets-config', element: <AssetsConfigPage /> },

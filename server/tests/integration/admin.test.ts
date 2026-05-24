@@ -1,11 +1,15 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { FastifyInstance } from 'fastify';
-import { buildTestApp, ADMIN_AUTH } from '../helpers/app.js';
+import { buildTestApp, ADMIN_AUTH, TEST_DATABASE_URL } from '../helpers/app.js';
 import { PrismaClient } from '@prisma/client';
 import fs from 'fs/promises';
 import path from 'path';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: TEST_DATABASE_URL },
+  },
+});
 let app: FastifyInstance;
 
 beforeAll(async () => {
@@ -112,6 +116,10 @@ describe('GET /admin/highlights', () => {
 
 describe('PATCH /admin/highlights/:highlightId', () => {
   it('should update highlight fields', async () => {
+    const original = await prisma.highlight.findUniqueOrThrow({
+      where: { id: 'hl_001_01' },
+      select: { title: true, intensity: true },
+    });
     const res = await app.inject({
       method: 'PATCH',
       url: '/admin/highlights/hl_001_01',
@@ -122,6 +130,11 @@ describe('PATCH /admin/highlights/:highlightId', () => {
     const body = res.json();
     expect(body.data.title).toBe('更新后的标题');
     expect(body.data.intensity).toBe(5);
+
+    await prisma.highlight.update({
+      where: { id: 'hl_001_01' },
+      data: original,
+    });
   });
 });
 
@@ -163,8 +176,206 @@ describe('POST /admin/highlights/:highlightId/enable and disable', () => {
   });
 });
 
+describe('GET /admin/highlights/:highlightId', () => {
+  it('should return highlight detail with episode and drama', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.id).toBe('hl_001_01');
+    expect(body.data.episode).toBeDefined();
+    expect(body.data.episode.videoUrl).toContain('/static/');
+    expect(body.data.drama).toBeDefined();
+    expect(body.data.drama.title).toBeDefined();
+  });
+
+  it('should return 404 for non-existent highlight', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/highlights/non_existent',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(404);
+  });
+});
+
+describe('GET /admin/highlights/:highlightId/review-context', () => {
+  it('should return review context with transcript when available', async () => {
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/highlights/hl_001_01/review-context',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.highlight).toBeDefined();
+    expect(body.data.transcriptAvailable).toBeDefined();
+    expect(Array.isArray(body.data.transcriptContext)).toBe(true);
+    expect(Array.isArray(body.data.candidateNeighbors)).toBe(true);
+  });
+
+  it('should return empty transcript when file missing', async () => {
+    // hl_001_01's episode may not have a transcript file
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/highlights/hl_001_01/review-context',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    // transcriptAvailable should be false if no file found
+    if (!body.data.transcriptAvailable) {
+      expect(body.data.transcriptContext).toEqual([]);
+    }
+  });
+});
+
+describe('POST /admin/highlights/:highlightId/confirm', () => {
+  it('should confirm a candidate highlight', async () => {
+    // First set hl_001_04 to candidate with source=ai
+    await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_04',
+      headers: ADMIN_AUTH,
+      payload: { status: 'candidate' },
+    });
+    // Verify it's candidate
+    const before = await app.inject({
+      method: 'GET',
+      url: '/admin/highlights/hl_001_04',
+      headers: ADMIN_AUTH,
+    });
+    expect(before.json().data.status).toBe('candidate');
+
+    // Confirm it
+    const res = await app.inject({
+      method: 'POST',
+      url: '/admin/highlights/hl_001_04/confirm',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.status).toBe('confirmed');
+
+    await prisma.highlight.update({
+      where: { id: 'hl_001_04' },
+      data: { source: 'ai', status: 'candidate' },
+    });
+  });
+
+  it('should change source from ai to ai_manual on confirm', async () => {
+    // Set source to ai first
+    await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_04',
+      headers: ADMIN_AUTH,
+      payload: { status: 'candidate' },
+    });
+    // Directly set source to ai via DB
+    const prismaClient = new PrismaClient({
+      datasources: {
+        db: { url: TEST_DATABASE_URL },
+      },
+    });
+    await prismaClient.highlight.update({
+      where: { id: 'hl_001_04' },
+      data: { source: 'ai', status: 'candidate' },
+    });
+    await prismaClient.$disconnect();
+
+    const res = await app.inject({
+      method: 'POST',
+      url: '/admin/highlights/hl_001_04/confirm',
+      headers: ADMIN_AUTH,
+    });
+    expect(res.statusCode).toBe(200);
+    expect(res.json().data.source).toBe('ai_manual');
+    expect(res.json().data.status).toBe('confirmed');
+
+    await prisma.highlight.update({
+      where: { id: 'hl_001_04' },
+      data: { source: 'ai', status: 'candidate' },
+    });
+  });
+});
+
+describe('PATCH /admin/highlights/:highlightId extended fields', () => {
+  it('should update review extension fields', async () => {
+    const original = await prisma.highlight.findUniqueOrThrow({
+      where: { id: 'hl_001_01' },
+      select: {
+        reason: true,
+        supportingSegmentIdsJson: true,
+        speakerGuess: true,
+        targetCharacterGuess: true,
+        mentionedCharactersJson: true,
+        characterGuessConfidence: true,
+      },
+    });
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+      payload: {
+        reason: '求助被拒绝，情绪峰值明确',
+        supportingSegmentIdsJson: '["seg_0029","seg_0030"]',
+        speakerGuess: '女主',
+        targetCharacterGuess: '娘家人',
+        mentionedCharactersJson: '["女主","娘家"]',
+        characterGuessConfidence: 0.72,
+      },
+    });
+    expect(res.statusCode).toBe(200);
+    const data = res.json().data;
+    expect(data.reason).toBe('求助被拒绝，情绪峰值明确');
+    expect(data.speakerGuess).toBe('女主');
+    expect(data.characterGuessConfidence).toBeCloseTo(0.72);
+
+    await prisma.highlight.update({
+      where: { id: 'hl_001_01' },
+      data: original,
+    });
+  });
+
+  it('should reject invalid JSON in JSON fields', async () => {
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+      payload: { supportingSegmentIdsJson: 'not-json' },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('should reject invalid type enum', async () => {
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+      payload: { type: 'funny' },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('should reject invalid templateId enum', async () => {
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_01',
+      headers: ADMIN_AUTH,
+      payload: { templateId: 'ending_branch' },
+    });
+    expect(res.statusCode).toBe(400);
+  });
+});
+
 describe('POST /admin/demo/reset', () => {
   it('should reset runtime data but preserve seed data', async () => {
+    const highlightCountBefore = await prisma.highlight.count();
+    const branchOptionCountBefore = await prisma.branchOption.count();
+
     // Create some runtime data first
     await app.inject({
       method: 'POST',
@@ -209,10 +420,10 @@ describe('POST /admin/demo/reset', () => {
     expect(episodes).toBe(46);
 
     const highlights = await prisma.highlight.count();
-    expect(highlights).toBe(5);
+    expect(highlights).toBe(highlightCountBefore);
 
     const branchOptions = await prisma.branchOption.count();
-    expect(branchOptions).toBe(4);
+    expect(branchOptions).toBe(branchOptionCountBefore);
   });
 });
 

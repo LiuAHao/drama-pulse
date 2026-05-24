@@ -26,7 +26,7 @@ import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.ui.component.BottomNavBar
 import com.dramapulse.app.ui.component.BottomNavTab
 
-private const val USE_FAKE_DATA = true
+private const val USE_FAKE_DATA = false
 
 @Composable
 fun AppNavHost(
@@ -44,6 +44,7 @@ fun AppNavHost(
             contentRepository = appContainer.contentRepository,
             progressRepository = appContainer.progressRepository,
             interactionRepository = appContainer.interactionRepository,
+            playerUiRepository = appContainer.playerUiRepository,
             playerController = appContainer.playerController
         )
     }

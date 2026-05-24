@@ -1,6 +1,5 @@
 package com.dramapulse.app.ui.overlay
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -23,16 +22,9 @@ fun HighlightOverlay(
     onInteractionClick: (String, String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    AnimatedVisibility(
-        visible = highlight != null,
-        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
-        modifier = modifier
-    ) {
-        if (highlight == null) return@AnimatedVisibility
-
+    if (highlight != null) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 24.dp),
             contentAlignment = Alignment.BottomCenter

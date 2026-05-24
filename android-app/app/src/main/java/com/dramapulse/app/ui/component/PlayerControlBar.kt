@@ -1,12 +1,13 @@
 package com.dramapulse.app.ui.component
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,17 +18,32 @@ import com.dramapulse.app.core.util.TimeUtil
 @Composable
 fun PlayerControlBar(
     playbackState: PlaybackUiState,
-    onPlay: () -> Unit,
-    onPause: () -> Unit,
     onSeek: (Long) -> Unit,
-    onNextEpisode: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var isDragging by remember { mutableStateOf(false) }
+    var previewFraction by remember { mutableFloatStateOf(playbackState.progressFraction) }
+
+    if (!isDragging) {
+        previewFraction = playbackState.progressFraction
+    }
+
+    val previewPositionMs = if (isDragging) {
+        (previewFraction * playbackState.durationMs).toLong()
+    } else {
+        playbackState.currentPositionMs
+    }
+
     Column(modifier = modifier.fillMaxWidth()) {
         ProgressSlider(
-            progress = playbackState.progressFraction,
-            buffered = playbackState.bufferedFraction,
-            onSeek = { fraction ->
+            progress = if (isDragging) previewFraction else playbackState.progressFraction,
+            onSeekPreview = { fraction ->
+                isDragging = true
+                previewFraction = fraction
+            },
+            onSeekFinished = { fraction ->
+                isDragging = false
+                previewFraction = fraction
                 val targetMs = (fraction * playbackState.durationMs).toLong()
                 onSeek(targetMs)
             }
@@ -39,7 +55,7 @@ fun PlayerControlBar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = TimeUtil.formatDuration(playbackState.currentPositionMs),
+                text = TimeUtil.formatDuration(previewPositionMs),
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White
             )
@@ -53,32 +69,6 @@ fun PlayerControlBar(
                 style = MaterialTheme.typography.labelMedium,
                 color = Color.White.copy(alpha = 0.6f)
             )
-            Spacer(modifier = Modifier.weight(1f))
-
-            if (playbackState.isPlaying) {
-                IconButton(onClick = onPause) {
-                    Icon(
-                        imageVector = Icons.Default.Pause,
-                        contentDescription = "暂停",
-                        tint = Color.White
-                    )
-                }
-            } else {
-                IconButton(onClick = onPlay) {
-                    Icon(
-                        imageVector = Icons.Default.PlayArrow,
-                        contentDescription = "播放",
-                        tint = Color.White
-                    )
-                }
-            }
-            IconButton(onClick = onNextEpisode) {
-                Icon(
-                    imageVector = Icons.Default.SkipNext,
-                    contentDescription = "下一集",
-                    tint = Color.White
-                )
-            }
         }
     }
 }

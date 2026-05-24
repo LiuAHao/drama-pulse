@@ -4,6 +4,8 @@ export const queryKeys = {
     ['admin', 'episodes', filters] as const,
   highlights: (filters?: Record<string, string>) =>
     ['admin', 'highlights', filters] as const,
+  highlightDetail: (id: string) => ['admin', 'highlight', id] as const,
+  highlightReviewContext: (id: string) => ['admin', 'highlight-review', id] as const,
   interactions: (filters?: Record<string, string>) =>
     ['admin', 'interactions', filters] as const,
   branchTasks: (filters?: Record<string, string>) =>

@@ -1,9 +1,13 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { FastifyInstance } from 'fastify';
-import { buildTestApp } from '../helpers/app.js';
+import { buildTestApp, TEST_DATABASE_URL } from '../helpers/app.js';
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: TEST_DATABASE_URL },
+  },
+});
 let app: FastifyInstance;
 
 beforeAll(async () => {

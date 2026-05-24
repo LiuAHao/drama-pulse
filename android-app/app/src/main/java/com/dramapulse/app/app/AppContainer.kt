@@ -14,11 +14,15 @@ import com.dramapulse.app.core.data.FakeInteractionRepository
 import com.dramapulse.app.core.data.FakeProgressRepository
 import com.dramapulse.app.core.data.InteractionRepository
 import com.dramapulse.app.core.data.InteractionRepositoryImpl
+import com.dramapulse.app.core.data.PersistentPlayerUiRepository
+import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.data.ProgressRepositoryImpl
+import com.dramapulse.app.core.data.SharedPreferencesPlayerUiStorage
 import com.dramapulse.app.core.network.DeviceIdProvider
 import com.dramapulse.app.core.network.NetworkModule
 import com.dramapulse.app.core.player.ExoPlayerController
+import com.dramapulse.app.core.player.MediaCacheProvider
 import com.dramapulse.app.core.util.DeviceUtil
 
 data class AppContainer(
@@ -26,6 +30,7 @@ data class AppContainer(
     val progressRepository: ProgressRepository,
     val interactionRepository: InteractionRepository,
     val branchRepository: BranchRepository,
+    val playerUiRepository: PlayerUiRepository,
     val playerController: ExoPlayerController
 )
 
@@ -49,7 +54,13 @@ private fun buildAppContainer(
 ): AppContainer {
     val deviceId = DeviceIdProvider.deviceId
     val userId = DeviceUtil.getUserIdFromDeviceId(deviceId)
-    val playerController = ExoPlayerController(context)
+    val cacheDataSourceFactory = MediaCacheProvider.getCacheDataSourceFactory(context)
+    val playerController = ExoPlayerController(context, cacheDataSourceFactory)
+    val playerUiRepository = PersistentPlayerUiRepository(
+        storage = SharedPreferencesPlayerUiStorage(
+            context.getSharedPreferences("drama_pulse_player_ui", Context.MODE_PRIVATE)
+        )
+    )
 
     if (useFakeData) {
         val contentRepository = FakeContentRepository()
@@ -58,6 +69,7 @@ private fun buildAppContainer(
             progressRepository = FakeProgressRepository(contentRepository),
             interactionRepository = FakeInteractionRepository(),
             branchRepository = FakeBranchRepository(),
+            playerUiRepository = playerUiRepository,
             playerController = playerController
         )
     }
@@ -77,6 +89,7 @@ private fun buildAppContainer(
             api = NetworkModule.api,
             deviceId = deviceId
         ),
+        playerUiRepository = playerUiRepository,
         playerController = playerController
     )
 }
