@@ -3,7 +3,6 @@ package com.dramapulse.app.feature.drama_list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dramapulse.app.core.data.ContentRepository
-import com.dramapulse.app.core.data.DramaListResult
 import com.dramapulse.app.core.model.ContinueWatchingModel
 import com.dramapulse.app.core.model.DramaCardModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,6 @@ data class DramaListUiState(
     val featured: List<DramaCardModel> = emptyList(),
     val alternatives: List<DramaCardModel> = emptyList(),
     val continueWatching: ContinueWatchingModel? = null,
-    val searchQuery: String = "",
     val errorMessage: String? = null
 )
 
@@ -27,7 +25,6 @@ enum class ScreenState {
 sealed class DramaListEvent {
     data object OnEnter : DramaListEvent()
     data object OnRetry : DramaListEvent()
-    data class OnSearchQueryChanged(val query: String) : DramaListEvent()
     data class OnDramaClick(val dramaId: String) : DramaListEvent()
     data object OnContinueWatchingClick : DramaListEvent()
 }
@@ -47,9 +44,6 @@ class DramaListViewModel(
                 }
             }
             is DramaListEvent.OnRetry -> loadDramas()
-            is DramaListEvent.OnSearchQueryChanged -> {
-                _uiState.value = _uiState.value.copy(searchQuery = event.query)
-            }
             is DramaListEvent.OnDramaClick -> {}
             is DramaListEvent.OnContinueWatchingClick -> {}
         }
@@ -76,9 +70,14 @@ class DramaListViewModel(
                     )
                 }
             } catch (e: Exception) {
+                val message = if (e.message?.contains("Server base URL is not configured.") == true) {
+                    "请先到“我的”页设置服务端地址"
+                } else {
+                    e.message ?: "加载失败"
+                }
                 _uiState.value = _uiState.value.copy(
                     screenState = ScreenState.ERROR,
-                    errorMessage = e.message ?: "加载失败"
+                    errorMessage = message
                 )
             }
         }

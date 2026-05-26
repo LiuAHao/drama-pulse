@@ -10,10 +10,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -38,6 +43,7 @@ import com.dramapulse.app.ui.theme.PageBackground
 fun ProfileScreen(
     viewModel: ProfileViewModel,
     onNavigateToPlayer: (dramaId: String) -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(Unit) {
@@ -50,6 +56,7 @@ fun ProfileScreen(
         uiState = uiState,
         onEvent = viewModel::onEvent,
         onDramaClick = onNavigateToPlayer,
+        onNavigateToSettings = onNavigateToSettings,
         modifier = modifier
     )
 }
@@ -59,8 +66,18 @@ fun ProfileScreen(
     uiState: ProfileUiState,
     onEvent: (ProfileEvent) -> Unit,
     onDramaClick: (String) -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (uiState.isEditingServerUrl) {
+        ServerUrlDialog(
+            value = uiState.serverUrlInput,
+            onValueChange = { onEvent(ProfileEvent.OnServerUrlInputChanged(it)) },
+            onDismiss = { onEvent(ProfileEvent.OnDismissServerUrlDialog) },
+            onConfirm = { onEvent(ProfileEvent.OnSaveServerUrl) }
+        )
+    }
+
     when (uiState.screenState) {
         ProfileScreenState.IDLE, ProfileScreenState.LOADING -> LoadingPanel(modifier)
         ProfileScreenState.ERROR -> ErrorPanel(
@@ -72,6 +89,7 @@ fun ProfileScreen(
             uiState = uiState,
             onEvent = onEvent,
             onDramaClick = onDramaClick,
+            onNavigateToSettings = onNavigateToSettings,
             modifier = modifier
         )
     }
@@ -82,6 +100,7 @@ private fun ProfileContent(
     uiState: ProfileUiState,
     onEvent: (ProfileEvent) -> Unit,
     onDramaClick: (String) -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -117,7 +136,8 @@ private fun ProfileContent(
         item(span = { GridItemSpan(3) }) {
             QuickToolsRow(
                 selectedSection = uiState.selectedSection,
-                onSelect = { onEvent(ProfileEvent.OnSectionSelected(it)) }
+                onSelect = { onEvent(ProfileEvent.OnSectionSelected(it)) },
+                onSettingsClick = onNavigateToSettings
             )
         }
 
@@ -146,6 +166,81 @@ private fun ProfileContent(
             }
         }
     }
+}
+
+@Composable
+internal fun ServerConfigCard(
+    serverBaseUrl: String,
+    onEditClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(Dimens.CardRadius))
+            .background(MaterialTheme.colorScheme.surface)
+            .clickable(onClick = onEditClick)
+            .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "服务端地址",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = serverBaseUrl.ifBlank { "未设置" },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        Icon(
+            imageVector = Icons.Default.Edit,
+            contentDescription = "编辑服务端地址",
+            tint = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+@Composable
+internal fun ServerUrlDialog(
+    value: String,
+    onValueChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("设置服务端地址") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(
+                    text = "真机请填写电脑当前局域网地址，例如 10.208.76.16:8787",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    singleLine = true,
+                    label = { Text("地址") },
+                    placeholder = { Text("http://10.208.76.16:8787") }
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onConfirm) {
+                Text("保存")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("取消")
+            }
+        }
+    )
 }
 
 @Composable
@@ -240,6 +335,7 @@ private fun StatItem(
 private fun QuickToolsRow(
     selectedSection: ProfileSection,
     onSelect: (ProfileSection) -> Unit,
+    onSettingsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -268,6 +364,14 @@ private fun QuickToolsRow(
             modifier = Modifier.weight(1f)
         )
     }
+    Spacer(modifier = Modifier.height(Dimens.ComponentGap))
+    QuickActionCard(
+        icon = Icons.Default.Edit,
+        label = "设置与调试",
+        selected = false,
+        onClick = onSettingsClick,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
 
 @Preview(showBackground = true, name = "Profile - Empty")
@@ -277,7 +381,8 @@ private fun ProfileScreenPreview() {
         ProfileScreen(
             uiState = PreviewData.profileStateEmpty,
             onEvent = {},
-            onDramaClick = {}
+            onDramaClick = {},
+            onNavigateToSettings = {}
         )
     }
 }
@@ -291,7 +396,8 @@ private fun ProfileScreenContentPreview() {
                 dramas = listOf(PreviewData.drama1, PreviewData.drama2)
             ),
             onEvent = {},
-            onDramaClick = {}
+            onDramaClick = {},
+            onNavigateToSettings = {}
         )
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,41 +13,53 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import android.widget.Toast
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.compose.ui.viewinterop.AndroidView
 import com.dramapulse.app.core.data.PlayerCommentEntry
+import com.dramapulse.app.core.data.PlayerDanmakuEntry
 import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.core.player.ExoPlayerController
 import com.dramapulse.app.core.player.PlaybackState
@@ -69,10 +82,17 @@ fun PlayerScreen(
     playerController: ExoPlayerController,
     onBack: () -> Unit,
     onNavigateToBranch: (episodeId: String) -> Unit,
+    forceReloadOnEnter: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(dramaId, episodeId) {
-        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId, episodeId))
+        viewModel.onEvent(PlayerEvent.EnterScreen(dramaId, episodeId, forceReload = forceReloadOnEnter))
+    }
+
+    DisposableEffect(dramaId, episodeId) {
+        onDispose {
+            viewModel.onLeavePlaybackSurface()
+        }
     }
 
     val uiState by viewModel.uiState.collectAsState()
@@ -243,29 +263,22 @@ private fun PlayerContent(
         )
 
         // Danmaku floating messages
-        if (uiState.social.danmakuEnabled && uiState.social.danmakuMessages.isNotEmpty()) {
-            Column(
+        if (uiState.social.danmakuEnabled && uiState.social.activeDanmakuMessages.isNotEmpty()) {
+            DanmakuOverlay(
+                messages = uiState.social.activeDanmakuMessages,
                 modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(top = 96.dp, start = 16.dp, end = 80.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                uiState.social.danmakuMessages.take(3).forEach { danmaku ->
-                    Text(
-                        text = danmaku.content,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(Color.Black.copy(alpha = 0.38f))
-                            .padding(horizontal = 12.dp, vertical = 6.dp)
-                    )
-                }
-            }
+                    .align(Alignment.TopCenter)
+                    .padding(top = 88.dp)
+                    .fillMaxWidth()
+            )
         }
 
         HighlightOverlay(
             highlight = uiState.highlight.activeHighlight,
+            interactionEnabled = uiState.highlight.activeInteractionEnabled,
+            interactionClickCount = uiState.highlight.interactionClickCountByHighlightId[
+                uiState.highlight.activeHighlight?.id
+            ] ?: 0,
             onInteractionClick = { highlightId, text ->
                 onEvent(PlayerEvent.OnInteractionClick(highlightId, text))
             },
@@ -498,7 +511,7 @@ private fun DanmakuComposer(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(0.88f),
+        modifier = modifier.fillMaxWidth(0.78f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -512,29 +525,38 @@ private fun DanmakuComposer(
                 .clickable { onEnabledChange(!enabled) }
                 .padding(horizontal = 10.dp, vertical = 8.dp)
         )
-        OutlinedTextField(
+        BasicTextField(
             value = input,
             onValueChange = onInputChange,
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .widthIn(min = 96.dp, max = 180.dp)
+                .height(38.dp)
+                .clip(CircleShape)
+                .background(Color.Black.copy(alpha = 0.55f))
+                .padding(horizontal = 12.dp, vertical = 0.dp),
             singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedContainerColor = Color.Black.copy(alpha = 0.55f),
-                unfocusedContainerColor = Color.Black.copy(alpha = 0.55f),
-                focusedBorderColor = Color.Transparent,
-                unfocusedBorderColor = Color.Transparent,
-                focusedTextColor = Color.White,
-                unfocusedTextColor = Color.White
-            )
+            textStyle = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                color = Color.White
+            ),
+            decorationBox = { innerTextField ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    innerTextField()
+                }
+            }
         )
         Text(
             text = "发送",
             color = Color.White,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
             modifier = Modifier
                 .clip(CircleShape)
                 .background(Color.White.copy(alpha = 0.16f))
                 .clickable(onClick = onSend)
-                .padding(horizontal = 14.dp, vertical = 10.dp)
+                .padding(horizontal = 12.dp, vertical = 8.dp)
         )
     }
 }
@@ -620,6 +642,57 @@ private fun CommentsSheet(
             )
         }
     }
+}
+
+@Composable
+private fun DanmakuOverlay(
+    messages: List<PlayerDanmakuEntry>,
+    modifier: Modifier = Modifier
+) {
+    BoxWithConstraints(modifier = modifier.height(96.dp)) {
+        val screenWidthPx = constraints.maxWidth.toFloat()
+        messages.forEachIndexed { index: Int, danmaku: PlayerDanmakuEntry ->
+            DanmakuItem(
+                text = danmaku.content,
+                trackIndex = index,
+                screenWidthPx = screenWidthPx
+            )
+        }
+    }
+}
+
+@Composable
+private fun DanmakuItem(
+    text: String,
+    trackIndex: Int,
+    screenWidthPx: Float
+) {
+    var started by remember(text) { mutableStateOf(false) }
+    var itemWidthPx by remember(text) { mutableStateOf(0) }
+    val density = LocalDensity.current
+    LaunchedEffect(text) {
+        started = true
+    }
+    val translationX by animateFloatAsState(
+        targetValue = if (started) -itemWidthPx.toFloat() else screenWidthPx,
+        animationSpec = tween(durationMillis = 5200, easing = LinearEasing),
+        label = "danmaku_translation"
+    )
+
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyLarge,
+        color = Color.White,
+        maxLines = 1,
+        modifier = Modifier
+            .onSizeChanged { itemWidthPx = it.width }
+            .offset {
+                IntOffset(
+                    x = translationX.toInt(),
+                    y = with(density) { (trackIndex * 26).dp.roundToPx() }
+                )
+            }
+    )
 }
 
 // region Previews

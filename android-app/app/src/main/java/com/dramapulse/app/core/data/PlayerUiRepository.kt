@@ -4,29 +4,40 @@ import android.content.SharedPreferences
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Serializable
 data class PlayerCommentEntry(
     val id: String,
     val content: String,
-    val createdAtLabel: String
+    val createdAtLabel: String,
+    val createdAtEpochMs: Long = System.currentTimeMillis()
 )
 
 @Serializable
 data class PlayerDanmakuEntry(
     val id: String,
-    val content: String
+    val content: String,
+    val createdAtEpochMs: Long,
+    val triggerPositionMs: Long
 )
 
 interface PlayerUiRepository {
     fun isFavorite(dramaId: String): Boolean
     fun toggleFavorite(dramaId: String): Boolean
     fun getComments(episodeId: String): List<PlayerCommentEntry>
-    fun addComment(episodeId: String, content: String): List<PlayerCommentEntry>
+    fun addComment(episodeId: String, content: String, createdAtEpochMs: Long = System.currentTimeMillis()): List<PlayerCommentEntry>
     fun isDanmakuEnabled(episodeId: String): Boolean
     fun setDanmakuEnabled(episodeId: String, enabled: Boolean)
     fun getDanmaku(episodeId: String): List<PlayerDanmakuEntry>
-    fun addDanmaku(episodeId: String, content: String): List<PlayerDanmakuEntry>
+    fun addDanmaku(
+        episodeId: String,
+        content: String,
+        triggerPositionMs: Long,
+        createdAtEpochMs: Long = System.currentTimeMillis()
+    ): List<PlayerDanmakuEntry>
 }
 
 interface PlayerUiStorage {
@@ -83,13 +94,18 @@ class PersistentPlayerUiRepository(
         return snapshot.commentsByEpisodeId[episodeId].orEmpty()
     }
 
-    override fun addComment(episodeId: String, content: String): List<PlayerCommentEntry> {
+    override fun addComment(
+        episodeId: String,
+        content: String,
+        createdAtEpochMs: Long
+    ): List<PlayerCommentEntry> {
         val current = snapshot.commentsByEpisodeId[episodeId].orEmpty()
         val updated = listOf(
             PlayerCommentEntry(
                 id = "comment_${System.currentTimeMillis()}",
                 content = content,
-                createdAtLabel = "刚刚"
+                createdAtLabel = formatTimestampLabel(createdAtEpochMs),
+                createdAtEpochMs = createdAtEpochMs
             )
         ) + current
         snapshot = snapshot.copy(
@@ -114,16 +130,24 @@ class PersistentPlayerUiRepository(
         return snapshot.danmakuByEpisodeId[episodeId].orEmpty()
     }
 
-    override fun addDanmaku(episodeId: String, content: String): List<PlayerDanmakuEntry> {
+    override fun addDanmaku(
+        episodeId: String,
+        content: String,
+        triggerPositionMs: Long,
+        createdAtEpochMs: Long
+    ): List<PlayerDanmakuEntry> {
         val current = snapshot.danmakuByEpisodeId[episodeId].orEmpty()
         val updated = (
             listOf(
                 PlayerDanmakuEntry(
                     id = "danmaku_${System.currentTimeMillis()}",
-                    content = content
+                    content = content,
+                    createdAtEpochMs = createdAtEpochMs,
+                    triggerPositionMs = triggerPositionMs
                 )
             ) + current
-        ).take(8)
+        ).sortedByDescending { it.createdAtEpochMs }
+            .take(30)
         snapshot = snapshot.copy(
             danmakuByEpisodeId = snapshot.danmakuByEpisodeId + (episodeId to updated)
         )
@@ -153,8 +177,8 @@ class InMemoryPlayerUiRepository : PlayerUiRepository {
 
     override fun getComments(episodeId: String): List<PlayerCommentEntry> = delegate.getComments(episodeId)
 
-    override fun addComment(episodeId: String, content: String): List<PlayerCommentEntry> {
-        return delegate.addComment(episodeId, content)
+    override fun addComment(episodeId: String, content: String, createdAtEpochMs: Long): List<PlayerCommentEntry> {
+        return delegate.addComment(episodeId, content, createdAtEpochMs)
     }
 
     override fun isDanmakuEnabled(episodeId: String): Boolean = delegate.isDanmakuEnabled(episodeId)
@@ -165,8 +189,13 @@ class InMemoryPlayerUiRepository : PlayerUiRepository {
 
     override fun getDanmaku(episodeId: String): List<PlayerDanmakuEntry> = delegate.getDanmaku(episodeId)
 
-    override fun addDanmaku(episodeId: String, content: String): List<PlayerDanmakuEntry> {
-        return delegate.addDanmaku(episodeId, content)
+    override fun addDanmaku(
+        episodeId: String,
+        content: String,
+        triggerPositionMs: Long,
+        createdAtEpochMs: Long
+    ): List<PlayerDanmakuEntry> {
+        return delegate.addDanmaku(episodeId, content, triggerPositionMs, createdAtEpochMs)
     }
 }
 
@@ -178,4 +207,10 @@ private class InMemoryPlayerUiStorage : PlayerUiStorage {
     override fun putString(key: String, value: String) {
         values[key] = value
     }
+}
+
+private fun formatTimestampLabel(epochMs: Long): String {
+    return DateTimeFormatter.ofPattern("MM-dd HH:mm")
+        .withZone(ZoneId.systemDefault())
+        .format(Instant.ofEpochMilli(epochMs))
 }

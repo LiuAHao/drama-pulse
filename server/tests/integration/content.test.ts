@@ -64,6 +64,9 @@ describe('GET /dramas', () => {
     const body = dramasRes.json();
     expect(body.data.continueWatching).not.toBeNull();
     expect(body.data.continueWatching.progressMs).toBe(5000);
+    expect(body.data.continueWatching.drama.coverPath).toContain('http://');
+    expect(body.data.continueWatching.episode.videoPath).toContain('http://');
+    expect(body.data.continueWatching.episode.videoUrl).toContain('http://');
   });
 });
 
@@ -97,5 +100,34 @@ describe('GET /episodes/:episodeId', () => {
   it('should return 404 for non-existent episode', async () => {
     const res = await app.inject({ method: 'GET', url: '/episodes/nonexistent' });
     expect(res.statusCode).toBe(404);
+  });
+});
+
+describe('GET /users/:userId/watch-progress', () => {
+  it('should return nested drama and episode with URL-mapped resource fields', async () => {
+    const deviceId = 'test-device-progress-001';
+    const userId = getUserIdFromDeviceId(deviceId);
+
+    const saveRes = await app.inject({
+      method: 'POST',
+      url: `/users/${userId}/watch-progress`,
+      headers: { host: '192.168.1.88:8787', 'x-device-id': deviceId },
+      payload: { deviceId, episodeId: 'ep_001_01', progressMs: 12345 },
+    });
+    expect(saveRes.statusCode).toBe(200);
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/users/${userId}/watch-progress`,
+      headers: { host: '192.168.1.88:8787', 'x-device-id': deviceId },
+    });
+    expect(res.statusCode).toBe(200);
+
+    const body = res.json();
+    expect(body.code).toBe(0);
+    expect(body.data.length).toBeGreaterThan(0);
+    expect(body.data[0].drama.coverPath).toContain('http://192.168.1.88:8787/');
+    expect(body.data[0].episode.videoPath).toContain('http://192.168.1.88:8787/');
+    expect(body.data[0].episode.videoUrl).toContain('http://192.168.1.88:8787/');
   });
 });

@@ -26,14 +26,12 @@ enum class BottomNavTab(val label: String, val icon: ImageVector) {
 @Composable
 fun BottomNavBar(
     selectedTab: BottomNavTab,
-    darkMode: Boolean = false,
     onTabSelected: (BottomNavTab) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor = if (darkMode) MaterialTheme.colorScheme.scrim else MaterialTheme.colorScheme.surface
-    val selectedColor = if (darkMode) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.primary
-    val unselectedColor = if (darkMode) MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.65f)
-        else MaterialTheme.colorScheme.onSurfaceVariant
+    val backgroundColor = MaterialTheme.colorScheme.surface
+    val selectedColor = MaterialTheme.colorScheme.primary
+    val unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
 
     Row(
         modifier = modifier

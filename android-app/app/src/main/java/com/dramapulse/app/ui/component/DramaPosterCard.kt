@@ -15,7 +15,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.ui.theme.Accent
 import com.dramapulse.app.ui.theme.AccentSoft
@@ -30,6 +32,8 @@ fun DramaPosterCard(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -43,7 +47,10 @@ fun DramaPosterCard(
         ) {
             if (coverUrl != null) {
                 AsyncImage(
-                    model = coverUrl,
+                    model = ImageRequest.Builder(context)
+                        .data(coverUrl)
+                        .crossfade(false)
+                        .build(),
                     contentDescription = title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()

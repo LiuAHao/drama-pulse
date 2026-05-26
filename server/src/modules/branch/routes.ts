@@ -12,7 +12,8 @@ import {
   createBranchCommentSchema,
 } from '../../shared/schemas/index.js';
 import { assertUserMatchesDeviceId, getUserIdFromDeviceId, resolveDeviceId } from '../../services/userIdentity/index.js';
-import { getBaseUrlFromRequest, pathToUrl } from '../../services/resource/index.js';
+import { getBaseUrlFromRequest } from '../../services/resource/index.js';
+import { toClientBranchOption, toClientBranchTask } from '../../services/clientPayload/index.js';
 
 export async function branchRoutes(fastify: FastifyInstance) {
   // GET /episodes/:episodeId/branch-options
@@ -40,17 +41,14 @@ export async function branchRoutes(fastify: FastifyInstance) {
       orderBy: { sortIndex: 'asc' },
     });
 
-    const result = branchOptions.map((option) => ({
-      ...option,
-      resultContentPath: pathToUrl(option.resultContentPath, baseUrl),
-      coverPath: pathToUrl(option.coverPath, baseUrl),
-    }));
+    const result = branchOptions.map((option) => toClientBranchOption(option, baseUrl));
 
     return reply.send(success(result));
   });
 
   // POST /branch-tasks
   fastify.post('/branch-tasks', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
     const body = createBranchTaskSchema.parse(request.body);
     const deviceId = resolveDeviceId(request, body.deviceId);
 
@@ -78,11 +76,12 @@ export async function branchRoutes(fastify: FastifyInstance) {
       },
     });
 
-    return reply.send(success(task));
+    return reply.send(success(toClientBranchTask(task, baseUrl)));
   });
 
   // GET /branch-tasks/:taskId
   fastify.get('/branch-tasks/:taskId', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
     const params = taskIdParamSchema.parse(request.params);
 
     const task = await prisma.branchTask.findUnique({
@@ -101,11 +100,12 @@ export async function branchRoutes(fastify: FastifyInstance) {
       throw new NotFoundError('branch task not found');
     }
 
-    return reply.send(success(task));
+    return reply.send(success(toClientBranchTask(task, baseUrl)));
   });
 
   // GET /users/:userId/branch-tasks
   fastify.get('/users/:userId/branch-tasks', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
     const params = userIdParamSchema.parse(request.params);
     const headerDeviceId = request.headers['x-device-id'];
     const normalizedHeaderDeviceId = Array.isArray(headerDeviceId) ? headerDeviceId[0] : headerDeviceId;
@@ -117,11 +117,16 @@ export async function branchRoutes(fastify: FastifyInstance) {
       where: { userId: params.userId },
       orderBy: { createdAt: 'desc' },
       include: {
-        episode: true,
+        episode: {
+          include: { drama: true },
+        },
+        _count: {
+          select: { likes: true, comments: true },
+        },
       },
     });
 
-    return reply.send(success(tasks));
+    return reply.send(success(tasks.map((task) => toClientBranchTask(task, baseUrl))));
   });
 
   // POST /branch-tasks/:taskId/likes

@@ -126,14 +126,17 @@ class FakeContentRepository : ContentRepository {
                 episodeId = episodeId,
                 startTimeMs = 15_000,
                 endTimeMs = 30_000,
+                interactionStartMs = 15_300,
+                interactionAppearMs = 15_800,
+                interactionEndMs = 31_500,
                 type = HighlightType.FEEL_GOOD,
                 title = "主角觉醒",
                 description = "主角意识到自己的潜力",
                 intensity = 4,
-                templateId = HighlightTemplate.EMOTION_BUTTON,
                 interactionOptions = listOf(
-                    HighlightOption(text = "太燃了", action = "cheer"),
-                    HighlightOption(text = "加油", action = "support")
+                    HighlightOption(text = "爽了", action = "cheer"),
+                    HighlightOption(text = "继续打脸", action = "support"),
+                    HighlightOption(text = "别停", action = "boost")
                 ),
                 stats = HighlightStatsModel(
                     totalCount = 42,
@@ -147,14 +150,17 @@ class FakeContentRepository : ContentRepository {
                 episodeId = episodeId,
                 startTimeMs = 60_000,
                 endTimeMs = 75_000,
+                interactionStartMs = 60_200,
+                interactionAppearMs = 60_700,
+                interactionEndMs = 76_500,
                 type = HighlightType.REVERSAL,
                 title = "剧情反转",
                 description = "意想不到的发展",
                 intensity = 5,
-                templateId = HighlightTemplate.VOTE_SIDE,
                 interactionOptions = listOf(
-                    HighlightOption(text = "震惊", action = "shock"),
-                    HighlightOption(text = "意料之中", action = "expected")
+                    HighlightOption(text = "卧槽", action = "shock"),
+                    HighlightOption(text = "没想到", action = "expected"),
+                    HighlightOption(text = "居然是他", action = "reveal")
                 ),
                 stats = HighlightStatsModel(
                     totalCount = 88,

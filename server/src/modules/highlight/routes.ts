@@ -3,13 +3,7 @@ import { prisma } from '../../shared/db/index.js';
 import { ValidationError, NotFoundError } from '../../shared/errors/index.js';
 import { success } from '../../shared/response/index.js';
 import { episodeIdParamSchema, highlightIdParamSchema } from '../../shared/schemas/index.js';
-
-const DEFAULT_STATS = {
-  totalCount: 0,
-  uniqueDeviceCount: 0,
-  heatLevel: 0,
-  topOption: '',
-};
+import { toClientHighlight } from '../../services/clientPayload/index.js';
 
 export async function highlightRoutes(fastify: FastifyInstance) {
   // GET /episodes/:episodeId/highlights
@@ -32,35 +26,7 @@ export async function highlightRoutes(fastify: FastifyInstance) {
       include: { highlightStats: true },
     });
 
-    const result = highlights.map((h) => ({
-      id: h.id,
-      episodeId: h.episodeId,
-      startTimeMs: h.startTimeMs,
-      endTimeMs: h.endTimeMs,
-      interactionStartMs: h.interactionStartMs ?? h.startTimeMs,
-      interactionAppearMs: h.interactionAppearMs ?? h.interactionStartMs ?? h.startTimeMs,
-      interactionEndMs: h.interactionEndMs ?? (h.endTimeMs + 1500),
-      type: h.type,
-      title: h.title,
-      description: h.description,
-      intensity: h.intensity,
-      templateId: h.templateId,
-      interactionOptionsJson: h.interactionOptionsJson,
-      visualEffectType: h.visualEffectType,
-      source: h.source,
-      confidence: h.confidence,
-      status: h.status,
-      createdAt: h.createdAt,
-      updatedAt: h.updatedAt,
-      stats: h.highlightStats
-        ? {
-            totalCount: h.highlightStats.totalCount,
-            uniqueDeviceCount: h.highlightStats.uniqueDeviceCount,
-            heatLevel: h.highlightStats.heatLevel,
-            topOption: h.highlightStats.topOption,
-          }
-        : DEFAULT_STATS,
-    }));
+    const result = highlights.map((h) => toClientHighlight(h, h.highlightStats));
 
     return reply.send(success(result));
   });
@@ -90,7 +56,12 @@ export async function highlightRoutes(fastify: FastifyInstance) {
           heatLevel: stats.heatLevel,
           topOption: stats.topOption,
         }
-      : DEFAULT_STATS;
+      : {
+          totalCount: 0,
+          uniqueDeviceCount: 0,
+          heatLevel: 0,
+          topOption: '',
+        };
 
     return reply.send(success(result));
   });

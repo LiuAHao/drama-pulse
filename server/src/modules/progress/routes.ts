@@ -4,11 +4,14 @@ import { success } from '../../shared/response';
 import { AppError, ValidationError, NotFoundError } from '../../shared/errors';
 import { userIdParamSchema, upsertWatchProgressSchema } from '../../shared/schemas';
 import { assertUserMatchesDeviceId, getUserIdFromDeviceId, resolveDeviceId } from '../../services/userIdentity';
+import { getBaseUrlFromRequest } from '../../services/resource/index.js';
+import { toClientWatchProgress } from '../../services/clientPayload/index.js';
 
 export async function progressRoutes(fastify: FastifyInstance) {
   // GET /users/:userId/watch-progress
   fastify.get('/users/:userId/watch-progress', async (request, reply) => {
     try {
+      const baseUrl = getBaseUrlFromRequest(request);
       const parsed = userIdParamSchema.safeParse(request.params);
       if (!parsed.success) {
         throw new ValidationError('invalid userId');
@@ -25,7 +28,7 @@ export async function progressRoutes(fastify: FastifyInstance) {
         include: { drama: true, episode: true },
       });
 
-      return reply.send(success(progresses));
+      return reply.send(success(progresses.map((progress) => toClientWatchProgress(progress, baseUrl))));
     } catch (err) {
       if (err instanceof AppError) throw err;
       throw new AppError(50001, 'failed to load watch progress', 500);

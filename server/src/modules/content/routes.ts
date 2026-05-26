@@ -3,8 +3,9 @@ import { prisma } from '../../shared/db';
 import { success } from '../../shared/response';
 import { AppError, NotFoundError, ValidationError } from '../../shared/errors';
 import { dramaIdParamSchema, episodeIdParamSchema } from '../../shared/schemas';
-import { getBaseUrlFromRequest, pathToUrl } from '../../services/resource';
+import { getBaseUrlFromRequest } from '../../services/resource';
 import { getUserIdFromDeviceId } from '../../services/userIdentity';
+import { toClientDrama, toClientEpisode } from '../../services/clientPayload/index.js';
 
 export async function contentRoutes(fastify: FastifyInstance) {
   // GET /dramas - featured list, alternatives, and continue-watching
@@ -18,11 +19,11 @@ export async function contentRoutes(fastify: FastifyInstance) {
 
       const featured = dramas
         .filter((d) => d.isFeatured)
-        .map((d) => ({ ...d, coverPath: pathToUrl(d.coverPath, baseUrl) }));
+        .map((d) => toClientDrama(d, baseUrl));
 
       const alternatives = dramas
         .filter((d) => !d.isFeatured)
-        .map((d) => ({ ...d, coverPath: pathToUrl(d.coverPath, baseUrl) }));
+        .map((d) => toClientDrama(d, baseUrl));
 
       let continueWatching: {
         drama: (typeof featured)[0];
@@ -44,11 +45,13 @@ export async function contentRoutes(fastify: FastifyInstance) {
             const episode = await prisma.episode.findUnique({
               where: { id: progress.episodeId },
             });
-            continueWatching = {
-              drama: { ...drama, coverPath: pathToUrl(drama.coverPath, baseUrl) },
-              episode,
-              progressMs: progress.progressMs,
-            };
+            if (episode) {
+              continueWatching = {
+                drama: toClientDrama(drama, baseUrl),
+                episode: toClientEpisode(episode, baseUrl),
+                progressMs: progress.progressMs,
+              };
+            }
           }
         }
       }
@@ -75,8 +78,7 @@ export async function contentRoutes(fastify: FastifyInstance) {
       });
 
       const mapped = episodes.map((ep) => ({
-        ...ep,
-        videoPath: pathToUrl(ep.videoPath, baseUrl),
+        ...toClientEpisode(ep, baseUrl),
       }));
 
       return reply.send(success(mapped));
@@ -105,10 +107,7 @@ export async function contentRoutes(fastify: FastifyInstance) {
       }
 
       return reply.send(
-        success({
-          ...episode,
-          videoPath: pathToUrl(episode.videoPath, baseUrl),
-        }),
+        success(toClientEpisode(episode, baseUrl)),
       );
     } catch (err) {
       if (err instanceof AppError) throw err;

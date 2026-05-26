@@ -73,6 +73,94 @@ describe('POST /branch-tasks', () => {
     expect(body.code).toBe(0);
     expect(body.data.status).toBe('pending');
     expect(body.data.episodeId).toBe('ep_001_23');
+    expect(body.data.count.likes).toBe(0);
+    expect(body.data.count.comments).toBe(0);
+  });
+});
+
+describe('GET /branch-tasks/:taskId', () => {
+  it('should return client-shaped task detail with count and URL-mapped nested fields', async () => {
+    const createRes = await app.inject({
+      method: 'POST',
+      url: '/branch-tasks',
+      headers: { host: '192.168.1.88:8787' },
+      payload: {
+        deviceId: 'test-device-branch-detail-001',
+        episodeId: 'ep_001_23',
+        userPrompt: '测试分支详情',
+      },
+    });
+    const taskId = createRes.json().data.id;
+
+    const likeRes = await app.inject({
+      method: 'POST',
+      url: `/branch-tasks/${taskId}/likes`,
+      payload: { deviceId: 'test-device-branch-detail-001' },
+    });
+    expect(likeRes.statusCode).toBe(200);
+
+    const commentRes = await app.inject({
+      method: 'POST',
+      url: `/branch-tasks/${taskId}/comments`,
+      payload: { deviceId: 'test-device-branch-detail-001', content: '好看' },
+    });
+    expect(commentRes.statusCode).toBe(200);
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/branch-tasks/${taskId}`,
+      headers: { host: '192.168.1.88:8787' },
+    });
+    expect(res.statusCode).toBe(200);
+
+    const body = res.json();
+    expect(body.code).toBe(0);
+    expect(body.data.count.likes).toBe(1);
+    expect(body.data.count.comments).toBe(1);
+    expect(body.data.episode.videoPath).toContain('http://192.168.1.88:8787/');
+    expect(body.data.episode.videoUrl).toContain('http://192.168.1.88:8787/');
+    expect(body.data.drama.coverPath).toContain('http://192.168.1.88:8787/');
+  });
+});
+
+describe('GET /users/:userId/branch-tasks', () => {
+  it('should return list with client-shaped count and URL-mapped nested fields', async () => {
+    const deviceId = 'test-device-branch-list-001';
+    const createRes = await app.inject({
+      method: 'POST',
+      url: '/branch-tasks',
+      headers: { host: '192.168.1.88:8787' },
+      payload: {
+        deviceId,
+        episodeId: 'ep_001_23',
+        userPrompt: '测试分支列表',
+      },
+    });
+    expect(createRes.statusCode).toBe(200);
+    const userId = createRes.json().data.userId;
+    const taskId = createRes.json().data.id;
+
+    await app.inject({
+      method: 'POST',
+      url: `/branch-tasks/${taskId}/likes`,
+      payload: { deviceId },
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/users/${userId}/branch-tasks`,
+      headers: { host: '192.168.1.88:8787', 'x-device-id': deviceId },
+    });
+    expect(res.statusCode).toBe(200);
+
+    const body = res.json();
+    expect(body.code).toBe(0);
+    expect(body.data.length).toBeGreaterThan(0);
+    expect(body.data[0].count.likes).toBeGreaterThanOrEqual(1);
+    expect(body.data[0].count.comments).toBeGreaterThanOrEqual(0);
+    expect(body.data[0].episode.videoPath).toContain('http://192.168.1.88:8787/');
+    expect(body.data[0].episode.videoUrl).toContain('http://192.168.1.88:8787/');
+    expect(body.data[0].drama.coverPath).toContain('http://192.168.1.88:8787/');
   });
 });
 

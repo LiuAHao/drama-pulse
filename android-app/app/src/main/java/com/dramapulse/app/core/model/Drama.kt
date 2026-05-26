@@ -34,14 +34,35 @@ data class HighlightModel(
     val episodeId: String,
     val startTimeMs: Long,
     val endTimeMs: Long,
+    val interactionStartMs: Long,
+    val interactionAppearMs: Long,
+    val interactionEndMs: Long,
     val type: HighlightType,
     val title: String,
     val description: String,
     val intensity: Int,
-    val templateId: HighlightTemplate,
     val interactionOptions: List<HighlightOption>,
     val stats: HighlightStatsModel?
-)
+) {
+    val isQuickPrompt: Boolean
+        get() = intensity <= 2
+
+    fun isVisibleAt(positionMs: Long): Boolean =
+        positionMs in interactionAppearMs..interactionEndMs
+
+    fun isInteractableAt(positionMs: Long): Boolean =
+        positionMs in interactionStartMs..interactionEndMs
+
+    fun compatibilityInteractionType(): String =
+        if (isQuickPrompt) "emotion_button" else "boost_action"
+
+    fun optionTextAt(clickIndex: Int): String {
+        if (interactionOptions.isEmpty()) {
+            return title.ifBlank { type.fallbackOptionText() }
+        }
+        return interactionOptions[clickIndex.mod(interactionOptions.size)].text
+    }
+}
 
 enum class HighlightType(val value: String) {
     FEEL_GOOD("feel_good"),
@@ -56,18 +77,15 @@ enum class HighlightType(val value: String) {
         fun from(value: String): HighlightType =
             entries.find { it.value == value } ?: FEEL_GOOD
     }
-}
 
-enum class HighlightTemplate(val value: String) {
-    EMOTION_BUTTON("emotion_button"),
-    VOTE_SIDE("vote_side"),
-    BOOST_ACTION("boost_action"),
-    SUSPENSE_LOCK("suspense_lock"),
-    ENDING_BRANCH("ending_branch");
-
-    companion object {
-        fun from(value: String): HighlightTemplate =
-            entries.find { it.value == value } ?: EMOTION_BUTTON
+    fun fallbackOptionText(): String = when (this) {
+        FEEL_GOOD -> "爽了"
+        REVERSAL -> "卧槽"
+        FUNNY -> "笑死"
+        SWEET -> "嗑到了"
+        CONFLICT -> "烧起来了"
+        SUSPENSE -> "等等"
+        EMOTION_BURST -> "上头了"
     }
 }
 

@@ -61,11 +61,13 @@ fun HighlightDto.toModel(): HighlightModel {
         episodeId = episodeId,
         startTimeMs = startTimeMs,
         endTimeMs = endTimeMs,
+        interactionStartMs = interactionStartMs ?: startTimeMs,
+        interactionAppearMs = interactionAppearMs ?: interactionStartMs ?: startTimeMs,
+        interactionEndMs = interactionEndMs ?: (endTimeMs + 1_500),
         type = HighlightType.from(type),
         title = title,
         description = description,
         intensity = intensity,
-        templateId = HighlightTemplate.from(templateId),
         interactionOptions = options,
         stats = stats?.toModel()
     )

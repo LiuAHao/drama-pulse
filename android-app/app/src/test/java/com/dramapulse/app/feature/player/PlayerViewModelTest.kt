@@ -9,6 +9,8 @@ import com.dramapulse.app.core.data.WatchProgressEntry
 import com.dramapulse.app.core.model.DramaCardModel
 import com.dramapulse.app.core.model.EpisodeModel
 import com.dramapulse.app.core.model.HighlightModel
+import com.dramapulse.app.core.model.HighlightOption
+import com.dramapulse.app.core.model.HighlightType
 import com.dramapulse.app.core.model.HighlightStatsModel
 import com.dramapulse.app.core.player.PlaybackUiState
 import com.dramapulse.app.core.player.PlayerController
@@ -16,6 +18,7 @@ import com.dramapulse.app.testutil.MainDispatcherRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -225,6 +228,108 @@ class PlayerViewModelTest {
         viewModel.forceClearForTest()
     }
 
+    @Test
+    fun `highlight appears at interactionAppearMs and is interactable at interactionStartMs`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val highlight = buildHighlight(
+            id = "hl-1",
+            episodeId = episode1.id,
+            interactionAppearMs = 15_600,
+            interactionStartMs = 16_000,
+            interactionEndMs = 19_500
+        )
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(highlight))
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            repos.playerController.emitPlayback(positionMs = 15_700)
+            advanceTimeBy(600)
+            runCurrent()
+            assertEquals("hl-1", viewModel.uiState.value.highlight.activeHighlight?.id)
+            assertEquals(false, viewModel.uiState.value.highlight.activeInteractionEnabled)
+
+            repos.playerController.emitPlayback(positionMs = 16_100)
+            advanceTimeBy(600)
+            runCurrent()
+            assertEquals(true, viewModel.uiState.value.highlight.activeInteractionEnabled)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
+    fun `strong highlight close to previous strong one is downgraded to quick prompt`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val first = buildHighlight(
+            id = "hl-1",
+            episodeId = episode1.id,
+            interactionAppearMs = 10_000,
+            interactionStartMs = 10_200,
+            interactionEndMs = 13_500,
+            intensity = 5
+        )
+        val second = buildHighlight(
+            id = "hl-2",
+            episodeId = episode1.id,
+            interactionAppearMs = 15_500,
+            interactionStartMs = 15_800,
+            interactionEndMs = 18_500,
+            intensity = 4,
+            type = HighlightType.CONFLICT
+        )
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(first, second))
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            repos.playerController.emitPlayback(positionMs = 10_500)
+            advanceTimeBy(600)
+            runCurrent()
+            repos.playerController.emitPlayback(positionMs = 14_000, isPlaying = false)
+            advanceTimeBy(600)
+            runCurrent()
+            repos.playerController.emitPlayback(positionMs = 15_900)
+            advanceTimeBy(600)
+            runCurrent()
+
+            assertEquals(2, viewModel.uiState.value.highlight.activeHighlight?.intensity)
+            assertEquals(true, viewModel.uiState.value.highlight.activeHighlight?.isQuickPrompt)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
     private data class TestPlayerDependencies(
         val contentRepository: FakeContentRepositoryForTest,
         val progressRepository: FakeProgressRepositoryForTest = FakeProgressRepositoryForTest(emptyList()),
@@ -235,7 +340,8 @@ class PlayerViewModelTest {
 
     private class FakeContentRepositoryForTest(
         private val episodes: List<EpisodeModel>,
-        private val episodeDetails: Map<String, EpisodeModel>
+        private val episodeDetails: Map<String, EpisodeModel>,
+        private val highlightsByEpisodeId: Map<String, List<HighlightModel>> = emptyMap()
     ) : ContentRepository {
         override suspend fun getDramas(): DramaListResult {
             return DramaListResult(
@@ -261,7 +367,8 @@ class PlayerViewModelTest {
             return requireNotNull(episodeDetails[episodeId])
         }
 
-        override suspend fun getHighlights(episodeId: String): List<HighlightModel> = emptyList()
+        override suspend fun getHighlights(episodeId: String): List<HighlightModel> =
+            highlightsByEpisodeId[episodeId].orEmpty()
     }
 
     private class FakeProgressRepositoryForTest(
@@ -328,6 +435,16 @@ class PlayerViewModelTest {
             preloadedUrl = mediaUrl
         }
 
+        fun emitPlayback(positionMs: Long, isPlaying: Boolean = true) {
+            _playbackState.value = PlaybackUiState(
+                currentPositionMs = positionMs,
+                durationMs = 30_000,
+                bufferedPositionMs = positionMs + 2_000,
+                state = if (isPlaying) com.dramapulse.app.core.player.PlaybackState.PLAYING
+                else com.dramapulse.app.core.player.PlaybackState.PAUSED
+            )
+        }
+
         fun resetPlaybackCalls() {
             playInvocations = 0
             pauseInvocations = 0
@@ -349,6 +466,34 @@ class PlayerViewModelTest {
             summary = "",
             isFinalEpisode = episodeNo == 2,
             hasBranch = episodeNo == 2
+        )
+    }
+
+    private fun buildHighlight(
+        id: String,
+        episodeId: String,
+        interactionAppearMs: Long,
+        interactionStartMs: Long,
+        interactionEndMs: Long,
+        intensity: Int = 3,
+        type: HighlightType = HighlightType.FEEL_GOOD
+    ): HighlightModel {
+        return HighlightModel(
+            id = id,
+            episodeId = episodeId,
+            startTimeMs = interactionStartMs - 600,
+            endTimeMs = interactionEndMs - 1_200,
+            interactionStartMs = interactionStartMs,
+            interactionAppearMs = interactionAppearMs,
+            interactionEndMs = interactionEndMs,
+            type = type,
+            title = "高光测试",
+            description = "",
+            intensity = intensity,
+            interactionOptions = listOf(
+                HighlightOption(text = type.fallbackOptionText())
+            ),
+            stats = null
         )
     }
 

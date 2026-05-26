@@ -42,7 +42,6 @@ fun DramaListScreen(
         )
         ScreenState.CONTENT -> DramaListContent(
             uiState = uiState,
-            onSearchQueryChange = { onEvent(DramaListEvent.OnSearchQueryChanged(it)) },
             onDramaClick = { dramaId ->
                 onNavigateToPlayer(dramaId, null)
             },
@@ -57,7 +56,6 @@ fun DramaListScreen(
 @Composable
 private fun DramaListContent(
     uiState: DramaListUiState,
-    onSearchQueryChange: (String) -> Unit,
     onDramaClick: (String) -> Unit,
     onContinueWatchingClick: (dramaId: String, episodeId: String) -> Unit,
     modifier: Modifier = Modifier
@@ -74,14 +72,6 @@ private fun DramaListContent(
         horizontalArrangement = Arrangement.spacedBy(Dimens.ComponentGap),
         verticalArrangement = Arrangement.spacedBy(Dimens.ComponentGap)
     ) {
-        // Search bar - full width
-        item(span = { GridItemSpan(2) }) {
-            TopSearchBar(
-                value = uiState.searchQuery,
-                onValueChange = onSearchQueryChange
-            )
-        }
-
         uiState.continueWatching?.let { continueWatching ->
             item(span = { GridItemSpan(2) }) {
                 ContinueWatchingCard(
@@ -103,20 +93,14 @@ private fun DramaListContent(
                 text = "精选短剧",
                 style = MaterialTheme.typography.headlineLarge,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.padding(top = Dimens.ModuleGap)
+                modifier = Modifier.padding(top = Dimens.PaddingS)
             )
         }
 
         // Drama poster grid - 2 columns
-        val filteredDramas = (uiState.featured + uiState.alternatives).filter { drama ->
-            val query = uiState.searchQuery.trim()
-            query.isBlank() ||
-                drama.title.contains(query, ignoreCase = true) ||
-                drama.description.contains(query, ignoreCase = true) ||
-                drama.tags.any { it.contains(query, ignoreCase = true) }
-        }
+        val dramas = uiState.featured + uiState.alternatives
 
-        items(filteredDramas) { drama ->
+        items(dramas) { drama ->
             DramaPosterCard(
                 title = drama.title,
                 coverUrl = drama.coverUrl,
@@ -134,18 +118,6 @@ private fun DramaListScreenPreview() {
     DramaPulseTheme {
         DramaListScreen(
             uiState = PreviewData.dramaListState,
-            onEvent = {},
-            onNavigateToPlayer = { _, _ -> }
-        )
-    }
-}
-
-@Preview(showBackground = true, name = "DramaList - Search")
-@Composable
-private fun DramaListScreenSearchPreview() {
-    DramaPulseTheme {
-        DramaListScreen(
-            uiState = PreviewData.dramaListStateWithSearch,
             onEvent = {},
             onNavigateToPlayer = { _, _ -> }
         )

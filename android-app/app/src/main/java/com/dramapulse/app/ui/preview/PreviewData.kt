@@ -81,11 +81,8 @@ object PreviewData {
         screenState = ScreenState.CONTENT,
         featured = listOf(drama1),
         alternatives = listOf(drama2, drama3),
-        continueWatching = continueWatching,
-        searchQuery = ""
+        continueWatching = continueWatching
     )
-
-    val dramaListStateWithSearch = dramaListState.copy(searchQuery = "撕")
 
     val profileState = ProfileUiState(
         screenState = ProfileScreenState.CONTENT,
@@ -134,8 +131,12 @@ object PreviewData {
         ),
         danmakuEnabled = true,
         danmakuMessages = listOf(
-            PlayerDanmakuEntry("d1", "高能预警！"),
-            PlayerDanmakuEntry("d2", "来了来了")
+            PlayerDanmakuEntry("d1", "高能预警！", createdAtEpochMs = 1L, triggerPositionMs = 43_000L),
+            PlayerDanmakuEntry("d2", "来了来了", createdAtEpochMs = 2L, triggerPositionMs = 45_000L)
+        ),
+        activeDanmakuMessages = listOf(
+            PlayerDanmakuEntry("d1", "高能预警！", createdAtEpochMs = 1L, triggerPositionMs = 43_000L),
+            PlayerDanmakuEntry("d2", "来了来了", createdAtEpochMs = 2L, triggerPositionMs = 45_000L)
         )
     )
 

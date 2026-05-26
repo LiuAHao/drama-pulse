@@ -1,6 +1,8 @@
 package com.dramapulse.app.app
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,9 +21,12 @@ import com.dramapulse.app.feature.branch.BranchViewModel
 import com.dramapulse.app.feature.drama_list.DramaListScreen
 import com.dramapulse.app.feature.drama_list.DramaListViewModel
 import com.dramapulse.app.feature.player.PlayerScreen
+import com.dramapulse.app.feature.player.DebugPlaybackOverride
 import com.dramapulse.app.feature.player.PlayerViewModel
 import com.dramapulse.app.feature.profile.ProfileScreen
+import com.dramapulse.app.feature.profile.ServerSettingsRepository
 import com.dramapulse.app.feature.profile.ProfileViewModel
+import com.dramapulse.app.feature.profile.SettingsScreen
 import com.dramapulse.app.core.design.Dimens
 import com.dramapulse.app.ui.component.BottomNavBar
 import com.dramapulse.app.ui.component.BottomNavTab
@@ -34,6 +39,13 @@ fun AppNavHost(
     modifier: Modifier = Modifier
 ) {
     val appContainer = rememberAppContainer(useFakeData = USE_FAKE_DATA)
+    val startDestination = if (
+        !USE_FAKE_DATA && appContainer.serverConfigRepository.getDisplayBaseUrl().isBlank()
+    ) {
+        AppRoutes.PROFILE
+    } else {
+        AppRoutes.DRAMA_LIST
+    }
 
     val dramaListViewModel = remember {
         DramaListViewModel(appContainer.contentRepository)
@@ -49,7 +61,11 @@ fun AppNavHost(
         )
     }
 
-    val profileViewModel = remember { ProfileViewModel() }
+    val profileViewModel = remember {
+        ProfileViewModel(
+            serverSettingsRepository = ServerSettingsRepository(appContainer.serverConfigRepository)
+        )
+    }
     val playerUiState by playerViewModel.uiState.collectAsState()
     val dramaListUiState by dramaListViewModel.uiState.collectAsState()
 
@@ -76,7 +92,6 @@ fun AppNavHost(
             if (showBottomNav) {
                 BottomNavBar(
                     selectedTab = currentTab,
-                    darkMode = currentRoute == AppRoutes.PLAYER,
                     onTabSelected = { tab ->
                         if (currentRoute == AppRoutes.PLAYER && tab != BottomNavTab.PLAYER) {
                             playerViewModel.onLeavePlaybackSurface()
@@ -120,8 +135,12 @@ fun AppNavHost(
 
         NavHost(
             navController = navController,
-            startDestination = AppRoutes.DRAMA_LIST,
-            modifier = contentModifier
+            startDestination = startDestination,
+            modifier = contentModifier,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
         ) {
             composable(AppRoutes.DRAMA_LIST) {
                 DramaListScreen(
@@ -146,6 +165,7 @@ fun AppNavHost(
             ) { backStackEntry ->
                 val dramaId = backStackEntry.arguments?.getString("dramaId") ?: ""
                 val episodeId = backStackEntry.arguments?.getString("episodeId")
+                playerViewModel.setDebugPlaybackOverride(null)
                 PlayerScreen(
                     dramaId = dramaId,
                     episodeId = episodeId,
@@ -154,7 +174,8 @@ fun AppNavHost(
                     onBack = { navController.popBackStack() },
                     onNavigateToBranch = { epId ->
                         navController.navigate(AppRoutes.branchResultRoute(epId))
-                    }
+                    },
+                    forceReloadOnEnter = false
                 )
             }
 
@@ -180,7 +201,66 @@ fun AppNavHost(
                     viewModel = profileViewModel,
                     onNavigateToPlayer = { dramaId ->
                         navController.navigate(AppRoutes.playerRoute(dramaId))
+                    },
+                    onNavigateToSettings = {
+                        navController.navigate(AppRoutes.SETTINGS)
                     }
+                )
+            }
+
+            composable(AppRoutes.SETTINGS) {
+                SettingsScreen(
+                    viewModel = profileViewModel,
+                    onBack = { navController.popBackStack() },
+                    onOpenDebugPlayer = {
+                        val debugDramaId = playerUiState.meta.dramaId.ifBlank {
+                            dramaListUiState.continueWatching?.drama?.id
+                                ?: dramaListUiState.featured.firstOrNull()?.id
+                                ?: dramaListUiState.alternatives.firstOrNull()?.id
+                                ?: "drama_001"
+                        }
+                        val debugEpisodeId =
+                            playerUiState.meta.currentEpisode?.id
+                                ?: dramaListUiState.continueWatching?.episode?.id
+                        navController.navigate(
+                            AppRoutes.debugPlayerRoute(
+                                dramaId = debugDramaId,
+                                episodeId = debugEpisodeId
+                            )
+                        )
+                    }
+                )
+            }
+
+            composable(
+                route = AppRoutes.DEBUG_PLAYER,
+                arguments = listOf(
+                    navArgument("dramaId") { type = NavType.StringType },
+                    navArgument("episodeId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
+                )
+            ) { backStackEntry ->
+                val dramaId = backStackEntry.arguments?.getString("dramaId") ?: ""
+                val episodeId = backStackEntry.arguments?.getString("episodeId")
+                playerViewModel.setDebugPlaybackOverride(
+                    DebugPlaybackOverride(
+                        highlight = profileViewModel.buildDebugHighlight(),
+                        startPositionMs = 0L
+                    )
+                )
+                PlayerScreen(
+                    dramaId = dramaId,
+                    episodeId = episodeId,
+                    viewModel = playerViewModel,
+                    playerController = appContainer.playerController,
+                    onBack = { navController.popBackStack() },
+                    onNavigateToBranch = { epId ->
+                        navController.navigate(AppRoutes.branchResultRoute(epId))
+                    },
+                    forceReloadOnEnter = true
                 )
             }
         }

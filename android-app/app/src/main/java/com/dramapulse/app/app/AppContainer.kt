@@ -21,6 +21,7 @@ import com.dramapulse.app.core.data.ProgressRepositoryImpl
 import com.dramapulse.app.core.data.SharedPreferencesPlayerUiStorage
 import com.dramapulse.app.core.network.DeviceIdProvider
 import com.dramapulse.app.core.network.NetworkModule
+import com.dramapulse.app.core.network.ServerConfigRepository
 import com.dramapulse.app.core.player.ExoPlayerController
 import com.dramapulse.app.core.player.MediaCacheProvider
 import com.dramapulse.app.core.util.DeviceUtil
@@ -31,7 +32,8 @@ data class AppContainer(
     val interactionRepository: InteractionRepository,
     val branchRepository: BranchRepository,
     val playerUiRepository: PlayerUiRepository,
-    val playerController: ExoPlayerController
+    val playerController: ExoPlayerController,
+    val serverConfigRepository: ServerConfigRepository
 )
 
 @Composable
@@ -56,6 +58,7 @@ private fun buildAppContainer(
     val userId = DeviceUtil.getUserIdFromDeviceId(deviceId)
     val cacheDataSourceFactory = MediaCacheProvider.getCacheDataSourceFactory(context)
     val playerController = ExoPlayerController(context, cacheDataSourceFactory)
+    val serverConfigRepository = ServerConfigRepository(context)
     val playerUiRepository = PersistentPlayerUiRepository(
         storage = SharedPreferencesPlayerUiStorage(
             context.getSharedPreferences("drama_pulse_player_ui", Context.MODE_PRIVATE)
@@ -70,7 +73,8 @@ private fun buildAppContainer(
             interactionRepository = FakeInteractionRepository(),
             branchRepository = FakeBranchRepository(),
             playerUiRepository = playerUiRepository,
-            playerController = playerController
+            playerController = playerController,
+            serverConfigRepository = serverConfigRepository
         )
     }
 
@@ -90,6 +94,7 @@ private fun buildAppContainer(
             deviceId = deviceId
         ),
         playerUiRepository = playerUiRepository,
-        playerController = playerController
+        playerController = playerController,
+        serverConfigRepository = serverConfigRepository
     )
 }
