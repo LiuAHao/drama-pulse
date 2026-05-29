@@ -15,12 +15,19 @@ android-app/      Android 客户端
 server/           本地服务端
 admin-web/        本地 Web 管理后台
 scripts/          离线处理脚本
-data/             SQLite 与种子数据
+data/             导出文件、seed 辅助数据
+server/data/      服务端运行库与测试库
 assets/           封面、分支结果、特效资源
 videos/           本地原始视频资源
 docs/             产品、技术、排期等文档
 config/           配置模板
 ```
+
+说明：
+
+- 默认运行数据库是 `server/data/app.db`
+- 测试数据库是 `server/data/test.app.db`
+- 根目录 `data/` 主要放导出结果和 seed 辅助文件，不是服务端当前运行库
 
 ## 文档
 

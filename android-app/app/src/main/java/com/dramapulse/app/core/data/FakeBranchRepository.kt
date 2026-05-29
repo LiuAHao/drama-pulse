@@ -8,17 +8,19 @@ class FakeBranchRepository : BranchRepository {
         return listOf(
             BranchOptionModel(
                 id = "bo-1",
-                title = "甜蜜结局",
-                description = "主角收获爱情与事业双丰收",
+                title = "温情结局",
+                description = "主角收获温暖关系与圆满收场",
                 resultType = "video",
-                coverUrl = ""
+                coverUrl = "",
+                resultContentUrl = ""
             ),
             BranchOptionModel(
                 id = "bo-2",
                 title = "反转结局",
                 description = "一个意想不到的结局",
                 resultType = "video",
-                coverUrl = ""
+                coverUrl = "",
+                resultContentUrl = ""
             )
         )
     }

@@ -19,12 +19,16 @@ enum class ProfileSection {
 data class ProfileUiState(
     val screenState: ProfileScreenState = ProfileScreenState.IDLE,
     val nickname: String = "剧迷用户",
+    val bio: String = "",
     val avatarUrl: String? = null,
     val watchCount: Int = 0,
     val favoriteCount: Int = 0,
     val branchCount: Int = 0,
     val selectedSection: ProfileSection = ProfileSection.HISTORY,
     val serverBaseUrl: String = "",
+    val isEditingProfile: Boolean = false,
+    val profileNicknameInput: String = "",
+    val profileBioInput: String = "",
     val isEditingServerUrl: Boolean = false,
     val serverUrlInput: String = "",
     val debugHighlightType: HighlightType = HighlightType.FEEL_GOOD,
@@ -39,8 +43,14 @@ enum class ProfileScreenState {
 
 sealed class ProfileEvent {
     data object OnEnter : ProfileEvent()
+    data object OnRefresh : ProfileEvent()
     data class OnSectionSelected(val section: ProfileSection) : ProfileEvent()
     data class OnDramaClick(val dramaId: String) : ProfileEvent()
+    data object OnEditProfileClick : ProfileEvent()
+    data object OnDismissProfileDialog : ProfileEvent()
+    data class OnProfileNicknameChanged(val value: String) : ProfileEvent()
+    data class OnProfileBioChanged(val value: String) : ProfileEvent()
+    data object OnSaveProfile : ProfileEvent()
     data object OnEditServerUrlClick : ProfileEvent()
     data object OnDismissServerUrlDialog : ProfileEvent()
     data class OnServerUrlInputChanged(val value: String) : ProfileEvent()
@@ -50,11 +60,14 @@ sealed class ProfileEvent {
 }
 
 class ProfileViewModel(
-    private val serverSettingsRepository: ServerSettingsRepository
+    private val serverSettingsRepository: ServerSettingsRepository,
+    private val profileRemoteRepository: ProfileRemoteRepository,
+    private val profileSettingsRepository: ProfileSettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+    private var sectionData = ProfileSectionData()
 
     fun onEvent(event: ProfileEvent) {
         when (event) {
@@ -63,11 +76,39 @@ class ProfileViewModel(
                     loadProfile()
                 }
             }
+            is ProfileEvent.OnRefresh -> {
+                if (_uiState.value.screenState != ProfileScreenState.LOADING) {
+                    loadProfile()
+                }
+            }
             is ProfileEvent.OnSectionSelected -> {
                 _uiState.value = _uiState.value.copy(selectedSection = event.section)
                 loadSectionData(event.section)
             }
             is ProfileEvent.OnDramaClick -> {}
+            is ProfileEvent.OnEditProfileClick -> {
+                _uiState.value = _uiState.value.copy(
+                    isEditingProfile = true,
+                    profileNicknameInput = _uiState.value.nickname,
+                    profileBioInput = _uiState.value.bio
+                )
+            }
+            is ProfileEvent.OnDismissProfileDialog -> {
+                _uiState.value = _uiState.value.copy(
+                    isEditingProfile = false,
+                    profileNicknameInput = _uiState.value.nickname,
+                    profileBioInput = _uiState.value.bio
+                )
+            }
+            is ProfileEvent.OnProfileNicknameChanged -> {
+                _uiState.value = _uiState.value.copy(profileNicknameInput = event.value)
+            }
+            is ProfileEvent.OnProfileBioChanged -> {
+                _uiState.value = _uiState.value.copy(profileBioInput = event.value)
+            }
+            is ProfileEvent.OnSaveProfile -> {
+                saveProfile()
+            }
             is ProfileEvent.OnEditServerUrlClick -> {
                 _uiState.value = _uiState.value.copy(
                     isEditingServerUrl = true,
@@ -97,33 +138,114 @@ class ProfileViewModel(
 
     private fun loadProfile() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(screenState = ProfileScreenState.LOADING)
-            try {
-                _uiState.value = _uiState.value.copy(
-                    screenState = ProfileScreenState.EMPTY,
-                    nickname = "剧迷用户26667294",
-                    watchCount = 0,
-                    favoriteCount = 0,
-                    branchCount = 0,
-                    selectedSection = ProfileSection.HISTORY,
-                    serverBaseUrl = serverSettingsRepository.getServerBaseUrl(),
-                    serverUrlInput = serverSettingsRepository.getServerBaseUrl(),
-                    dramas = emptyList()
+            val previousState = _uiState.value
+            val selectedSection = _uiState.value.selectedSection
+            _uiState.value = _uiState.value.copy(
+                screenState = ProfileScreenState.LOADING,
+                errorMessage = null
+            )
+            val cachedNickname = profileSettingsRepository.getNickname()
+            val cachedBio = profileSettingsRepository.getBio()
+            val cachedAvatarUrl = profileSettingsRepository.getAvatarUrl()
+            val serverBaseUrl = serverSettingsRepository.getServerBaseUrl()
+            val cachedSectionDramas = sectionDataFor(selectedSection)
+
+            _uiState.value = _uiState.value.copy(
+                screenState = deriveScreenState(cachedSectionDramas),
+                nickname = cachedNickname,
+                bio = cachedBio,
+                avatarUrl = cachedAvatarUrl,
+                watchCount = previousState.watchCount,
+                favoriteCount = previousState.favoriteCount,
+                branchCount = previousState.branchCount,
+                selectedSection = selectedSection,
+                serverBaseUrl = serverBaseUrl,
+                serverUrlInput = serverBaseUrl,
+                profileNicknameInput = cachedNickname,
+                profileBioInput = cachedBio,
+                dramas = cachedSectionDramas
+            )
+
+            runCatching {
+                val remoteProfile = profileRemoteRepository.getProfile()
+                val remoteSectionData = profileRemoteRepository.getProfileSectionData()
+                remoteProfile to remoteSectionData
+            }.onSuccess { (remoteProfile, remoteSectionData) ->
+                sectionData = remoteSectionData
+                val sectionDramas = sectionDataFor(selectedSection)
+                profileSettingsRepository.saveProfile(
+                    nickname = remoteProfile.nickname,
+                    bio = remoteProfile.bio,
+                    avatarUrl = remoteProfile.avatarUrl
                 )
-            } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
-                    screenState = ProfileScreenState.ERROR,
-                    errorMessage = e.message ?: "加载失败"
+                    nickname = remoteProfile.nickname,
+                    bio = remoteProfile.bio,
+                    avatarUrl = remoteProfile.avatarUrl,
+                    watchCount = remoteProfile.watchCount,
+                    favoriteCount = remoteProfile.favoriteCount,
+                    branchCount = remoteProfile.branchCount,
+                    profileNicknameInput = remoteProfile.nickname,
+                    profileBioInput = remoteProfile.bio,
+                    screenState = deriveScreenState(sectionDramas),
+                    dramas = sectionDramas,
+                    errorMessage = null
+                )
+            }.onFailure { error ->
+                _uiState.value = _uiState.value.copy(
+                    screenState = deriveScreenState(_uiState.value.dramas),
+                    errorMessage = error.message ?: "资料加载失败"
                 )
             }
         }
     }
 
     private fun loadSectionData(section: ProfileSection) {
+        val sectionDramas = sectionDataFor(section)
         _uiState.value = _uiState.value.copy(
-            screenState = ProfileScreenState.EMPTY,
-            dramas = emptyList()
+            screenState = deriveScreenState(sectionDramas),
+            dramas = sectionDramas
         )
+    }
+
+    private fun saveProfile() {
+        val nickname = _uiState.value.profileNicknameInput.trim()
+        val bio = _uiState.value.profileBioInput.trim()
+        val avatarUrl = _uiState.value.avatarUrl
+
+        if (nickname.isBlank()) {
+            _uiState.value = _uiState.value.copy(errorMessage = "昵称不能为空")
+            return
+        }
+
+        viewModelScope.launch {
+            runCatching {
+                profileRemoteRepository.updateProfile(
+                    nickname = nickname,
+                    bio = bio,
+                    avatarUrl = avatarUrl
+                )
+            }.onSuccess { remoteProfile ->
+                profileSettingsRepository.saveProfile(
+                    nickname = remoteProfile.nickname,
+                    bio = remoteProfile.bio,
+                    avatarUrl = remoteProfile.avatarUrl
+                )
+                _uiState.value = _uiState.value.copy(
+                    nickname = remoteProfile.nickname,
+                    bio = remoteProfile.bio,
+                    avatarUrl = remoteProfile.avatarUrl,
+                    profileNicknameInput = remoteProfile.nickname,
+                    profileBioInput = remoteProfile.bio,
+                    isEditingProfile = false,
+                    errorMessage = null
+                )
+            }.onFailure { error ->
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = error.message ?: "资料保存失败"
+                )
+            }
+        }
     }
 
     private fun saveServerUrl() {
@@ -145,6 +267,7 @@ class ProfileViewModel(
             isEditingServerUrl = false,
             errorMessage = null
         )
+        loadProfile()
     }
 
     fun buildDebugHighlight(): HighlightModel {
@@ -171,10 +294,8 @@ class ProfileViewModel(
         HighlightType.FEEL_GOOD -> "反杀来了"
         HighlightType.REVERSAL -> "突然反转"
         HighlightType.CONFLICT -> "情绪拉满"
-        HighlightType.SWEET -> "心动一下"
+        HighlightType.SWEET -> "暖了一下"
         HighlightType.FUNNY -> "笑点来了"
-        HighlightType.SUSPENSE -> "别眨眼"
-        HighlightType.EMOTION_BURST -> "上头瞬间"
     }
 
     private fun debugOptionsFor(type: HighlightType): List<HighlightOption> = when (type) {
@@ -194,22 +315,30 @@ class ProfileViewModel(
             HighlightOption("太炸了")
         )
         HighlightType.SWEET -> listOf(
-            HighlightOption("嗑到了"),
-            HighlightOption("心动了"),
-            HighlightOption("给我亲")
+            HighlightOption("心暖了"),
+            HighlightOption("被触动了"),
+            HighlightOption("护住这一刻")
         )
         HighlightType.FUNNY -> listOf(
             HighlightOption("笑死"),
             HighlightOption("太会了")
         )
-        HighlightType.SUSPENSE -> listOf(
-            HighlightOption("等等"),
-            HighlightOption("不对劲")
-        )
-        HighlightType.EMOTION_BURST -> listOf(
-            HighlightOption("上头了"),
-            HighlightOption("受不了了")
-        )
+    }
+
+    private fun deriveScreenState(dramas: List<DramaCardModel>): ProfileScreenState {
+        return if (dramas.isEmpty()) {
+            ProfileScreenState.EMPTY
+        } else {
+            ProfileScreenState.CONTENT
+        }
+    }
+
+    private fun sectionDataFor(section: ProfileSection): List<DramaCardModel> {
+        return when (section) {
+            ProfileSection.HISTORY -> sectionData.history
+            ProfileSection.FAVORITES -> sectionData.favorites
+            ProfileSection.MY_BRANCHES -> sectionData.myBranches
+        }
     }
 
 }

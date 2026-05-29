@@ -24,10 +24,15 @@ import com.dramapulse.app.feature.player.PlayerScreen
 import com.dramapulse.app.feature.player.DebugPlaybackOverride
 import com.dramapulse.app.feature.player.PlayerViewModel
 import com.dramapulse.app.feature.profile.ProfileScreen
+import com.dramapulse.app.feature.profile.ProfileEvent
+import com.dramapulse.app.feature.profile.ProfileRemoteRepository
+import com.dramapulse.app.feature.profile.ProfileSettingsRepository
 import com.dramapulse.app.feature.profile.ServerSettingsRepository
 import com.dramapulse.app.feature.profile.ProfileViewModel
 import com.dramapulse.app.feature.profile.SettingsScreen
 import com.dramapulse.app.core.design.Dimens
+import com.dramapulse.app.core.network.toDisplayBaseUrl
+import com.dramapulse.app.core.util.DeviceUtil
 import com.dramapulse.app.ui.component.BottomNavBar
 import com.dramapulse.app.ui.component.BottomNavTab
 
@@ -39,13 +44,10 @@ fun AppNavHost(
     modifier: Modifier = Modifier
 ) {
     val appContainer = rememberAppContainer(useFakeData = USE_FAKE_DATA)
-    val startDestination = if (
-        !USE_FAKE_DATA && appContainer.serverConfigRepository.getDisplayBaseUrl().isBlank()
-    ) {
-        AppRoutes.PROFILE
-    } else {
-        AppRoutes.DRAMA_LIST
-    }
+    val startDestination = resolveStartDestination(
+        useFakeData = USE_FAKE_DATA,
+        baseUrlOrNull = appContainer.serverConfigRepository.getBaseUrlOrNull()
+    )
 
     val dramaListViewModel = remember {
         DramaListViewModel(appContainer.contentRepository)
@@ -63,7 +65,14 @@ fun AppNavHost(
 
     val profileViewModel = remember {
         ProfileViewModel(
-            serverSettingsRepository = ServerSettingsRepository(appContainer.serverConfigRepository)
+            serverSettingsRepository = ServerSettingsRepository(appContainer.serverConfigRepository),
+            profileRemoteRepository = ProfileRemoteRepository(
+                api = appContainer.api,
+                userId = DeviceUtil.getUserIdFromDeviceId(appContainer.deviceId)
+            ),
+            profileSettingsRepository = ProfileSettingsRepository(
+                sharedPreferences = appContainer.profileSharedPreferences
+            )
         )
     }
     val playerUiState by playerViewModel.uiState.collectAsState()
@@ -110,7 +119,10 @@ fun AppNavHost(
                                     ?: dramaListUiState.continueWatching?.episode?.id
                                 AppRoutes.playerRoute(currentDramaId, currentEpisodeId)
                             }
-                            BottomNavTab.PROFILE -> AppRoutes.PROFILE
+                            BottomNavTab.PROFILE -> {
+                                profileViewModel.onEvent(ProfileEvent.OnRefresh)
+                                AppRoutes.PROFILE
+                            }
                         }
 
                         if (tab == BottomNavTab.DRAMA) {
@@ -264,5 +276,16 @@ fun AppNavHost(
                 )
             }
         }
+    }
+}
+
+internal fun resolveStartDestination(
+    useFakeData: Boolean,
+    baseUrlOrNull: String?
+): String {
+    return if (!useFakeData && baseUrlOrNull.toDisplayBaseUrl().isBlank()) {
+        AppRoutes.PROFILE
+    } else {
+        AppRoutes.DRAMA_LIST
     }
 }

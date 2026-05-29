@@ -130,4 +130,16 @@ describe('GET /users/:userId/watch-progress', () => {
     expect(body.data[0].episode.videoPath).toContain('http://192.168.1.88:8787/');
     expect(body.data[0].episode.videoUrl).toContain('http://192.168.1.88:8787/');
   });
+
+  it('should require x-device-id for watch progress fetch', async () => {
+    const deviceId = 'test-device-progress-002';
+    const userId = getUserIdFromDeviceId(deviceId);
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/users/${userId}/watch-progress`,
+    });
+
+    expect(res.statusCode).toBe(400);
+  });
 });

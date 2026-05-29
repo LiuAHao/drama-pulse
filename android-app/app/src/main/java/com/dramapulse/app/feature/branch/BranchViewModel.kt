@@ -7,7 +7,6 @@ import com.dramapulse.app.core.model.BranchCommentModel
 import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.model.BranchTaskModel
 import com.dramapulse.app.core.model.BranchTaskStatus
-import com.dramapulse.app.core.model.StoryboardScene
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,6 +18,7 @@ data class BranchUiState(
     val screenState: BranchScreenState = BranchScreenState.IDLE,
     val activeEpisodeId: String = "",
     val branchOptions: List<BranchOptionModel> = emptyList(),
+    val selectedFixedOption: BranchOptionModel? = null,
     val branchTask: BranchTaskModel? = null,
     val canInteractWithTask: Boolean = false,
     val comments: List<BranchCommentModel> = emptyList(),
@@ -69,6 +69,7 @@ class BranchViewModel(
                         screenState = BranchScreenState.SHOWING_OPTIONS,
                         activeEpisodeId = episodeId,
                         branchOptions = options,
+                        selectedFixedOption = null,
                         branchTask = null,
                         canInteractWithTask = false,
                         comments = emptyList(),
@@ -92,7 +93,8 @@ class BranchViewModel(
         _uiState.update {
             it.copy(
                 screenState = BranchScreenState.TASK_SUCCESS,
-                branchTask = option.toPreviewTask(),
+                selectedFixedOption = option,
+                branchTask = null,
                 canInteractWithTask = false,
                 comments = emptyList(),
                 commentTotal = 0,
@@ -121,6 +123,7 @@ class BranchViewModel(
                 _uiState.update {
                     it.copy(
                         screenState = BranchScreenState.POLLING_TASK,
+                        selectedFixedOption = null,
                         branchTask = task,
                         canInteractWithTask = false,
                         comments = emptyList(),
@@ -215,39 +218,5 @@ class BranchViewModel(
                 _uiState.update { it.copy(isLoadingComments = false) }
             }
         }
-    }
-
-    private fun BranchOptionModel.toPreviewTask(): BranchTaskModel {
-        val storyText = buildString {
-            if (description.isNotBlank()) {
-                append(description)
-            } else {
-                append("这是一个预设的固定分支结果。")
-            }
-            append("\n\n该方向会作为尾集后的另一种剧情延展进行展示。")
-        }
-
-        return BranchTaskModel(
-            id = "fixed-$id",
-            status = BranchTaskStatus.SUCCESS,
-            userPrompt = title,
-            resultTitle = title,
-            resultHook = description.ifBlank { "预设分支已生成，可继续围观另一个结局。" },
-            resultStory = storyText,
-            storyboard = listOf(
-                StoryboardScene(
-                    scene = 1,
-                    description = "尾集结束后，故事转向“$title”这一分支。",
-                    duration = 6
-                ),
-                StoryboardScene(
-                    scene = 2,
-                    description = "角色关系与情绪冲突围绕该结局继续推进。",
-                    duration = 8
-                )
-            ),
-            likeCount = 0,
-            commentCount = 0
-        )
     }
 }

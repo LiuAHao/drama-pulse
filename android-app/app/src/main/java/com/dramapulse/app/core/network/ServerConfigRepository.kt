@@ -17,7 +17,7 @@ class ServerConfigRepository(private val context: Context) {
     }
 
     fun getDisplayBaseUrl(): String {
-        return getBaseUrlOrNull()?.removeSuffix("/") ?: ""
+        return getBaseUrlOrNull().toDisplayBaseUrl()
     }
 
     fun saveBaseUrl(value: String) {
@@ -56,6 +56,10 @@ fun String.ensureHttpBaseUrl(): String {
         "http://$normalized"
     }
     return "$withScheme/"
+}
+
+fun String?.toDisplayBaseUrl(): String {
+    return this?.removeSuffix("/") ?: ""
 }
 
 fun String.isLikelyValidServerBaseUrl(): Boolean {

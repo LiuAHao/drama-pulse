@@ -14,9 +14,11 @@ class FakeProgressRepository(
                 ?: return@mapNotNull null
             WatchProgressEntry(
                 dramaId = episode.dramaId,
+                drama = null,
                 dramaTitle = episode.title,
                 episode = episode,
-                progressMs = progressMs
+                progressMs = progressMs,
+                updatedAtEpochMs = System.currentTimeMillis()
             )
         }
     }

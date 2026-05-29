@@ -115,7 +115,11 @@ fun SettingsScreen(
                 Spacer(modifier = Modifier.height(10.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        listOf(HighlightType.FEEL_GOOD, HighlightType.REVERSAL).forEach { type ->
+                        listOf(
+                            HighlightType.FEEL_GOOD,
+                            HighlightType.REVERSAL,
+                            HighlightType.FUNNY
+                        ).forEach { type ->
                             FilterChipLike(
                                 label = typeLabel(type),
                                 selected = uiState.debugHighlightType == type,
@@ -247,10 +251,8 @@ private fun typeLabel(type: HighlightType): String = when (type) {
     HighlightType.FEEL_GOOD -> "爽点"
     HighlightType.REVERSAL -> "反转"
     HighlightType.CONFLICT -> "冲突"
-    HighlightType.SWEET -> "甜蜜"
+    HighlightType.SWEET -> "温情"
     HighlightType.FUNNY -> "搞笑"
-    HighlightType.SUSPENSE -> "悬念"
-    HighlightType.EMOTION_BURST -> "情绪爆发"
 }
 
 @Preview(showBackground = true, name = "Settings")

@@ -44,6 +44,10 @@ export interface Episode {
   updatedAt: string;
 }
 
+export interface EpisodeWithDrama extends Episode {
+  drama: Drama;
+}
+
 export interface Highlight {
   id: string;
   episodeId: string;
@@ -124,10 +128,87 @@ export interface BranchTask {
   resultSource: string;
   failReason: string;
   retryCount: number;
-  episode?: { id: string; title: string; episodeNo: number };
+  episode?: Episode | null;
+  drama?: Drama | null;
+  count?: {
+    likes: number;
+    comments: number;
+  };
   createdAt: string;
   startedAt: string | null;
   finishedAt: string | null;
+}
+
+export interface BranchTaskComment {
+  id: string;
+  branchTaskId: string;
+  userId: string;
+  deviceId: string;
+  content: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BranchTaskLike {
+  id: string;
+  branchTaskId: string;
+  userId: string;
+  deviceId: string;
+  createdAt: string;
+}
+
+export interface BranchTaskDetail {
+  task: BranchTask;
+  comments: BranchTaskComment[];
+  likes: BranchTaskLike[];
+  durationMs: number | null;
+}
+
+export interface FavoriteRecord {
+  id: string;
+  userId: string;
+  deviceId: string;
+  dramaId: string;
+  createdAt: string;
+  drama: Drama;
+}
+
+export interface PlayerCommentRecord {
+  id: string;
+  userId: string;
+  deviceId: string;
+  episodeId: string;
+  content: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  episode: EpisodeWithDrama;
+}
+
+export interface DanmakuRecord {
+  id: string;
+  userId: string;
+  deviceId: string;
+  episodeId: string;
+  content: string;
+  triggerPositionMs: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  episode: EpisodeWithDrama;
+}
+
+export interface WatchProgressRecord {
+  id: string;
+  userId: string;
+  deviceId: string;
+  dramaId: string;
+  episodeId: string;
+  progressMs: number;
+  updatedAt: string;
+  drama: Drama | null;
+  episode: Episode | null;
 }
 
 export interface AssetsConfigData {

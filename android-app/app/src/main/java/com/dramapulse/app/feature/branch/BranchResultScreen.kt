@@ -10,11 +10,17 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.media3.common.MediaItem
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.PlayerView
+import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.model.BranchTaskModel
 import com.dramapulse.app.ui.component.EmptyPanel
 import com.dramapulse.app.ui.component.ErrorPanel
@@ -77,6 +83,7 @@ fun BranchResultScreen(
                 modifier = Modifier.padding(padding)
             )
             BranchScreenState.TASK_SUCCESS -> BranchTaskResult(
+                fixedOption = uiState.selectedFixedOption,
                 task = uiState.branchTask,
                 uiState = uiState,
                 viewModel = viewModel,
@@ -184,12 +191,13 @@ private fun BranchOptionsContent(
 
 @Composable
 private fun BranchTaskResult(
+    fixedOption: BranchOptionModel?,
     task: BranchTaskModel?,
     uiState: BranchUiState,
     viewModel: BranchViewModel,
     modifier: Modifier = Modifier
 ) {
-    if (task == null) return
+    if (task == null && fixedOption == null) return
 
     LazyColumn(
         modifier = modifier
@@ -197,60 +205,66 @@ private fun BranchTaskResult(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
-            Text(
-                text = task.resultTitle,
-                style = MaterialTheme.typography.headlineLarge,
-                color = Accent
-            )
-        }
-
-        if (task.resultHook.isNotEmpty()) {
+        if (fixedOption != null) {
+            item {
+                FixedBranchResult(option = fixedOption)
+            }
+        } else if (task != null) {
             item {
                 Text(
-                    text = task.resultHook,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    text = task.resultTitle,
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = Accent
                 )
             }
-        }
 
-        if (task.resultStory.isNotEmpty()) {
-            item {
-                Text(
-                    text = task.resultStory,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-
-        if (task.storyboard.isNotEmpty()) {
-            item {
-                Text(
-                    text = "分镜",
-                    style = MaterialTheme.typography.headlineMedium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-            items(task.storyboard) { scene ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(12.dp)
-                ) {
+            if (task.resultHook.isNotEmpty()) {
+                item {
                     Text(
-                        text = "场景 ${scene.scene}：${scene.description}",
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = task.resultHook,
+                        style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }
+
+            if (task.resultStory.isNotEmpty()) {
+                item {
+                    Text(
+                        text = task.resultStory,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+
+            if (task.storyboard.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "分镜",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+                items(task.storyboard) { scene ->
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .background(MaterialTheme.colorScheme.surface)
+                            .padding(12.dp)
+                    ) {
+                        Text(
+                            text = "场景 ${scene.scene}：${scene.description}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
         }
 
-        if (uiState.canInteractWithTask) {
+        if (task != null && uiState.canInteractWithTask) {
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
@@ -333,6 +347,60 @@ private fun BranchTaskResult(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun FixedBranchResult(
+    option: BranchOptionModel
+) {
+    val context = LocalContext.current
+    val player = remember(option.resultContentUrl) {
+        ExoPlayer.Builder(context).build().apply {
+            if (option.resultContentUrl.isNotBlank()) {
+                setMediaItem(MediaItem.fromUri(option.resultContentUrl))
+                prepare()
+                playWhenReady = true
+            }
+        }
+    }
+
+    DisposableEffect(player) {
+        onDispose {
+            player.release()
+        }
+    }
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = option.title,
+            style = MaterialTheme.typography.headlineLarge,
+            color = Accent
+        )
+        if (option.resultContentUrl.isNotBlank()) {
+            AndroidView(
+                factory = { ctx ->
+                    PlayerView(ctx).apply {
+                        useController = true
+                        this.player = player
+                    }
+                },
+                update = { view ->
+                    view.player = player
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+                    .clip(RoundedCornerShape(16.dp))
+            )
+        }
+        if (option.description.isNotBlank()) {
+            Text(
+                text = option.description,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

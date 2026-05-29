@@ -176,6 +176,171 @@ describe('POST /admin/highlights/:highlightId/enable and disable', () => {
   });
 });
 
+describe('Admin player engagement data', () => {
+  it('should return favorites with content filters', async () => {
+    await prisma.favoriteDrama.createMany({
+      data: [
+        {
+          userId: 'user_admin_favorite_a',
+          deviceId: 'device_admin_favorite_a',
+          dramaId: 'drama_001',
+        },
+        {
+          userId: 'user_admin_favorite_b',
+          deviceId: 'device_admin_favorite_b',
+          dramaId: 'drama_002',
+        },
+      ],
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/favorites?dramaId=drama_001&page=1&pageSize=10',
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.total).toBeGreaterThan(0);
+    expect(body.data.items[0].drama.id).toBe('drama_001');
+    expect(body.data.items[0].drama.coverUrl).toContain('/static/assets/');
+
+    await prisma.favoriteDrama.deleteMany({
+      where: {
+        userId: {
+          in: ['user_admin_favorite_a', 'user_admin_favorite_b'],
+        },
+      },
+    });
+  });
+
+  it('should return player comments with drama and episode context', async () => {
+    await prisma.playerComment.createMany({
+      data: [
+        {
+          userId: 'user_admin_comment_a',
+          deviceId: 'device_admin_comment_a',
+          episodeId: 'ep_001_01',
+          content: '这段评论真上头',
+          status: 'visible',
+        },
+        {
+          userId: 'user_admin_comment_b',
+          deviceId: 'device_admin_comment_b',
+          episodeId: 'ep_002_01',
+          content: '另一条评论',
+          status: 'visible',
+        },
+      ],
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/player-comments?dramaId=drama_001&page=1&pageSize=10',
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.total).toBeGreaterThan(0);
+    expect(body.data.items[0].episode.drama.id).toBe('drama_001');
+    expect(body.data.items[0].content).toBeDefined();
+
+    await prisma.playerComment.deleteMany({
+      where: {
+        userId: {
+          in: ['user_admin_comment_a', 'user_admin_comment_b'],
+        },
+      },
+    });
+  });
+
+  it('should return danmaku with trigger position and content filters', async () => {
+    await prisma.danmakuMessage.createMany({
+      data: [
+        {
+          userId: 'user_admin_danmaku_a',
+          deviceId: 'device_admin_danmaku_a',
+          episodeId: 'ep_001_02',
+          content: '哈哈哈哈',
+          triggerPositionMs: 12000,
+          status: 'visible',
+        },
+        {
+          userId: 'user_admin_danmaku_b',
+          deviceId: 'device_admin_danmaku_b',
+          episodeId: 'ep_002_02',
+          content: '卧槽',
+          triggerPositionMs: 8000,
+          status: 'visible',
+        },
+      ],
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/danmaku?episodeId=ep_001_02&page=1&pageSize=10',
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.total).toBeGreaterThan(0);
+    expect(body.data.items[0].episode.id).toBe('ep_001_02');
+    expect(body.data.items[0].triggerPositionMs).toBe(12000);
+
+    await prisma.danmakuMessage.deleteMany({
+      where: {
+        userId: {
+          in: ['user_admin_danmaku_a', 'user_admin_danmaku_b'],
+        },
+      },
+    });
+  });
+
+  it('should return watch progress ordered with drama and episode context', async () => {
+    await prisma.watchProgress.createMany({
+      data: [
+        {
+          userId: 'user_admin_progress_a',
+          deviceId: 'device_admin_progress_a',
+          dramaId: 'drama_001',
+          episodeId: 'ep_001_03',
+          progressMs: 45678,
+        },
+        {
+          userId: 'user_admin_progress_b',
+          deviceId: 'device_admin_progress_b',
+          dramaId: 'drama_002',
+          episodeId: 'ep_002_01',
+          progressMs: 12345,
+        },
+      ],
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/watch-progress?dramaId=drama_001&page=1&pageSize=10',
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.total).toBeGreaterThan(0);
+    expect(body.data.items[0].drama.id).toBe('drama_001');
+    expect(body.data.items[0].episode.id).toBe('ep_001_03');
+    expect(body.data.items[0].progressMs).toBe(45678);
+
+    await prisma.watchProgress.deleteMany({
+      where: {
+        userId: {
+          in: ['user_admin_progress_a', 'user_admin_progress_b'],
+        },
+      },
+    });
+  });
+});
+
 describe('GET /admin/highlights/:highlightId', () => {
   it('should return highlight detail with episode and drama', async () => {
     const res = await app.inject({
@@ -367,7 +532,7 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
       method: 'PATCH',
       url: '/admin/highlights/hl_001_01',
       headers: ADMIN_AUTH,
-      payload: { type: 'funny' },
+      payload: { type: 'unknown_type' },
     });
     expect(res.statusCode).toBe(400);
   });
@@ -390,6 +555,79 @@ describe('PATCH /admin/highlights/:highlightId extended fields', () => {
       payload: { interactionStartMs: 15000, interactionAppearMs: 14999, interactionEndMs: 26000 },
     });
     expect(res.statusCode).toBe(400);
+  });
+});
+
+describe('GET /admin/branch-tasks/:taskId', () => {
+  it('should return task detail with content and engagement context', async () => {
+    const task = await prisma.branchTask.create({
+      data: {
+        userId: 'user_admin_branch_detail',
+        deviceId: 'device_admin_branch_detail',
+        episodeId: 'ep_001_01',
+        userPrompt: '如果女主这时反击会怎样',
+        status: 'success',
+        resultTitle: '反击线',
+        resultHook: '她终于不忍了',
+        resultStory: '女主在众人面前完成了反击。',
+        storyboardJson: '[{"scene":"反击开始"}]',
+        resultTagsJson: '["反击","爽感"]',
+        resultInteractionOptionsJson: '["继续追击","先离开"]',
+      },
+    });
+
+    await prisma.branchComment.createMany({
+      data: [
+        {
+          branchTaskId: task.id,
+          userId: 'user_admin_branch_comment_a',
+          deviceId: 'device_admin_branch_comment_a',
+          content: '这个分支很带劲',
+          status: 'visible',
+        },
+        {
+          branchTaskId: task.id,
+          userId: 'user_admin_branch_comment_b',
+          deviceId: 'device_admin_branch_comment_b',
+          content: '想看后续',
+          status: 'visible',
+        },
+      ],
+    });
+
+    await prisma.branchLike.createMany({
+      data: [
+        {
+          branchTaskId: task.id,
+          userId: 'user_admin_branch_like_a',
+          deviceId: 'device_admin_branch_like_a',
+        },
+        {
+          branchTaskId: task.id,
+          userId: 'user_admin_branch_like_b',
+          deviceId: 'device_admin_branch_like_b',
+        },
+      ],
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/admin/branch-tasks/${task.id}`,
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.task.id).toBe(task.id);
+    expect(body.data.task.count.likes).toBe(2);
+    expect(body.data.task.count.comments).toBe(2);
+    expect(body.data.task.resultStory).toContain('反击');
+    expect(body.data.comments).toHaveLength(2);
+    expect(body.data.likes).toHaveLength(2);
+
+    await prisma.branchTask.delete({
+      where: { id: task.id },
+    });
   });
 });
 
@@ -433,6 +671,18 @@ describe('POST /admin/demo/reset', () => {
 
     const progressAfter = await prisma.watchProgress.count();
     expect(progressAfter).toBe(0);
+
+    const favoritesAfter = await prisma.favoriteDrama.count();
+    expect(favoritesAfter).toBe(0);
+
+    const playerCommentsAfter = await prisma.playerComment.count();
+    expect(playerCommentsAfter).toBe(0);
+
+    const danmakuAfter = await prisma.danmakuMessage.count();
+    expect(danmakuAfter).toBe(0);
+
+    const profilesAfter = await prisma.userProfile.count();
+    expect(profilesAfter).toBe(0);
 
     // Verify seed data preserved
     const dramas = await prisma.drama.count();

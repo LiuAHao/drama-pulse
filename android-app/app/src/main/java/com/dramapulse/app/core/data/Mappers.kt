@@ -2,6 +2,7 @@ package com.dramapulse.app.core.data
 
 import com.dramapulse.app.core.model.*
 import com.dramapulse.app.core.model.remote.*
+import com.dramapulse.app.core.util.toEpochMillisOrNow
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonArray
@@ -68,6 +69,13 @@ fun HighlightDto.toModel(): HighlightModel {
         title = title,
         description = description,
         intensity = intensity,
+        templateId = templateId,
+        visualEffectType = visualEffectType,
+        source = source,
+        confidence = confidence,
+        status = status,
+        createdAt = createdAt,
+        updatedAt = updatedAt,
         interactionOptions = options,
         stats = stats?.toModel()
     )
@@ -94,7 +102,8 @@ fun BranchOptionDto.toModel(): BranchOptionModel {
         title = title,
         description = description,
         resultType = resultType,
-        coverUrl = coverPath
+        coverUrl = coverPath,
+        resultContentUrl = resultContentPath
     )
 }
 
@@ -136,6 +145,7 @@ fun BranchCommentDto.toModel(): BranchCommentModel {
 fun WatchProgressDto.toEntry(): WatchProgressEntry {
     return WatchProgressEntry(
         dramaId = dramaId,
+        drama = drama?.toCardModel(),
         dramaTitle = drama?.title ?: "",
         episode = episode?.toModel() ?: EpisodeModel(
             id = episodeId,
@@ -148,6 +158,7 @@ fun WatchProgressDto.toEntry(): WatchProgressEntry {
             isFinalEpisode = false,
             hasBranch = false
         ),
-        progressMs = progressMs
+        progressMs = progressMs,
+        updatedAtEpochMs = updatedAt.toEpochMillisOrNow()
     )
 }

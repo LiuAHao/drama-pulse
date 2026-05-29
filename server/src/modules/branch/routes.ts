@@ -11,7 +11,7 @@ import {
   createBranchLikeSchema,
   createBranchCommentSchema,
 } from '../../shared/schemas/index.js';
-import { assertUserMatchesDeviceId, getUserIdFromDeviceId, resolveDeviceId } from '../../services/userIdentity/index.js';
+import { getUserIdFromDeviceId, requireUserMatchesRequestDeviceId, resolveDeviceId } from '../../services/userIdentity/index.js';
 import { getBaseUrlFromRequest } from '../../services/resource/index.js';
 import { toClientBranchOption, toClientBranchTask } from '../../services/clientPayload/index.js';
 
@@ -107,11 +107,7 @@ export async function branchRoutes(fastify: FastifyInstance) {
   fastify.get('/users/:userId/branch-tasks', async (request, reply) => {
     const baseUrl = getBaseUrlFromRequest(request);
     const params = userIdParamSchema.parse(request.params);
-    const headerDeviceId = request.headers['x-device-id'];
-    const normalizedHeaderDeviceId = Array.isArray(headerDeviceId) ? headerDeviceId[0] : headerDeviceId;
-    if (normalizedHeaderDeviceId) {
-      assertUserMatchesDeviceId(params.userId, normalizedHeaderDeviceId);
-    }
+    requireUserMatchesRequestDeviceId(request, params.userId);
 
     const tasks = await prisma.branchTask.findMany({
       where: { userId: params.userId },

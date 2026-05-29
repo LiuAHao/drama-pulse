@@ -18,13 +18,13 @@ fun resolveVerticalSwipeAction(
 
     return when {
         accumulatedDrag > thresholdPx -> {
-            val isLastEpisode = currentEpisodeIndex >= episodeCount - 1
-            if (isLastEpisode) VerticalSwipeAction.REACHED_END else VerticalSwipeAction.NEXT_EPISODE
+            val isFirstEpisode = currentEpisodeIndex <= 0
+            if (isFirstEpisode) VerticalSwipeAction.REACHED_START else VerticalSwipeAction.PREVIOUS_EPISODE
         }
 
         accumulatedDrag < -thresholdPx -> {
-            val isFirstEpisode = currentEpisodeIndex <= 0
-            if (isFirstEpisode) VerticalSwipeAction.REACHED_START else VerticalSwipeAction.PREVIOUS_EPISODE
+            val isLastEpisode = currentEpisodeIndex >= episodeCount - 1
+            if (isLastEpisode) VerticalSwipeAction.REACHED_END else VerticalSwipeAction.NEXT_EPISODE
         }
 
         else -> VerticalSwipeAction.NONE

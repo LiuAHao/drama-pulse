@@ -1,6 +1,7 @@
 package com.dramapulse.app.feature.player
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -20,6 +21,8 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -50,7 +53,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,9 +72,14 @@ import com.dramapulse.app.ui.component.ErrorPanel
 import com.dramapulse.app.ui.component.LoadingPanel
 import com.dramapulse.app.ui.component.NextEpisodeCard
 import com.dramapulse.app.ui.component.PlayerControlBar
+import com.dramapulse.app.ui.overlay.HeatHintOverlay
 import com.dramapulse.app.ui.overlay.HighlightOverlay
-import com.dramapulse.app.ui.preview.PreviewData
-import com.dramapulse.app.ui.theme.DramaPulseTheme
+
+private val FLOATING_DANMAKU_TOP_PADDING = 64.dp
+private val FLOATING_DANMAKU_OVERLAY_HEIGHT = 120.dp
+private val FLOATING_DANMAKU_TRACK_GAP = 32.dp
+private val FLOATING_DANMAKU_FONT_SIZE = 18.sp
+private val DANMAKU_COMPOSER_HEIGHT = 38.dp
 
 @Composable
 fun PlayerScreen(
@@ -86,6 +93,9 @@ fun PlayerScreen(
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(dramaId, episodeId) {
+        // Highlights come from backend, but each time we re-enter the playback surface
+        // we re-arm local trigger state so the current episode can trigger again.
+        viewModel.resetHighlightTriggersForCurrentEpisode()
         viewModel.onEvent(PlayerEvent.EnterScreen(dramaId, episodeId, forceReload = forceReloadOnEnter))
     }
 
@@ -130,6 +140,12 @@ private fun PlayerContent(
         uiState.overlay.showEpisodeSelector || uiState.overlay.showNextEpisodeCard || uiState.overlay.showBranchEntry || uiState.overlay.showCommentsSheet
     var danmakuInput by remember { mutableStateOf("") }
     var commentInput by remember { mutableStateOf("") }
+
+    LaunchedEffect(uiState.transientMessage?.id) {
+        val message = uiState.transientMessage ?: return@LaunchedEffect
+        Toast.makeText(context, message.text, Toast.LENGTH_SHORT).show()
+        onEvent(PlayerEvent.ConsumeTransientMessage(message.id))
+    }
 
     Box(
         modifier = modifier
@@ -202,34 +218,16 @@ private fun PlayerContent(
             )
         }
 
-        // Top bar: episode title + episode selector icon
-        Row(
+        PlayerTopBar(
+            dramaTitle = uiState.meta.dramaTitle,
+            episodeLabel = uiState.meta.currentEpisode?.let { "第${it.episodeNo}集" }.orEmpty(),
+            onBack = onBack,
+            onEpisodeSelectorClick = { onEvent(PlayerEvent.ToggleEpisodeSelector) },
             modifier = Modifier
-                .fillMaxWidth()
                 .align(Alignment.TopCenter)
                 .statusBarsPadding()
-                .padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = uiState.meta.currentEpisode?.title ?: "",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.weight(1f)
-            )
-            Icon(
-                imageVector = Icons.AutoMirrored.Default.List,
-                contentDescription = "选集",
-                tint = Color.White,
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .clickable { onEvent(PlayerEvent.ToggleEpisodeSelector) }
-                    .padding(2.dp)
-            )
-        }
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        )
 
         // Right side action buttons (above bottom info area)
         PlayerSideActions(
@@ -268,7 +266,7 @@ private fun PlayerContent(
                 messages = uiState.social.activeDanmakuMessages,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
-                    .padding(top = 88.dp)
+                    .padding(top = FLOATING_DANMAKU_TOP_PADDING)
                     .fillMaxWidth()
             )
         }
@@ -285,6 +283,14 @@ private fun PlayerContent(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 78.dp)
+        )
+
+        HeatHintOverlay(
+            highlight = uiState.highlight.activeHighlight,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .statusBarsPadding()
+                .padding(top = 60.dp, end = 12.dp)
         )
 
         if (uiState.playback.isBuffering) {
@@ -391,6 +397,63 @@ private fun PlayerContent(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun PlayerTopBar(
+    dramaTitle: String,
+    episodeLabel: String,
+    onBack: () -> Unit,
+    onEpisodeSelectorClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+            contentDescription = "返回",
+            tint = Color.White,
+            modifier = Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable { onBack() }
+                .padding(4.dp)
+        )
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp)
+        ) {
+            if (dramaTitle.isNotBlank()) {
+                Text(
+                    text = dramaTitle,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            if (episodeLabel.isNotBlank()) {
+                Text(
+                    text = episodeLabel,
+                    color = Color.White.copy(alpha = 0.72f),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+        Icon(
+            imageVector = Icons.AutoMirrored.Default.List,
+            contentDescription = "选集",
+            tint = Color.White,
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .clickable { onEpisodeSelectorClick() }
+                .padding(2.dp)
+        )
     }
 }
 
@@ -511,53 +574,112 @@ private fun DanmakuComposer(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier.fillMaxWidth(0.78f),
+        modifier = modifier.fillMaxWidth(if (enabled) 0.88f else 0.38f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(
+        DanmakuActionChip(
             text = if (enabled) "弹幕开" else "弹幕关",
-            color = Color.White,
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(Color.Black.copy(alpha = 0.5f))
-                .clickable { onEnabledChange(!enabled) }
-                .padding(horizontal = 10.dp, vertical = 8.dp)
+            contentDescription = if (enabled) "关闭弹幕" else "开启弹幕",
+            icon = Icons.Default.ChatBubbleOutline,
+            active = enabled,
+            emphasized = false,
+            onClick = { onEnabledChange(!enabled) },
+            modifier = Modifier.widthIn(min = 92.dp)
         )
-        BasicTextField(
-            value = input,
-            onValueChange = onInputChange,
-            modifier = Modifier
-                .widthIn(min = 96.dp, max = 180.dp)
-                .height(38.dp)
-                .clip(CircleShape)
-                .background(Color.Black.copy(alpha = 0.55f))
-                .padding(horizontal = 12.dp, vertical = 0.dp),
-            singleLine = true,
-            textStyle = MaterialTheme.typography.bodySmall.copy(
-                fontSize = 12.sp,
-                color = Color.White
-            ),
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    innerTextField()
+        if (enabled) {
+            BasicTextField(
+                value = input,
+                onValueChange = onInputChange,
+                modifier = Modifier
+                    .weight(1f)
+                    .height(DANMAKU_COMPOSER_HEIGHT)
+                    .clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.55f))
+                    .padding(horizontal = 12.dp, vertical = 0.dp),
+                singleLine = true,
+                textStyle = MaterialTheme.typography.bodySmall.copy(
+                    fontSize = 12.sp,
+                    color = Color.White
+                ),
+                decorationBox = { innerTextField ->
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        if (input.isEmpty()) {
+                            Text(
+                                text = "说点什么",
+                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 12.sp),
+                                color = Color.White.copy(alpha = 0.36f)
+                            )
+                        }
+                        innerTextField()
+                    }
                 }
-            }
+            )
+            DanmakuActionChip(
+                text = null,
+                contentDescription = "发送",
+                icon = Icons.AutoMirrored.Default.Send,
+                active = input.isNotBlank(),
+                emphasized = true,
+                onClick = onSend,
+                modifier = Modifier.widthIn(min = DANMAKU_COMPOSER_HEIGHT)
+            )
+        }
+    }
+}
+
+@Composable
+private fun DanmakuActionChip(
+    text: String?,
+    contentDescription: String,
+    icon: ImageVector,
+    active: Boolean,
+    emphasized: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val backgroundColor = when {
+        emphasized && active -> Color(0xFF74A8FF)
+        emphasized -> Color.White.copy(alpha = 0.16f)
+        active -> Color(0xFF1F2D48).copy(alpha = 0.92f)
+        else -> Color.Black.copy(alpha = 0.46f)
+    }
+    val borderColor = when {
+        emphasized && active -> Color.White.copy(alpha = 0.18f)
+        emphasized -> Color.White.copy(alpha = 0.18f)
+        active -> Color(0xFF8CB9FF).copy(alpha = 0.42f)
+        else -> Color.White.copy(alpha = 0.12f)
+    }
+    val contentColor = if (emphasized && active) Color(0xFF102347) else Color.White
+
+    Row(
+        modifier = modifier
+            .height(DANMAKU_COMPOSER_HEIGHT)
+            .clip(CircleShape)
+            .background(backgroundColor)
+            .border(width = 1.dp, color = borderColor, shape = CircleShape)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(6.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = contentDescription,
+            tint = contentColor,
+            modifier = Modifier.size(15.dp)
         )
-        Text(
-            text = "发送",
-            color = Color.White,
-            style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
-            modifier = Modifier
-                .clip(CircleShape)
-                .background(Color.White.copy(alpha = 0.16f))
-                .clickable(onClick = onSend)
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        )
+        if (text != null) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.labelLarge.copy(fontSize = 12.sp),
+                color = contentColor,
+                maxLines = 1
+            )
+        }
     }
 }
 
@@ -649,7 +771,7 @@ private fun DanmakuOverlay(
     messages: List<PlayerDanmakuEntry>,
     modifier: Modifier = Modifier
 ) {
-    BoxWithConstraints(modifier = modifier.height(96.dp)) {
+    BoxWithConstraints(modifier = modifier.height(FLOATING_DANMAKU_OVERLAY_HEIGHT)) {
         val screenWidthPx = constraints.maxWidth.toFloat()
         messages.forEachIndexed { index: Int, danmaku: PlayerDanmakuEntry ->
             DanmakuItem(
@@ -681,7 +803,7 @@ private fun DanmakuItem(
 
     Text(
         text = text,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.bodyLarge.copy(fontSize = FLOATING_DANMAKU_FONT_SIZE),
         color = Color.White,
         maxLines = 1,
         modifier = Modifier
@@ -689,48 +811,8 @@ private fun DanmakuItem(
             .offset {
                 IntOffset(
                     x = translationX.toInt(),
-                    y = with(density) { (trackIndex * 26).dp.roundToPx() }
+                    y = with(density) { (FLOATING_DANMAKU_TRACK_GAP * trackIndex).roundToPx() }
                 )
             }
     )
 }
-
-// region Previews
-
-@Preview(showBackground = true, backgroundColor = 0xFF000000, name = "Player - Bottom Bar")
-@Composable
-private fun PlayerBottomBarPreview() {
-    DramaPulseTheme {
-        PlayerBottomBar(
-            episodeTitle = "第2集：系统兑现第一波物资",
-            episodeSummary = "村里危机升级，主角第一次公开反击。",
-            danmakuEnabled = true,
-            danmakuInput = "",
-            onDanmakuEnabledChange = {},
-            onDanmakuInputChange = {},
-            onDanmakuSend = {},
-            playbackState = PreviewData.playbackPlaying,
-            onSeek = {},
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
-
-@Preview(showBackground = true, backgroundColor = 0xFF000000, name = "Player - Side Actions")
-@Composable
-private fun PlayerSideActionsPreview() {
-    DramaPulseTheme {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
-        ) {
-            PlayerSideActions(
-                isFavorite = true,
-                onFavoriteClick = {},
-                onCommentClick = {}
-            )
-        }
-    }
-}
-
-// endregion

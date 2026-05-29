@@ -3,11 +3,12 @@ package com.dramapulse.app.core.data
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import kotlinx.coroutines.test.runTest
 
 class PersistentPlayerUiRepositoryTest {
 
     @Test
-    fun `favorite state persists across repository instances`() {
+    fun `favorite state persists across repository instances`() = runTest {
         val storage = FakePlayerUiStorage()
         val repo1 = PersistentPlayerUiRepository(storage)
 
@@ -20,7 +21,7 @@ class PersistentPlayerUiRepositoryTest {
     }
 
     @Test
-    fun `comments persist across repository instances`() {
+    fun `comments persist across repository instances`() = runTest {
         val storage = FakePlayerUiStorage()
         val repo1 = PersistentPlayerUiRepository(storage)
 

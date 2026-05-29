@@ -23,6 +23,7 @@ model Drama {
   episodes        Episode[]
   interactionEvents InteractionEvent[]
   watchProgresses WatchProgress[]
+  favorites FavoriteDrama[]
 
   @@map("dramas")
 }
@@ -47,6 +48,8 @@ model Episode {
   branchTasks      BranchTask[]
   interactionEvents InteractionEvent[]
   watchProgresses  WatchProgress[]
+  playerComments   PlayerComment[]
+  danmakuMessages  DanmakuMessage[]
 
   @@unique([dramaId, episodeNo])
   @@map("episodes")
@@ -214,4 +217,64 @@ model WatchProgress {
 
   @@unique([userId, dramaId])
   @@map("watch_progresses")
+}
+
+model UserProfile {
+  userId    String   @id @map("user_id")
+  nickname  String   @default("")
+  bio       String   @default("")
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user_profiles")
+}
+
+model FavoriteDrama {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  deviceId  String   @map("device_id")
+  dramaId   String   @map("drama_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  drama Drama @relation(fields: [dramaId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dramaId])
+  @@index([userId, createdAt])
+  @@map("favorite_dramas")
+}
+
+model PlayerComment {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  deviceId  String   @map("device_id")
+  episodeId String   @map("episode_id")
+  content   String
+  status    String   @default("visible")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@index([episodeId, createdAt])
+  @@index([userId, createdAt])
+  @@map("player_comments")
+}
+
+model DanmakuMessage {
+  id                String   @id @default(cuid())
+  userId            String   @map("user_id")
+  deviceId          String   @map("device_id")
+  episodeId         String   @map("episode_id")
+  content           String
+  triggerPositionMs Int      @map("trigger_position_ms")
+  status            String   @default("visible")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  episode Episode @relation(fields: [episodeId], references: [id], onDelete: Cascade)
+
+  @@index([episodeId, createdAt])
+  @@index([userId, createdAt])
+  @@map("danmaku_messages")
 }

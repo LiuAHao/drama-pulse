@@ -41,11 +41,18 @@ data class HighlightModel(
     val title: String,
     val description: String,
     val intensity: Int,
+    val templateId: String = "",
+    val visualEffectType: String = "",
+    val source: String = "manual",
+    val confidence: Double = 1.0,
+    val status: String = "confirmed",
+    val createdAt: String = "",
+    val updatedAt: String = "",
     val interactionOptions: List<HighlightOption>,
     val stats: HighlightStatsModel?
 ) {
     val isQuickPrompt: Boolean
-        get() = intensity <= 2
+        get() = templateId == HIGHLIGHT_TEMPLATE_EMOTION_BUTTON || intensity <= 2
 
     fun isVisibleAt(positionMs: Long): Boolean =
         positionMs in interactionAppearMs..interactionEndMs
@@ -54,7 +61,34 @@ data class HighlightModel(
         positionMs in interactionStartMs..interactionEndMs
 
     fun compatibilityInteractionType(): String =
-        if (isQuickPrompt) "emotion_button" else "boost_action"
+        when (templateId) {
+            HIGHLIGHT_TEMPLATE_EMOTION_BUTTON,
+            HIGHLIGHT_TEMPLATE_VOTE_SIDE,
+            HIGHLIGHT_TEMPLATE_SUSPENSE_LOCK -> templateId
+            else -> if (isQuickPrompt) HIGHLIGHT_TEMPLATE_EMOTION_BUTTON else HIGHLIGHT_TEMPLATE_BOOST_ACTION
+        }
+
+    fun isClientDisplayable(): Boolean =
+        status == "confirmed"
+
+    fun activationPriorityScore(): Int {
+        val templateScore = when (compatibilityInteractionType()) {
+            HIGHLIGHT_TEMPLATE_SUSPENSE_LOCK -> 40
+            HIGHLIGHT_TEMPLATE_BOOST_ACTION -> 30
+            HIGHLIGHT_TEMPLATE_VOTE_SIDE -> 20
+            HIGHLIGHT_TEMPLATE_EMOTION_BUTTON -> 10
+            else -> 0
+        }
+        val effectScore = when (visualEffectType) {
+            "burst" -> 6
+            "glow" -> 4
+            "shake" -> 3
+            "sticker" -> 1
+            else -> 0
+        }
+        val confidenceScore = (confidence * 10).toInt().coerceIn(0, 10)
+        return (intensity * 100) + templateScore + effectScore + confidenceScore
+    }
 
     fun optionTextAt(clickIndex: Int): String {
         if (interactionOptions.isEmpty()) {
@@ -69,9 +103,7 @@ enum class HighlightType(val value: String) {
     REVERSAL("reversal"),
     FUNNY("funny"),
     SWEET("sweet"),
-    CONFLICT("conflict"),
-    SUSPENSE("suspense"),
-    EMOTION_BURST("emotion_burst");
+    CONFLICT("conflict");
 
     companion object {
         fun from(value: String): HighlightType =
@@ -82,10 +114,8 @@ enum class HighlightType(val value: String) {
         FEEL_GOOD -> "爽了"
         REVERSAL -> "卧槽"
         FUNNY -> "笑死"
-        SWEET -> "嗑到了"
+        SWEET -> "心暖了"
         CONFLICT -> "烧起来了"
-        SUSPENSE -> "等等"
-        EMOTION_BURST -> "上头了"
     }
 }
 
@@ -101,12 +131,18 @@ data class HighlightStatsModel(
     val topOption: String
 )
 
+const val HIGHLIGHT_TEMPLATE_EMOTION_BUTTON = "emotion_button"
+const val HIGHLIGHT_TEMPLATE_VOTE_SIDE = "vote_side"
+const val HIGHLIGHT_TEMPLATE_SUSPENSE_LOCK = "suspense_lock"
+const val HIGHLIGHT_TEMPLATE_BOOST_ACTION = "boost_action"
+
 data class BranchOptionModel(
     val id: String,
     val title: String,
     val description: String,
     val resultType: String,
-    val coverUrl: String
+    val coverUrl: String,
+    val resultContentUrl: String = ""
 )
 
 data class BranchTaskModel(

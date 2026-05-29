@@ -52,6 +52,11 @@ interface DramaPulseApi {
         @Query("pageSize") pageSize: Int = 20
     ): ApiResponse<PaginatedData<BranchCommentDto>>
 
+    @GET("/users/{userId}/branch-tasks")
+    suspend fun getUserBranchTasks(
+        @Path("userId") userId: String
+    ): ApiResponse<List<BranchTaskDto>>
+
     // Watch Progress
     @GET("/users/{userId}/watch-progress")
     suspend fun getWatchProgress(@Path("userId") userId: String): ApiResponse<List<WatchProgressDto>>
@@ -61,4 +66,50 @@ interface DramaPulseApi {
         @Path("userId") userId: String,
         @Body request: UpsertWatchProgressRequest
     ): ApiResponse<WatchProgressDto>
+
+    // User Profile
+    @GET("/users/{userId}/profile")
+    suspend fun getUserProfile(
+        @Path("userId") userId: String
+    ): ApiResponse<UserProfileStatsDto>
+
+    @PUT("/users/{userId}/profile")
+    suspend fun updateUserProfile(
+        @Path("userId") userId: String,
+        @Body request: UpdateUserProfileRequest
+    ): ApiResponse<UserProfileDto>
+
+    @GET("/users/{userId}/favorites")
+    suspend fun getFavoriteDramaIds(
+        @Path("userId") userId: String
+    ): ApiResponse<FavoriteDramaListDto>
+
+    @PUT("/users/{userId}/favorites/{dramaId}")
+    suspend fun updateFavoriteDrama(
+        @Path("userId") userId: String,
+        @Path("dramaId") dramaId: String,
+        @Body request: UpdateFavoriteRequest
+    ): ApiResponse<UpdateFavoriteResponse>
+
+    @GET("/episodes/{episodeId}/comments")
+    suspend fun getPlayerComments(
+        @Path("episodeId") episodeId: String
+    ): ApiResponse<List<PlayerCommentDto>>
+
+    @POST("/episodes/{episodeId}/comments")
+    suspend fun createPlayerComment(
+        @Path("episodeId") episodeId: String,
+        @Body request: CreatePlayerCommentRequest
+    ): ApiResponse<PlayerCommentDto>
+
+    @GET("/episodes/{episodeId}/danmaku")
+    suspend fun getDanmakuMessages(
+        @Path("episodeId") episodeId: String
+    ): ApiResponse<List<DanmakuMessageDto>>
+
+    @POST("/episodes/{episodeId}/danmaku")
+    suspend fun createDanmakuMessage(
+        @Path("episodeId") episodeId: String,
+        @Body request: CreateDanmakuMessageRequest
+    ): ApiResponse<DanmakuMessageDto>
 }

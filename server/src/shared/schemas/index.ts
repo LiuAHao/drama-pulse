@@ -7,10 +7,20 @@ export const episodeIdParamSchema = z.object({ episodeId: z.string().min(1) });
 export const highlightIdParamSchema = z.object({ highlightId: z.string().min(1) });
 export const taskIdParamSchema = z.object({ taskId: z.string().min(1) });
 export const userIdParamSchema = z.object({ userId: z.string().min(1) });
+export const userProfileSchema = z.object({
+  nickname: z.string().trim().min(1).max(40),
+  bio: z.string().trim().max(120).default(''),
+  avatarUrl: z.string().url().nullable().optional(),
+});
 
 export const paginationSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
+});
+
+export const optionalPaginationSchema = z.object({
+  page: z.coerce.number().int().min(1).optional(),
+  pageSize: z.coerce.number().int().min(1).max(100).optional(),
 });
 
 export const createInteractionSchema = z.object({
@@ -37,13 +47,24 @@ export const createBranchLikeSchema = z.object({
   deviceId: z.string().min(1),
 });
 
+export const createPlayerCommentSchema = z.object({
+  deviceId: z.string().min(1).optional(),
+  content: z.string().trim().min(1).max(200),
+});
+
+export const createDanmakuMessageSchema = z.object({
+  deviceId: z.string().min(1).optional(),
+  content: z.string().trim().min(1).max(80),
+  triggerPositionMs: z.coerce.number().int().min(0),
+});
+
 export const upsertWatchProgressSchema = z.object({
   deviceId: z.string().min(1),
   episodeId: z.string().min(1),
   progressMs: z.number().int().min(0),
 });
 
-const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'suspense'] as const;
+const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'funny', 'suspense', 'emotion_burst'] as const;
 const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock'] as const;
 
 export const updateHighlightSchema = z.object({
@@ -80,11 +101,38 @@ export const adminEpisodeFilterSchema = z.object({
 export const adminInteractionFilterSchema = z.object({
   highlightId: z.string().optional(),
   deviceId: z.string().optional(),
+  episodeId: z.string().optional(),
 }).merge(paginationSchema);
 
 export const adminBranchTaskFilterSchema = z.object({
   status: z.string().optional(),
   episodeId: z.string().optional(),
+  dramaId: z.string().optional(),
+}).merge(paginationSchema);
+
+export const adminFavoriteFilterSchema = z.object({
+  dramaId: z.string().optional(),
+  userId: z.string().optional(),
+}).merge(paginationSchema);
+
+export const adminPlayerCommentFilterSchema = z.object({
+  dramaId: z.string().optional(),
+  episodeId: z.string().optional(),
+  userId: z.string().optional(),
+  status: z.string().optional(),
+}).merge(paginationSchema);
+
+export const adminDanmakuFilterSchema = z.object({
+  dramaId: z.string().optional(),
+  episodeId: z.string().optional(),
+  userId: z.string().optional(),
+  status: z.string().optional(),
+}).merge(paginationSchema);
+
+export const adminWatchProgressFilterSchema = z.object({
+  dramaId: z.string().optional(),
+  episodeId: z.string().optional(),
+  userId: z.string().optional(),
 }).merge(paginationSchema);
 
 export const assetsConfigSchema = z.object({

@@ -5,10 +5,14 @@ export async function seedDatabase(prisma: PrismaClient) {
   console.log('seeding database...');
 
   // Clean existing data
+  await prisma.danmakuMessage.deleteMany();
+  await prisma.playerComment.deleteMany();
+  await prisma.favoriteDrama.deleteMany();
   await prisma.branchLike.deleteMany();
   await prisma.branchComment.deleteMany();
   await prisma.branchTask.deleteMany();
   await prisma.branchOption.deleteMany();
+  await prisma.userProfile.deleteMany();
   await prisma.watchProgress.deleteMany();
   await prisma.interactionEvent.deleteMany();
   await prisma.highlightStats.deleteMany();

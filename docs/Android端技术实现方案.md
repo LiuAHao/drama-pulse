@@ -20,6 +20,10 @@
 [高光组件视觉与技术实现方案.md](/Users/a0000/Desktop/项目文件/drama-pulse/docs/高光组件视觉与技术实现方案.md)
 为准。本方案中的高光章节与该文档保持一致，不再单独扩展出另一套组件口径。
 
+关于高光真实素材如何生成、拆分和接入，统一以
+[高光资产生成与接入方案.md](/Users/a0000/Desktop/项目文件/drama-pulse/docs/高光资产生成与接入方案.md)
+为准。
+
 ## 2. Android 端定位
 
 Android 客户端不是一个普通播放器壳子，而是本项目用户侧主体验的唯一承载端。
@@ -121,8 +125,9 @@ Android 端风格统一为：
 按高光类型映射：
 
 - `feel_good`：橙红/金色
+- `funny`：明黄/活力橙
 - `reversal`：冷白/裂变蓝
-- `sweet`：暖粉/柔白
+- `sweet`：暖粉/柔白，偏温情而非恋爱甜宠
 - `conflict`：赤红/震动边缘
 
 ## 5.3 字体与层级
@@ -367,18 +372,307 @@ Idle
 
 ## 8.4 互动表现
 
-第一版客户端按高光类型固定支持以下 4 类核心表现：
+第一版客户端按高光类型固定支持以下 5 类核心表现：
 
 - `feel_good`：`爽` 字组件
+- `funny`：`哈 / 哈哈哈` 笑点组件
 - `reversal`：`卧槽` 字组件
 - `conflict`：火焰燃烧组件
-- `sweet`：爱心组件
+- `sweet`：温情爱心组件
 
 强度规则：
 
 - `intensity 1-2`：轻量选项态或轻浮层
 - `intensity 3`：标准类别组件
 - `intensity 4-5`：强视觉类别组件
+
+统一交互骨架：
+
+- 默认只露出中下区域偏中的小触发按钮
+- 用户点击后才进入该类型的完整峰值效果
+- 点击结果同时写入互动事件，并可在后续回流为弹幕
+- 同一个高光在有效窗口内允许重复点击，但完整重特效要限流
+
+## 8.5 五类组件的 Android 技术设计
+
+### 8.5.1 `feel_good` 爽点
+
+产品目标：
+
+- 让用户立刻感到“解气、反杀、出了口气”
+- 视觉要有爆开感和胜利感，但不能大面积压住视频主体
+
+默认态：
+
+- 中下区域出现一个小型触发按钮
+- 按钮文案可用“爽一下”“这波可以”“点一下”
+- 本体偏橙金，外圈有轻微呼吸光晕
+
+点击后：
+
+- 中心主字以 `爽` 为核心短时放大
+- 底部到两侧出现短促亮斑、碎光和冲击波
+- 视频边缘允许少量 `爽` 字作为符号化效果短时浮现
+
+技术落地：
+
+- 默认态用 Compose 绘制
+- 主字峰值和爆开光效优先走 `Lottie` 或 `Rive`
+- 边缘 `爽` 字扩散由 Compose 粒子或轻量序列帧承载
+
+### 8.5.2 `funny` 笑点
+
+产品目标：
+
+- 让用户直觉感到“绷不住了、这段太逗了”
+- 视觉气质要轻快、灵动、会抖包袱，不能做成普通黄色按钮
+
+默认态：
+
+- 中下区域出现一个小型触发按钮
+- 按钮文案可用“笑点来了”“绷不住了”“点一下”
+- 按钮本体有轻微弹跳感，但默认振幅要克制
+
+点击后：
+
+- 中心主字以 `哈` 或 `哈哈哈` 为主，走弹跳和轻旋
+- 周围出现少量上浮的 `哈` 字和小笑脸式粒子
+- 扩散以向上漂、连锁轻弹为主，不走爆燃式冲击
+
+技术落地：
+
+- 当前第一版已落地为 `Compose + 透明 PNG` 方案，不再等 `Rive` 先行
+- 按钮本体、中心大 `哈`、右上 `哈哈哈` 气泡、边缘 `哈哈` / 星点均由静态素材叠加
+- 按钮呼吸、中心主视觉轻呼吸、点击后边缘随机分发都由 Compose 控制
+
+首轮落地后的当前口径：
+
+- 默认态只显示中下触发按钮
+- 按钮位置沿用 `reversal` 的底部宿主位，不额外发明新布局
+- 按钮可重复点击，不会点击一次后消失整轮逻辑
+- 点击后固定出现：
+  - 中间大 `哈`
+  - 右上 `哈哈哈` 对话框
+- 点击后随机出现：
+  - 边缘小 `哈哈`
+  - 少量星形和点状装饰
+
+当前 funny 的实现约束：
+
+- 中间大 `哈` 和右上对话框不参与随机运动
+- 边缘分区虽然沿用反转的“分区刷出”思想，但会避开中下中轴，避免被主大 `哈` 挡住
+- `哈哈` 小字的权重要明显高于星星和圆点，笑点的热闹感主要靠文字扩散，不靠粒子堆量
+- 参数仍集中在 `HighlightOverlay.kt` 中，后续可以继续直接在 Android Studio 里手调大小、底部偏移和边缘密度
+
+### 8.5.3 `reversal` 反转
+
+产品目标：
+
+- 让用户立刻意识到“卧槽，剧情翻了”
+- 要有突然停顿后爆开的感觉，节奏上先收再放
+
+默认态：
+
+- 中下区域出现一个小型触发按钮
+- 按钮文案统一朝“反转来了”“这下不对劲”“点一下”收口
+- 默认态不要直接出现大面积裂纹和强光
+- 默认态只保留按钮、弱能量环和轻微冷白氛围
+
+点击后：
+
+- 中心主字以 `卧槽 / WOC` 为主，先轻停顿再翻牌放大
+- 两侧边缘短时出现少量 `卧槽 / WOC` 小字、裂片和冷白闪光
+- 整体峰值更强调骤变和意外，而不是持续燃烧
+
+资产映射：
+
+- `highlight_reversal_button_primary_user_v1` 作为中心按钮
+- `highlight_reversal_energy_ring` 作为底层能量环
+- `highlight_reversal_crack_cluster` 作为点击爆发层
+- `highlight_reversal_edge_woc_v1` / `highlight_reversal_edge_woc_v2` 作为边缘回声层
+
+技术落地：
+
+- 当前优先用 `Compose + 静态透明 PNG` 叠加实现，先保证效果稳定和可调
+- 旋转、轻脉冲、淡入淡出和点击爆发都由 Compose 控制
+- 若后续要升级更复杂的翻牌或分层过渡，再评估 `Rive`
+
+首轮落地后需要记住的工程经验：
+
+- `reversal` 当前已经验证，按钮宿主放在中下区域是成立的，后续强互动高光可优先复用这套按钮位置策略
+- 位置复用的是“宿主区”和“调参方式”，不是整套视觉模板
+- `HighlightOverlay.kt` 里集中暴露可手调参数这一点很重要，后续其他类型也建议保留
+- 当前反转组件的可复用骨架是：
+  `按钮出现 -> 按钮轻呼吸引导 -> 点击后中心主图放大 -> 边缘素材随机分布 -> 点击爆发层短时叠加 -> 自动淡出`
+- 这条骨架适合 `reversal`、`conflict` 这类强互动类型
+- `sweet`、`feel_good`、`funny` 不一定适合整套照搬，尤其不建议复用反转的骤停爆裂节奏
+
+不建议复用的部分：
+
+- 冷白裂片和爆闪风格
+- 大量边缘回声字
+- 明显“翻牌式”骤停后爆发节奏
+
+建议优先复用的部分：
+
+- 中下按钮宿主位置
+- 统一的点击热区尺寸策略
+- `Compose` 控制的轻呼吸、淡入淡出、边缘随机分发框架
+- “中心主视觉和边缘素材分层”这一工程组织方式
+
+### 8.5.4 `conflict` 冲突
+
+产品目标：
+
+- 强调对撞、拉扯、上火、情绪对峙
+- 冲击感要明显，但仍然要把视频主体让出来
+
+默认态：
+
+- 中下区域出现一个小型触发按钮
+- 按钮文案可用“有火药味”“点一下”“烧起来了”
+- 默认态主要表现为暗红外圈与轻微热浪，不直接满屏喷火
+
+点击后：
+
+- 中心触发火焰能量上涌
+- 屏幕两侧或下边缘出现火线、火花、余烬和热浪轻震
+- 重点是边缘燃烧氛围，不是中心大块遮挡
+
+技术落地：
+
+- 主按钮仍由 Compose 承载点击区
+- 火焰、余烬、热浪边缘素材建议使用 Lottie 或 webp 序列帧
+- 点击时可配合一次短振
+
+### 8.5.5 `sweet` 温情
+
+产品目标：
+
+- 传达的是“心暖、被触动、心软了一下”
+- 爱心可以保留，但语义绝不能做成恋爱甜宠
+
+默认态：
+
+- 中下区域出现一个小型触发按钮
+- 按钮文案统一朝“心暖一下”“被触动了”“点一下”收口
+- 默认态保持柔光和安静，不要高饱和粉色恋爱感
+
+点击后：
+
+- 中心主图以柔和爱心、暖光、呼吸扩散为主
+- 视频边缘可出现小爱心上浮和淡淡暖光
+- 效果强调柔、暖、散开，不强调强烈爆发
+
+技术落地：
+
+- 主体建议用 Lottie 表现柔光和爱心节奏
+- 小爱心上浮可走 Compose 多实例动画
+- 文案避免“嗑到了”“锁死”等恋爱化表达
+
+## 8.6 组件状态机
+
+每个高光组件统一走以下状态：
+
+- `Hidden`
+- `TeaseVisible`
+- `Interactive`
+- `BurstFeedback`
+- `CoolingDown`
+- `Dismissed`
+
+状态定义：
+
+- `Hidden`：未到 `interactionAppearMs`
+- `TeaseVisible`：已出现默认触发按钮，但可能尚未进入可点击窗口
+- `Interactive`：位于 `interactionStartMs..interactionEndMs`，允许点击
+- `BurstFeedback`：点击后进入短时峰值表现
+- `CoolingDown`：峰值后保留弱反馈，允许再次点击
+- `Dismissed`：超过 `interactionEndMs` 或被更高优先级高光替换
+
+重复点击规则：
+
+- 每次点击都要产生即时反馈
+- 峰值动画不完整重播，而是进入受控的增量反馈
+- 单高光点击峰值强度最多提升到 3 档，避免越点越乱
+
+## 8.7 类型、强度与组件映射
+
+Android 端不再依赖旧 `templateId` 决定视觉表现，而统一由：
+
+- `type`
+- `intensity`
+- `interactionAppearMs`
+- `interactionStartMs`
+- `interactionEndMs`
+- `interactionOptions`
+
+共同驱动。
+
+推荐映射：
+
+- `intensity 1`：`HighlightWeakHint`
+- `intensity 2`：`QuickSendPrompt`
+- `intensity 3`：`TypeTriggerCard + StandardEffectLayer`
+- `intensity 4-5`：`TypeTriggerCard + ImpactEffectLayer + EdgeAtmosphereLayer`
+
+类型组件：
+
+- `feel_good` -> `FeelGoodOverlay`
+- `funny` -> `FunnyOverlay`
+- `reversal` -> `ReversalOverlay`
+- `conflict` -> `ConflictOverlay`
+- `sweet` -> `SweetOverlay`
+
+## 8.7.1 点击音效映射
+
+高光按钮点击后，除了视觉反馈，还应补一层极短音效。
+
+第一版建议直接按类型固定映射，不做复杂的动态音频拼接：
+
+- `reversal`
+  - 惊讶向短人声，如“卧槽！”
+- `funny`
+  - 多人短促笑声，如“哈哈哈”
+- `feel_good`
+  - 干脆利落的“爽！”或类似短促喝彩
+- `sweet`
+  - 温情向轻人声，如“好暖心”或更柔和的暖意提示音
+- `conflict`
+  - 火焰燃烧 / 情绪点燃类短音效
+
+当前原则：
+
+- 音效长度必须短，优先 `300ms ~ 900ms`
+- 只承担点击确认和情绪补刀，不抢视频原声
+- 默认音量应低于视频主声道
+- 同类高光可重复点击时，允许重复播放，但要避免叠出刺耳爆音
+- `sweet` 的对外产品语义统一按“温情”理解，音效也走温暖、被触动的方向，不走甜宠撒糖感
+
+## 8.8 与真实播放页的挂接方式
+
+高光组件不是独立 Demo，而是直接挂在 `PlayerScreen` 的视频层之上。
+
+推荐叠层顺序：
+
+1. `AndroidView(PlayerView)`
+2. `HistoryDanmakuLayer`
+3. `HeatHintOverlay`
+4. `HighlightStage`
+5. `PlayerTopBar / PlayerBottomBar / SideActions`
+6. `EpisodeSelector / BranchEntry / CommentsSheet`
+
+规则：
+
+- 高光组件只覆盖视频区域，不把整页 UI 一起卷入动画
+- 页面退出时，高光宿主必须跟随播放页一起销毁
+- 调试预览也走真实 `PlayerScreen`，而不是脱离播放器单独看白底静态 Demo
+- 低强度高光当前采用“云朵式一键弹幕”实现，挂载在 `HighlightStage`
+- 低强度云朵层的实际调参入口集中在 `HighlightOverlay.kt`，便于直接在 Android Studio 中手调位置、字号、宽度和行距
+
+补充一条通用规则：
+
+- 后续如果再做新类型，优先先复用现有按钮宿主位置和参数组织方式，再单独替换主视觉、边缘素材和点击峰值层；不要每做一个类型就从零重新搭播放页浮层结构
 
 ## 9. 历史互动回流设计
 
@@ -405,6 +699,17 @@ Idle
 
 - 根据服务端返回的历史文本或选项映射文案渲染弹幕
 - 在高光时刻短时增强
+
+补充说明：
+
+- 低强度高光本体不是历史弹幕层的一部分，而是主互动层中的轻量组件
+- 用户点击低强度云朵后，文案会写入互动记录，再进入后续历史弹幕回流展示
+- 当前低强度云朵支持：
+  - 最多 `3` 条选项
+  - 按长短自动拆成 `1-2` 行
+  - 云朵宽度按字数动态适配
+  - 两行允许轻微负间距，抵消素材透明留白
+  - 整组相对底部控制区上移，避免压住播放器底栏
 
 ## 9.3 与主互动的关系
 
@@ -548,6 +853,7 @@ android-app/app/src/main/java/com/dramapulse/app/
 - 热度提示
 - 历史弹幕
 - 分支入口卡片
+- 高光实验与调试宿主
 
 ## 12. 核心代码对象设计
 
@@ -562,6 +868,53 @@ android-app/app/src/main/java/com/dramapulse/app/
 - `BranchOptionUiModel`
 - `BranchTaskUiModel`
 - `BranchCommentUiModel`
+- `HighlightOverlayState`
+- `HighlightRenderSpec`
+- `HighlightAssetProfile`
+- `HighlightDebugModel`
+
+其中高光相关模型建议进一步收口：
+
+`HighlightUiModel`
+
+- `id`
+- `type`
+- `intensity`
+- `title`
+- `description`
+- `interactionOptions`
+- `startTimeMs`
+- `endTimeMs`
+- `interactionAppearMs`
+- `interactionStartMs`
+- `interactionEndMs`
+- `stats`
+
+`HighlightOverlayState`
+
+- `activeHighlight`
+- `isInteractable`
+- `clickCount`
+- `burstLevel`
+- `cooldownUntilMs`
+- `lastStrongHighlightAt`
+
+`HighlightRenderSpec`
+
+- `type`
+- `intensity`
+- `triggerLabel`
+- `glyphSet`
+- `motionProfile`
+- `assetProfile`
+
+`HighlightAssetProfile`
+
+- `idleAsset`
+- `burstAsset`
+- `edgeAsset`
+- `particleProfile`
+- `hapticLevel`
 
 ## 12.2 ViewModel
 
@@ -838,6 +1191,14 @@ EnterScreen
 
 这样更适合 Compose 局部刷新，也更利于多个 agent 分工。
 
+高光部分建议再细分为：
+
+- `timelineHighlights`：当前集高光原始列表
+- `activeHighlight`：当前时间轴命中的高光
+- `highlightOverlayState`：当前可见组件状态
+- `interactionSessionState`：点击次数、最近点击、上报中状态
+- `debugHighlightOverride`：设置页调试注入的本地高光
+
 ## 15. 组件清单与页面结构说明
 
 ## 15.1 第一版必须实现的组件
@@ -862,12 +1223,18 @@ EnterScreen
 
 高光互动组件：
 
-- `HighlightPromptCard`
-- `EmotionButtonGroup`
-- `VoteSidePanel`
-- `BoostActionButton`
-- `SuspensePromptCard`
+- `HighlightStage`
+- `HighlightRenderer`
+- `HighlightAssetHost`
 - `HighlightWeakHint`
+- `QuickSendPrompt`
+- `TypeTriggerCard`
+- `FeelGoodOverlay`
+- `FunnyOverlay`
+- `ReversalOverlay`
+- `ConflictOverlay`
+- `SweetOverlay`
+- `EdgeAtmosphereLayer`
 
 历史回流组件：
 
@@ -894,6 +1261,28 @@ EnterScreen
 - `ui/component/*` 不直接感知业务接口
 - `ui/overlay/*` 可感知高光类别与强度，但不直接发请求
 
+建议的 `ui/overlay/` 目录：
+
+```text
+ui/overlay/
+  HighlightStage.kt
+  HighlightRenderer.kt
+  HighlightAssetHost.kt
+  HighlightOverlayState.kt
+  HighlightMotionSpec.kt
+  HighlightWeakHint.kt
+  QuickSendPrompt.kt
+  TypeTriggerCard.kt
+  FeelGoodOverlay.kt
+  FunnyOverlay.kt
+  ReversalOverlay.kt
+  ConflictOverlay.kt
+  SweetOverlay.kt
+  EdgeAtmosphereLayer.kt
+  HeatHintOverlay.kt
+  HistoryDanmakuLane.kt
+```
+
 ## 15.3 Compose 代码风格约定
 
 - 页面函数只做结构编排，不堆复杂业务逻辑
@@ -901,6 +1290,45 @@ EnterScreen
 - 样式优先抽到 `ui/theme` 或基础组件
 - 默认不滥用 `remember` / `derivedStateOf`
 - 只有在重组成本明显时再做局部优化
+
+高光动画的额外约束：
+
+- 播放时间轴判定不直接放在具体 Composable 内
+- 视觉 asset 的选择不和点击上报逻辑耦合
+- 高强度组件优先使用稳定素材，不用纯 Compose 临时硬画出全部效果
+
+## 15.4 设置页与调试面板接法
+
+现有设置页已经具备“高光组件调试”入口，后续应正式收口成 `Highlight Motion Lab` 的真实播放态入口。
+
+目标：
+
+- 从设置页选择 `type + intensity`
+- 进入真实 `PlayerScreen` 或 `DEBUG_PLAYER`
+- 注入一条本地 debug highlight
+- 在真实播放器层级里看默认态、点击态、退出态和遮挡情况
+
+调试面板至少支持：
+
+- 切换 5 类高光
+- 切换强度 `1..5`
+- 反复点击同一高光
+- 切换背景视频
+- 开关历史弹幕层
+- 查看安全区遮挡辅助线
+
+这一步非常关键，因为高光效果是否“惊艳”，本质上不是看静态截图，而是看它在真实视频、真实字幕、真实播控栏共存时是否还成立。
+
+## 15.5 当前代码对齐前置项
+
+在正式进入 5 类高光组件重构前，Android 端需要先完成一次口径清理：
+
+- 删除 `SUSPENSE`
+- 删除 `EMOTION_BURST`
+- 清掉旧 `EmotionButtonGroup / VoteSidePanel / BoostActionButton / SuspensePromptCard` 心智
+- 将 `sweet` 的默认文案从“嗑到了”收口到“心暖一下 / 被触动了”
+- 将调试页里的“甜蜜 / 搞笑”改成“温情 / 笑点”
+- 将互动上报类型从旧兼容值逐步收口为新规范，至少要保证类型语义和客户端展示一致
 
 ## 16. 本地缓存与降级
 
@@ -1065,19 +1493,39 @@ EnterScreen
 
 ## 20.3 阶段三：高光互动
 
-- 拉取高光
-- 时间轴触发
-- 主互动组件
-- 辅助反馈
-- 互动上报
+- 清理旧枚举与旧组件语义
+- 补齐 `interactionAppearMs / interactionStartMs / interactionEndMs`
+- 建 `HighlightStage`
+- 建 `HighlightRenderer`
+- 建 `HighlightAssetHost`
+- 先打通 `HighlightWeakHint` 和 `QuickSendPrompt`
+- 接通互动上报
 
-## 20.4 阶段四：历史互动回流
+## 20.4 阶段四：五类组件首版落地
+
+- `feel_good` 首版
+- `funny` 首版
+- `reversal` 首版
+- `conflict` 首版
+- `sweet` 首版
+- 完成中下触发按钮与点击峰值的统一骨架
+- 让 5 类组件都能在真实播放页跑通
+
+## 20.5 阶段五：历史互动回流
 
 - 热度展示
 - 历史弹幕展示
 - 点击后刷新局部统计
 
-## 20.5 阶段五：尾集分支
+## 20.6 阶段六：动效强化与资产替换
+
+- 接入正式 Lottie / Rive / 序列帧资产
+- 优化边缘氛围层
+- 加入触感反馈
+- 做安全区避让与性能压测
+- 在 `Highlight Motion Lab` 中逐类调参
+
+## 20.7 阶段七：尾集分支
 
 - 固定分支入口
 - 固定分支结果页

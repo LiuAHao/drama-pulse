@@ -58,6 +58,19 @@ describe('GET /episodes/:episodeId/highlights', () => {
     }
   });
 
+  it('should normalize string-based interaction options into object payloads', async () => {
+    const res = await app.inject({ method: 'GET', url: '/episodes/ep_001_01/highlights' });
+
+    expect(res.statusCode).toBe(200);
+    const firstHighlight = res.json().data[0];
+    const parsedOptions = JSON.parse(firstHighlight.interactionOptionsJson);
+    expect(Array.isArray(parsedOptions)).toBe(true);
+    expect(parsedOptions[0]).toEqual({
+      text: '太爽了',
+      action: '',
+    });
+  });
+
   it('should return empty array for episode with no confirmed highlights', async () => {
     // ep_001_03 has no highlights in seed data
     const res = await app.inject({ method: 'GET', url: '/episodes/ep_001_03/highlights' });

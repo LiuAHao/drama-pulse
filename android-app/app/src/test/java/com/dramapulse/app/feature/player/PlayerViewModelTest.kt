@@ -4,6 +4,9 @@ import com.dramapulse.app.core.data.ContentRepository
 import com.dramapulse.app.core.data.DramaListResult
 import com.dramapulse.app.core.data.InteractionRepository
 import com.dramapulse.app.core.data.InMemoryPlayerUiRepository
+import com.dramapulse.app.core.data.PlayerCommentEntry
+import com.dramapulse.app.core.data.PlayerDanmakuEntry
+import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.data.WatchProgressEntry
 import com.dramapulse.app.core.model.DramaCardModel
@@ -68,6 +71,7 @@ class PlayerViewModelTest {
         val state = viewModel.uiState.value
         assertEquals(PlayerScreenState.READY, state.screenState)
         assertEquals("ep-2", state.meta.currentEpisode?.id)
+        assertEquals("主打剧", state.meta.dramaTitle)
         assertEquals(8_500L, repos.playerController.lastAttachedStartPositionMs)
         assertEquals("https://example.com/ep-2.mp4", repos.playerController.lastAttachedUrl)
         viewModel.forceClearForTest()
@@ -330,11 +334,172 @@ class PlayerViewModelTest {
         }
     }
 
+    @Test
+    fun `reset highlight triggers allows same episode to trigger again after re-enter`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val highlight = buildHighlight(
+            id = "hl-1",
+            episodeId = episode1.id,
+            interactionAppearMs = 15_600,
+            interactionStartMs = 16_000,
+            interactionEndMs = 19_500
+        )
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(highlight))
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            repos.playerController.emitPlayback(positionMs = 15_700)
+            advanceTimeBy(600)
+            runCurrent()
+            assertEquals("hl-1", viewModel.uiState.value.highlight.activeHighlight?.id)
+
+            repos.playerController.emitPlayback(positionMs = 20_000)
+            advanceTimeBy(600)
+            runCurrent()
+            assertEquals(true, "hl-1" in viewModel.uiState.value.highlight.triggeredHighlightIds)
+
+            viewModel.resetHighlightTriggersForCurrentEpisode()
+            assertTrue(viewModel.uiState.value.highlight.triggeredHighlightIds.isEmpty())
+            assertNull(viewModel.uiState.value.highlight.activeHighlight)
+
+            repos.playerController.emitPlayback(positionMs = 15_700)
+            advanceTimeBy(600)
+            runCurrent()
+            assertEquals("hl-1", viewModel.uiState.value.highlight.activeHighlight?.id)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
+    fun `interaction submission updates active highlight stats for heat overlay`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val highlight = buildHighlight(
+            id = "hl-1",
+            episodeId = episode1.id,
+            interactionAppearMs = 1_000,
+            interactionStartMs = 1_000,
+            interactionEndMs = 6_000
+        )
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(highlight))
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+            repos.playerController.emitPlayback(positionMs = 1_200L)
+            advanceTimeBy(600)
+            runCurrent()
+
+            viewModel.onEvent(PlayerEvent.OnInteractionClick("hl-1", "爽了"))
+            runCurrent()
+
+            val activeHighlight = viewModel.uiState.value.highlight.activeHighlight
+            assertEquals(1, activeHighlight?.stats?.heatLevel)
+            assertEquals("爽了", activeHighlight?.stats?.topOption)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
+    fun `comment send failure exposes transient feedback`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1)
+            ),
+            playerUiRepository = FailingPlayerUiRepository()
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            viewModel.onEvent(PlayerEvent.SubmitComment("发不出去"))
+            runCurrent()
+
+            assertEquals("评论发送失败", viewModel.uiState.value.transientMessage?.text)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
+    fun `danmaku send failure exposes transient feedback`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1)
+            ),
+            playerUiRepository = FailingPlayerUiRepository()
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            viewModel.onEvent(PlayerEvent.SubmitDanmaku("发不出去"))
+            runCurrent()
+
+            assertEquals("弹幕发送失败", viewModel.uiState.value.transientMessage?.text)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
     private data class TestPlayerDependencies(
         val contentRepository: FakeContentRepositoryForTest,
         val progressRepository: FakeProgressRepositoryForTest = FakeProgressRepositoryForTest(emptyList()),
         val interactionRepository: InteractionRepository = FakeInteractionRepositoryForTest(),
-        val playerUiRepository: InMemoryPlayerUiRepository = InMemoryPlayerUiRepository(),
+        val playerUiRepository: PlayerUiRepository = InMemoryPlayerUiRepository(),
         val playerController: RecordingPlayerController = RecordingPlayerController()
     )
 
@@ -397,6 +562,26 @@ class PlayerViewModelTest {
                 topOption = optionText
             )
         }
+    }
+
+    private class FailingPlayerUiRepository : PlayerUiRepository {
+        override suspend fun isFavorite(dramaId: String): Boolean = false
+        override suspend fun toggleFavorite(dramaId: String): Boolean = false
+        override suspend fun getComments(episodeId: String): List<PlayerCommentEntry> = emptyList()
+        override suspend fun addComment(
+            episodeId: String,
+            content: String,
+            createdAtEpochMs: Long
+        ): List<PlayerCommentEntry> = throw IllegalStateException("评论发送失败")
+        override fun isDanmakuEnabled(episodeId: String): Boolean = true
+        override fun setDanmakuEnabled(episodeId: String, enabled: Boolean) = Unit
+        override suspend fun getDanmaku(episodeId: String): List<PlayerDanmakuEntry> = emptyList()
+        override suspend fun addDanmaku(
+            episodeId: String,
+            content: String,
+            triggerPositionMs: Long,
+            createdAtEpochMs: Long
+        ): List<PlayerDanmakuEntry> = throw IllegalStateException("弹幕发送失败")
     }
 
     private class RecordingPlayerController : PlayerController {

@@ -3,7 +3,7 @@ import { prisma } from '../../shared/db';
 import { success } from '../../shared/response';
 import { AppError, ValidationError, NotFoundError } from '../../shared/errors';
 import { userIdParamSchema, upsertWatchProgressSchema } from '../../shared/schemas';
-import { assertUserMatchesDeviceId, getUserIdFromDeviceId, resolveDeviceId } from '../../services/userIdentity';
+import { assertUserMatchesDeviceId, getUserIdFromDeviceId, requireUserMatchesRequestDeviceId, resolveDeviceId } from '../../services/userIdentity';
 import { getBaseUrlFromRequest } from '../../services/resource/index.js';
 import { toClientWatchProgress } from '../../services/clientPayload/index.js';
 
@@ -16,11 +16,7 @@ export async function progressRoutes(fastify: FastifyInstance) {
       if (!parsed.success) {
         throw new ValidationError('invalid userId');
       }
-      const headerDeviceId = request.headers['x-device-id'];
-      const normalizedHeaderDeviceId = Array.isArray(headerDeviceId) ? headerDeviceId[0] : headerDeviceId;
-      if (normalizedHeaderDeviceId) {
-        assertUserMatchesDeviceId(parsed.data.userId, normalizedHeaderDeviceId);
-      }
+      requireUserMatchesRequestDeviceId(request, parsed.data.userId);
 
       const progresses = await prisma.watchProgress.findMany({
         where: { userId: parsed.data.userId },

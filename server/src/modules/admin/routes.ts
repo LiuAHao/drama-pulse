@@ -3,17 +3,21 @@ import { prisma } from '../../shared/db/index.js';
 import { AuthError } from '../../shared/errors/index.js';
 import { success } from '../../shared/response/index.js';
 import {
+  adminDanmakuFilterSchema,
   highlightIdParamSchema,
   taskIdParamSchema,
   updateHighlightSchema,
+  adminFavoriteFilterSchema,
   adminEpisodeFilterSchema,
   adminHighlightFilterSchema,
   adminInteractionFilterSchema,
+  adminPlayerCommentFilterSchema,
   adminBranchTaskFilterSchema,
+  adminWatchProgressFilterSchema,
   assetsConfigSchema,
-  paginationSchema,
 } from '../../shared/schemas/index.js';
 import { getBaseUrlFromRequest, getResourceConfigPath, getResourceRoots, pathToUrl, getResourceRoots as getRoots } from '../../services/resource/index.js';
+import { toClientBranchTask, toClientDrama, toClientEpisode, toClientWatchProgress } from '../../services/clientPayload/index.js';
 import fs from 'fs/promises';
 import path from 'path';
 
@@ -80,6 +84,140 @@ function isLocalNetwork(ip: string | undefined): boolean {
     ip.startsWith('192.168.') ||
     ip === 'localhost'
   );
+}
+
+function toAdminDrama(drama: {
+  id: string;
+  title: string;
+  description: string;
+  coverPath: string;
+  tagsJson: string;
+  mainGenre: string;
+  isFeatured: boolean;
+  displayOrder: number;
+  status: string;
+  createdAt: Date;
+  updatedAt: Date;
+}, baseUrl: string) {
+  const coverUrl = pathToUrl(drama.coverPath, baseUrl);
+  return {
+    ...toClientDrama(drama, baseUrl),
+    coverUrl,
+  };
+}
+
+function toAdminPlayerComment(
+  comment: {
+    id: string;
+    userId: string;
+    deviceId: string;
+    episodeId: string;
+    content: string;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+    episode: {
+      id: string;
+      dramaId: string;
+      episodeNo: number;
+      title: string;
+      videoPath: string;
+      durationMs: number;
+      summary: string;
+      isFinalEpisode: boolean;
+      hasBranch: boolean;
+      status: string;
+      createdAt: Date;
+      updatedAt: Date;
+      drama: {
+        id: string;
+        title: string;
+        description: string;
+        coverPath: string;
+        tagsJson: string;
+        mainGenre: string;
+        isFeatured: boolean;
+        displayOrder: number;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+    };
+  },
+  baseUrl: string,
+) {
+  return {
+    id: comment.id,
+    userId: comment.userId,
+    deviceId: comment.deviceId,
+    episodeId: comment.episodeId,
+    content: comment.content,
+    status: comment.status,
+    createdAt: comment.createdAt,
+    updatedAt: comment.updatedAt,
+    episode: {
+      ...toClientEpisode(comment.episode, baseUrl),
+      drama: toAdminDrama(comment.episode.drama, baseUrl),
+    },
+  };
+}
+
+function toAdminDanmaku(
+  message: {
+    id: string;
+    userId: string;
+    deviceId: string;
+    episodeId: string;
+    content: string;
+    triggerPositionMs: number;
+    status: string;
+    createdAt: Date;
+    updatedAt: Date;
+    episode: {
+      id: string;
+      dramaId: string;
+      episodeNo: number;
+      title: string;
+      videoPath: string;
+      durationMs: number;
+      summary: string;
+      isFinalEpisode: boolean;
+      hasBranch: boolean;
+      status: string;
+      createdAt: Date;
+      updatedAt: Date;
+      drama: {
+        id: string;
+        title: string;
+        description: string;
+        coverPath: string;
+        tagsJson: string;
+        mainGenre: string;
+        isFeatured: boolean;
+        displayOrder: number;
+        status: string;
+        createdAt: Date;
+        updatedAt: Date;
+      };
+    };
+  },
+  baseUrl: string,
+) {
+  return {
+    id: message.id,
+    userId: message.userId,
+    deviceId: message.deviceId,
+    episodeId: message.episodeId,
+    content: message.content,
+    triggerPositionMs: message.triggerPositionMs,
+    status: message.status,
+    createdAt: message.createdAt,
+    updatedAt: message.updatedAt,
+    episode: {
+      ...toClientEpisode(message.episode, baseUrl),
+      drama: toAdminDrama(message.episode.drama, baseUrl),
+    },
+  };
 }
 
 export async function adminRoutes(fastify: FastifyInstance) {
@@ -403,11 +541,12 @@ export async function adminRoutes(fastify: FastifyInstance) {
   // GET /admin/interactions - list interactions with filters, paginated
   fastify.get('/admin/interactions', async (request, reply) => {
     const query = adminInteractionFilterSchema.parse(request.query);
-    const { page, pageSize, highlightId, deviceId } = query;
+    const { page, pageSize, highlightId, deviceId, episodeId } = query;
 
     const where: Record<string, unknown> = {};
     if (highlightId) where.highlightId = highlightId;
     if (deviceId) where.deviceId = deviceId;
+    if (episodeId) where.episodeId = episodeId;
 
     const [items, total] = await Promise.all([
       prisma.interactionEvent.findMany({
@@ -424,12 +563,16 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
   // GET /admin/branch-tasks - list branch tasks with filters, paginated
   fastify.get('/admin/branch-tasks', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
     const query = adminBranchTaskFilterSchema.parse(request.query);
-    const { page, pageSize, status, episodeId } = query;
+    const { page, pageSize, status, episodeId, dramaId } = query;
 
     const where: Record<string, unknown> = {};
     if (status) where.status = status;
     if (episodeId) where.episodeId = episodeId;
+    if (dramaId) {
+      where.episode = { is: { dramaId } };
+    }
 
     const [items, total] = await Promise.all([
       prisma.branchTask.findMany({
@@ -437,12 +580,218 @@ export async function adminRoutes(fastify: FastifyInstance) {
         skip: (page - 1) * pageSize,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: { episode: { select: { id: true, title: true, episodeNo: true } } },
+        include: {
+          episode: {
+            include: {
+              drama: true,
+            },
+          },
+          _count: {
+            select: { likes: true, comments: true },
+          },
+        },
       }),
       prisma.branchTask.count({ where }),
     ]);
 
-    reply.send(success({ items, total, page, pageSize }));
+    reply.send(success({
+      items: items.map((item) => toClientBranchTask(item, baseUrl)),
+      total,
+      page,
+      pageSize,
+    }));
+  });
+
+  // GET /admin/branch-tasks/:taskId - get branch task detail with engagement context
+  fastify.get('/admin/branch-tasks/:taskId', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const { taskId } = taskIdParamSchema.parse(request.params);
+
+    const task = await prisma.branchTask.findUnique({
+      where: { id: taskId },
+      include: {
+        episode: {
+          include: {
+            drama: true,
+          },
+        },
+        _count: {
+          select: { likes: true, comments: true },
+        },
+        comments: {
+          where: { status: 'visible' },
+          orderBy: { createdAt: 'desc' },
+          take: 50,
+        },
+        likes: {
+          orderBy: { createdAt: 'desc' },
+          take: 50,
+        },
+      },
+    });
+
+    if (!task) {
+      reply.status(404).send({ code: 40004, message: 'branch task not found', data: null });
+      return;
+    }
+
+    const durationMs = task.startedAt && task.finishedAt
+      ? task.finishedAt.getTime() - task.startedAt.getTime()
+      : null;
+
+    reply.send(success({
+      task: toClientBranchTask(task, baseUrl),
+      comments: task.comments,
+      likes: task.likes,
+      durationMs,
+    }));
+  });
+
+  // GET /admin/favorites - list persisted favorites with content filters
+  fastify.get('/admin/favorites', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const query = adminFavoriteFilterSchema.parse(request.query);
+    const { page, pageSize, dramaId, userId } = query;
+
+    const where: Record<string, unknown> = {};
+    if (dramaId) where.dramaId = dramaId;
+    if (userId) where.userId = userId;
+
+    const [items, total] = await Promise.all([
+      prisma.favoriteDrama.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { createdAt: 'desc' },
+        include: { drama: true },
+      }),
+      prisma.favoriteDrama.count({ where }),
+    ]);
+
+    reply.send(success({
+      items: items.map((item) => ({
+        id: item.id,
+        userId: item.userId,
+        deviceId: item.deviceId,
+        dramaId: item.dramaId,
+        createdAt: item.createdAt,
+        drama: toAdminDrama(item.drama, baseUrl),
+      })),
+      total,
+      page,
+      pageSize,
+    }));
+  });
+
+  // GET /admin/player-comments - list playback comments with content filters
+  fastify.get('/admin/player-comments', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const query = adminPlayerCommentFilterSchema.parse(request.query);
+    const { page, pageSize, dramaId, episodeId, userId, status } = query;
+
+    const where: Record<string, unknown> = {};
+    if (episodeId) where.episodeId = episodeId;
+    if (userId) where.userId = userId;
+    if (status) where.status = status;
+    if (dramaId) {
+      where.episode = { is: { dramaId } };
+    }
+
+    const [items, total] = await Promise.all([
+      prisma.playerComment.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          episode: {
+            include: {
+              drama: true,
+            },
+          },
+        },
+      }),
+      prisma.playerComment.count({ where }),
+    ]);
+
+    reply.send(success({
+      items: items.map((item) => toAdminPlayerComment(item, baseUrl)),
+      total,
+      page,
+      pageSize,
+    }));
+  });
+
+  // GET /admin/danmaku - list playback danmaku with content filters
+  fastify.get('/admin/danmaku', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const query = adminDanmakuFilterSchema.parse(request.query);
+    const { page, pageSize, dramaId, episodeId, userId, status } = query;
+
+    const where: Record<string, unknown> = {};
+    if (episodeId) where.episodeId = episodeId;
+    if (userId) where.userId = userId;
+    if (status) where.status = status;
+    if (dramaId) {
+      where.episode = { is: { dramaId } };
+    }
+
+    const [items, total] = await Promise.all([
+      prisma.danmakuMessage.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { createdAt: 'desc' },
+        include: {
+          episode: {
+            include: {
+              drama: true,
+            },
+          },
+        },
+      }),
+      prisma.danmakuMessage.count({ where }),
+    ]);
+
+    reply.send(success({
+      items: items.map((item) => toAdminDanmaku(item, baseUrl)),
+      total,
+      page,
+      pageSize,
+    }));
+  });
+
+  // GET /admin/watch-progress - list persisted watch progress with content filters
+  fastify.get('/admin/watch-progress', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const query = adminWatchProgressFilterSchema.parse(request.query);
+    const { page, pageSize, dramaId, episodeId, userId } = query;
+
+    const where: Record<string, unknown> = {};
+    if (dramaId) where.dramaId = dramaId;
+    if (episodeId) where.episodeId = episodeId;
+    if (userId) where.userId = userId;
+
+    const [items, total] = await Promise.all([
+      prisma.watchProgress.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: { updatedAt: 'desc' },
+        include: {
+          drama: true,
+          episode: true,
+        },
+      }),
+      prisma.watchProgress.count({ where }),
+    ]);
+
+    reply.send(success({
+      items: items.map((item) => toClientWatchProgress(item, baseUrl)),
+      total,
+      page,
+      pageSize,
+    }));
   });
 
   // POST /admin/branch-tasks/:taskId/retry - retry a failed/timeout task
@@ -487,7 +836,11 @@ export async function adminRoutes(fastify: FastifyInstance) {
       prisma.branchComment.deleteMany(),
       prisma.branchLike.deleteMany(),
       prisma.branchTask.deleteMany(),
+      prisma.favoriteDrama.deleteMany(),
+      prisma.playerComment.deleteMany(),
+      prisma.danmakuMessage.deleteMany(),
       prisma.watchProgress.deleteMany(),
+      prisma.userProfile.deleteMany(),
     ]);
 
     reply.send(success({ message: 'runtime data reset' }));

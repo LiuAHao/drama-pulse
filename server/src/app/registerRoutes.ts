@@ -6,6 +6,7 @@ import { branchRoutes } from '../modules/branch/routes.js';
 import { progressRoutes } from '../modules/progress/routes.js';
 import { adminRoutes } from '../modules/admin/routes.js';
 import { assetsRoutes } from '../modules/assets/routes.js';
+import { userRoutes } from '../modules/user/routes.js';
 
 export async function registerRoutes(fastify: FastifyInstance) {
   await fastify.register(assetsRoutes);
@@ -14,5 +15,6 @@ export async function registerRoutes(fastify: FastifyInstance) {
   await fastify.register(interactionRoutes);
   await fastify.register(branchRoutes);
   await fastify.register(progressRoutes);
+  await fastify.register(userRoutes);
   await fastify.register(adminRoutes);
 }

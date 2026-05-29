@@ -162,6 +162,27 @@ describe('GET /users/:userId/branch-tasks', () => {
     expect(body.data[0].episode.videoUrl).toContain('http://192.168.1.88:8787/');
     expect(body.data[0].drama.coverPath).toContain('http://192.168.1.88:8787/');
   });
+
+  it('should require x-device-id for branch task list fetch', async () => {
+    const deviceId = 'test-device-branch-list-002';
+    const createRes = await app.inject({
+      method: 'POST',
+      url: '/branch-tasks',
+      payload: {
+        deviceId,
+        episodeId: 'ep_001_23',
+        userPrompt: '测试分支列表鉴权',
+      },
+    });
+    const userId = createRes.json().data.userId;
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/users/${userId}/branch-tasks`,
+    });
+
+    expect(res.statusCode).toBe(400);
+  });
 });
 
 describe('POST /branch-tasks/:taskId/likes', () => {

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execFileSync } from 'child_process';
 import { FastifyInstance } from 'fastify';
 
 const serverRoot = path.resolve(import.meta.dirname, '../..');
@@ -11,6 +12,8 @@ if (fs.existsSync(runtimeDbPath)) {
   fs.copyFileSync(runtimeDbPath, testDbPath);
 }
 
+syncTestDatabaseSchema();
+
 process.env.ADMIN_TOKEN = 'test-admin-token';
 process.env.DATABASE_URL = TEST_DATABASE_URL;
 process.env.HOST = 'localhost';
@@ -18,6 +21,21 @@ process.env.PORT = '8787';
 process.env.VIDEOS_ROOT = '../videos';
 process.env.ASSETS_ROOT = '../assets';
 process.env.EXPORTS_ROOT = '../data/exports';
+
+function syncTestDatabaseSchema() {
+  execFileSync(
+    'pnpm',
+    ['prisma', 'db', 'push', '--skip-generate', '--accept-data-loss'],
+    {
+      cwd: serverRoot,
+      env: {
+        ...process.env,
+        DATABASE_URL: TEST_DATABASE_URL,
+      },
+      stdio: 'ignore',
+    }
+  );
+}
 
 async function seedTestDatabase() {
   const { PrismaClient } = await import('@prisma/client');
@@ -40,6 +58,7 @@ export async function buildTestApp(): Promise<FastifyInstance> {
     fs.copyFileSync(runtimeDbPath, testDbPath);
   }
 
+  syncTestDatabaseSchema();
   await seedTestDatabase();
 
   const { createApp } = await import('../../src/app/createApp.js');

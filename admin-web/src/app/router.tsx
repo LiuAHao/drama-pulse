@@ -7,6 +7,7 @@ import { EpisodesPage } from '../pages/episodes/EpisodesPage';
 import { HighlightsPage } from '../pages/highlights/HighlightsPage';
 import { HighlightReviewPage } from '../pages/highlights/HighlightReviewPage';
 import { InteractionsPage } from '../pages/interactions/InteractionsPage';
+import { PlayerEngagementPage } from '../pages/playerEngagement/PlayerEngagementPage';
 import { BranchTasksPage } from '../pages/branchTasks/BranchTasksPage';
 import { AssetsConfigPage } from '../pages/assetsConfig/AssetsConfigPage';
 import { DemoToolsPage } from '../pages/demoTools/DemoToolsPage';
@@ -24,6 +25,7 @@ export const router = createBrowserRouter([
       { path: 'highlights', element: <HighlightsPage /> },
       { path: 'highlights/:highlightId/review', element: <HighlightReviewPage /> },
       { path: 'interactions', element: <InteractionsPage /> },
+      { path: 'player-engagement', element: <PlayerEngagementPage /> },
       { path: 'branch-tasks', element: <BranchTasksPage /> },
       { path: 'assets-config', element: <AssetsConfigPage /> },
       { path: 'demo-tools', element: <DemoToolsPage /> },

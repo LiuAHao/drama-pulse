@@ -51,6 +51,7 @@ class DramaListViewModel(
 
     private fun loadDramas() {
         viewModelScope.launch {
+            val previousState = _uiState.value
             _uiState.value = _uiState.value.copy(screenState = ScreenState.LOADING)
             try {
                 val result = contentRepository.getDramas()
@@ -75,10 +76,18 @@ class DramaListViewModel(
                 } else {
                     e.message ?: "加载失败"
                 }
-                _uiState.value = _uiState.value.copy(
-                    screenState = ScreenState.ERROR,
-                    errorMessage = message
-                )
+                val hasExistingContent =
+                    previousState.featured.isNotEmpty() ||
+                        previousState.alternatives.isNotEmpty() ||
+                        previousState.continueWatching != null
+                _uiState.value = if (hasExistingContent) {
+                    previousState.copy(errorMessage = message)
+                } else {
+                    previousState.copy(
+                        screenState = ScreenState.ERROR,
+                        errorMessage = message
+                    )
+                }
             }
         }
     }

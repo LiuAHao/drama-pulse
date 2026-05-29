@@ -7,6 +7,7 @@ object AppRoutes {
     const val PROFILE = "profile"
     const val SETTINGS = "settings"
     const val DEBUG_PLAYER = "debug_player/{dramaId}?episodeId={episodeId}"
+    const val DEBUG_HIGHLIGHT = "debug_highlight"
 
     fun playerRoute(dramaId: String, episodeId: String? = null): String {
         return if (episodeId != null) {

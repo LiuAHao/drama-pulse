@@ -7,8 +7,7 @@ export function getUserIdFromDeviceId(deviceId: string): string {
 }
 
 export function resolveDeviceId(request: FastifyRequest, bodyDeviceId?: string): string {
-  const headerDeviceId = request.headers['x-device-id'];
-  const normalizedHeaderDeviceId = Array.isArray(headerDeviceId) ? headerDeviceId[0] : headerDeviceId;
+  const normalizedHeaderDeviceId = getHeaderDeviceId(request);
 
   if (normalizedHeaderDeviceId && bodyDeviceId && normalizedHeaderDeviceId !== bodyDeviceId) {
     throw new ValidationError('x-device-id does not match deviceId in body');
@@ -20,6 +19,19 @@ export function resolveDeviceId(request: FastifyRequest, bodyDeviceId?: string):
   }
 
   return resolved;
+}
+
+export function getHeaderDeviceId(request: FastifyRequest): string | undefined {
+  const headerDeviceId = request.headers['x-device-id'];
+  return Array.isArray(headerDeviceId) ? headerDeviceId[0] : headerDeviceId;
+}
+
+export function requireUserMatchesRequestDeviceId(request: FastifyRequest, userId: string): string {
+  const deviceId = getHeaderDeviceId(request);
+  if (!deviceId) {
+    throw new ValidationError('x-device-id is required');
+  }
+  return assertUserMatchesDeviceId(userId, deviceId);
 }
 
 export function assertUserMatchesDeviceId(userId: string, deviceId: string): string {

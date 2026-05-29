@@ -9,6 +9,7 @@ import com.dramapulse.app.core.data.PlayerDanmakuEntry
 import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.model.EpisodeModel
+import com.dramapulse.app.core.model.HIGHLIGHT_TEMPLATE_EMOTION_BUTTON
 import com.dramapulse.app.core.model.HighlightModel
 import com.dramapulse.app.core.model.HighlightType
 import com.dramapulse.app.core.player.PlaybackState
@@ -59,6 +60,11 @@ data class PlayerSocialUiState(
     val activeDanmakuMessages: List<PlayerDanmakuEntry> = emptyList()
 )
 
+data class PlayerTransientMessage(
+    val id: Long = System.currentTimeMillis(),
+    val text: String
+)
+
 data class PlayerScreenUiState(
     val screenState: PlayerScreenState = PlayerScreenState.IDLE,
     val meta: PlayerMetaState = PlayerMetaState(),
@@ -66,6 +72,7 @@ data class PlayerScreenUiState(
     val highlight: HighlightUiState = HighlightUiState(),
     val social: PlayerSocialUiState = PlayerSocialUiState(),
     val overlay: OverlayUiState = OverlayUiState(),
+    val transientMessage: PlayerTransientMessage? = null,
     val errorMessage: String? = null
 )
 
@@ -94,6 +101,7 @@ sealed class PlayerEvent {
     data class SetDanmakuEnabled(val enabled: Boolean) : PlayerEvent()
     data class SubmitDanmaku(val content: String) : PlayerEvent()
     data class OnInteractionClick(val highlightId: String, val optionText: String) : PlayerEvent()
+    data class ConsumeTransientMessage(val id: Long) : PlayerEvent()
     data object GoToBranch : PlayerEvent()
 }
 
@@ -141,6 +149,7 @@ class PlayerViewModel(
             is PlayerEvent.SetDanmakuEnabled -> setDanmakuEnabled(event.enabled)
             is PlayerEvent.SubmitDanmaku -> submitDanmaku(event.content)
             is PlayerEvent.OnInteractionClick -> submitInteraction(event.highlightId, event.optionText)
+            is PlayerEvent.ConsumeTransientMessage -> consumeTransientMessage(event.id)
             is PlayerEvent.GoToBranch -> {}
         }
     }
@@ -180,14 +189,30 @@ class PlayerViewModel(
                 }
             }
 
-            _uiState.update { it.copy(screenState = PlayerScreenState.LOADING) }
+            _uiState.update {
+                it.copy(
+                    screenState = PlayerScreenState.LOADING,
+                    highlight = HighlightUiState(),
+                    overlay = OverlayUiState(),
+                    errorMessage = null
+                )
+            }
+
             try {
-                val (episodes, watchProgress) = coroutineScope {
+                val (episodes, watchProgress, dramaTitle) = coroutineScope {
                     val episodesDeferred = async { contentRepository.getEpisodes(dramaId) }
                     val watchProgressDeferred = async {
                         progressRepository.getWatchProgress().firstOrNull { it.dramaId == dramaId }
                     }
-                    episodesDeferred.await() to watchProgressDeferred.await()
+                    val dramaTitleDeferred = async {
+                        runCatching {
+                            val dramaList = contentRepository.getDramas()
+                            dramaList.featured.firstOrNull { it.id == dramaId }?.title
+                                ?: dramaList.alternatives.firstOrNull { it.id == dramaId }?.title
+                                ?: dramaList.continueWatching?.takeIf { it.drama.id == dramaId }?.drama?.title
+                        }.getOrNull().orEmpty()
+                    }
+                    Triple(episodesDeferred.await(), watchProgressDeferred.await(), dramaTitleDeferred.await())
                 }
                 if (episodes.isEmpty()) {
                     _uiState.update {
@@ -215,7 +240,7 @@ class PlayerViewModel(
                     it.copy(
                         meta = PlayerMetaState(
                             dramaId = dramaId,
-                            dramaTitle = "",
+                            dramaTitle = dramaTitle.ifBlank { watchProgress?.dramaTitle.orEmpty() },
                             episodes = episodes,
                             currentEpisode = targetEpisode,
                             currentEpisodeIndex = targetIndex,
@@ -279,7 +304,6 @@ class PlayerViewModel(
                 it.copy(
                     meta = it.meta.copy(
                         currentEpisode = episode,
-                        dramaTitle = episode.title,
                         resumePositionMs = startPositionMs
                     ),
                     screenState = PlayerScreenState.READY
@@ -324,16 +348,18 @@ class PlayerViewModel(
     }
 
     private fun loadSocialState(dramaId: String, episodeId: String) {
-        _uiState.update {
-            it.copy(
-                social = PlayerSocialUiState(
-                    isFavorite = playerUiRepository.isFavorite(dramaId),
-                    comments = playerUiRepository.getComments(episodeId),
-                    danmakuEnabled = playerUiRepository.isDanmakuEnabled(episodeId),
-                    danmakuMessages = playerUiRepository.getDanmaku(episodeId),
-                    activeDanmakuMessages = emptyList()
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    social = PlayerSocialUiState(
+                        isFavorite = playerUiRepository.isFavorite(dramaId),
+                        comments = playerUiRepository.getComments(episodeId),
+                        danmakuEnabled = playerUiRepository.isDanmakuEnabled(episodeId),
+                        danmakuMessages = playerUiRepository.getDanmaku(episodeId),
+                        activeDanmakuMessages = emptyList()
+                    )
                 )
-            )
+            }
         }
     }
 
@@ -448,15 +474,33 @@ class PlayerViewModel(
 
     private fun toggleFavorite() {
         val dramaId = _uiState.value.meta.dramaId.ifBlank { return }
-        val isFavorite = playerUiRepository.toggleFavorite(dramaId)
-        _uiState.update { it.copy(social = it.social.copy(isFavorite = isFavorite)) }
+        viewModelScope.launch {
+            val isFavorite = playerUiRepository.toggleFavorite(dramaId)
+            _uiState.update { it.copy(social = it.social.copy(isFavorite = isFavorite)) }
+        }
     }
 
     private fun submitComment(content: String) {
         val episodeId = _uiState.value.meta.currentEpisode?.id ?: return
         if (content.isBlank()) return
-        val comments = playerUiRepository.addComment(episodeId, content.trim())
-        _uiState.update { it.copy(social = it.social.copy(comments = comments)) }
+        viewModelScope.launch {
+            try {
+                val comments = playerUiRepository.addComment(episodeId, content.trim())
+                _uiState.update {
+                    it.copy(
+                        social = it.social.copy(comments = comments),
+                        transientMessage = null,
+                        errorMessage = null
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        transientMessage = PlayerTransientMessage(text = e.message ?: "评论发送失败")
+                    )
+                }
+            }
+        }
     }
 
     private fun setDanmakuEnabled(enabled: Boolean) {
@@ -469,21 +513,43 @@ class PlayerViewModel(
         val episodeId = _uiState.value.meta.currentEpisode?.id ?: return
         if (content.isBlank()) return
         val currentPositionMs = _uiState.value.playback.currentPositionMs
-        val danmakuMessages = playerUiRepository.addDanmaku(
-            episodeId = episodeId,
-            content = content.trim(),
-            triggerPositionMs = currentPositionMs
-        )
-        _uiState.update {
-            it.copy(
-                social = it.social.copy(
-                    danmakuMessages = danmakuMessages,
-                    activeDanmakuMessages = resolveActiveDanmakuMessages(
-                        allMessages = danmakuMessages,
-                        currentPositionMs = currentPositionMs
-                    )
+        viewModelScope.launch {
+            try {
+                val danmakuMessages = playerUiRepository.addDanmaku(
+                    episodeId = episodeId,
+                    content = content.trim(),
+                    triggerPositionMs = currentPositionMs
                 )
-            )
+                _uiState.update {
+                    it.copy(
+                        social = it.social.copy(
+                            danmakuMessages = danmakuMessages,
+                            activeDanmakuMessages = resolveActiveDanmakuMessages(
+                                allMessages = danmakuMessages,
+                                currentPositionMs = currentPositionMs
+                            )
+                        ),
+                        transientMessage = null,
+                        errorMessage = null
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        transientMessage = PlayerTransientMessage(text = e.message ?: "弹幕发送失败")
+                    )
+                }
+            }
+        }
+    }
+
+    private fun consumeTransientMessage(id: Long) {
+        _uiState.update {
+            if (it.transientMessage?.id == id) {
+                it.copy(transientMessage = null)
+            } else {
+                it
+            }
         }
     }
 
@@ -508,6 +574,9 @@ class PlayerViewModel(
                     it.copy(
                         highlight = it.highlight.copy(
                             highlights = updatedHighlights,
+                            activeHighlight = it.highlight.activeHighlight?.let { active ->
+                                if (active.id == highlightId) active.copy(stats = stats) else active
+                            },
                             triggeredHighlightIds = it.highlight.triggeredHighlightIds + highlightId,
                             interactionClickCountByHighlightId = it.highlight.interactionClickCountByHighlightId +
                                 (highlightId to (clickCount + 1))
@@ -557,38 +626,17 @@ class PlayerViewModel(
         if (playback.state != PlaybackState.PLAYING) return
 
         val position = playback.currentPositionMs
-        val highlights = state.highlight.highlights
-        val triggered = state.highlight.triggeredHighlightIds
-
-        for (highlight in highlights) {
-            if (highlight.id in triggered) continue
-            if (highlight.isVisibleAt(position)) {
-                val isStrongHighlight = highlight.intensity >= 4
-                val shouldDowngradeToQuickPrompt =
-                    isStrongHighlight &&
-                        state.highlight.lastStrongHighlightAt > 0 &&
-                        (highlight.interactionAppearMs - state.highlight.lastStrongHighlightAt) < STRONG_HIGHLIGHT_GAP_MS
-                val effectiveHighlight =
-                    if (shouldDowngradeToQuickPrompt) {
-                        highlight.copy(intensity = 2)
-                    } else {
-                        highlight
-                    }
-                _uiState.update {
-                    it.copy(
-                        highlight = it.highlight.copy(
-                            activeHighlight = effectiveHighlight,
-                            activeInteractionEnabled = effectiveHighlight.isInteractableAt(position),
-                            triggeredHighlightIds = triggered + highlight.id,
-                            lastStrongHighlightAt = if (isStrongHighlight) {
-                                highlight.interactionAppearMs
-                            } else {
-                                it.highlight.lastStrongHighlightAt
-                            }
-                        )
+        val activation = resolveHighlightActivation(state, position)
+        if (activation != null) {
+            _uiState.update {
+                it.copy(
+                    highlight = it.highlight.copy(
+                        activeHighlight = activation.effectiveHighlight,
+                        activeInteractionEnabled = activation.effectiveHighlight.isInteractableAt(position),
+                        triggeredHighlightIds = it.highlight.triggeredHighlightIds + activation.sourceHighlight.id,
+                        lastStrongHighlightAt = activation.updatedLastStrongHighlightAt
                     )
-                }
-                break
+                )
             }
         }
 
@@ -616,6 +664,66 @@ class PlayerViewModel(
                 }
             }
         }
+    }
+
+    fun resetHighlightTriggersForCurrentEpisode() {
+        _uiState.update {
+            it.copy(
+                highlight = it.highlight.copy(
+                    activeHighlight = null,
+                    activeInteractionEnabled = false,
+                    triggeredHighlightIds = emptySet(),
+                    lastStrongHighlightAt = 0L,
+                    interactionClickCountByHighlightId = emptyMap()
+                )
+            )
+        }
+    }
+
+    private fun resolveHighlightActivation(
+        state: PlayerScreenUiState,
+        positionMs: Long
+    ): HighlightActivation? {
+        val sourceHighlight = state.highlight.highlights
+            .asSequence()
+            .filter { highlight ->
+                highlight.id !in state.highlight.triggeredHighlightIds &&
+                    highlight.isClientDisplayable() &&
+                    highlight.isVisibleAt(positionMs)
+            }
+            .sortedWith(
+                compareByDescending<HighlightModel> { it.activationPriorityScore() }
+                    .thenByDescending { it.confidence }
+                    .thenByDescending { it.interactionAppearMs }
+                    .thenBy { it.startTimeMs }
+            )
+            .firstOrNull() ?: return null
+
+        val isStrongHighlight = sourceHighlight.intensity >= 4
+        val shouldDowngradeToQuickPrompt =
+            isStrongHighlight &&
+                sourceHighlight.templateId != HIGHLIGHT_TEMPLATE_EMOTION_BUTTON &&
+                state.highlight.lastStrongHighlightAt > 0 &&
+                (sourceHighlight.interactionAppearMs - state.highlight.lastStrongHighlightAt) < STRONG_HIGHLIGHT_GAP_MS
+        val effectiveHighlight =
+            if (shouldDowngradeToQuickPrompt) {
+                sourceHighlight.copy(
+                    intensity = 2,
+                    templateId = HIGHLIGHT_TEMPLATE_EMOTION_BUTTON
+                )
+            } else {
+                sourceHighlight
+            }
+
+        return HighlightActivation(
+            sourceHighlight = sourceHighlight,
+            effectiveHighlight = effectiveHighlight,
+            updatedLastStrongHighlightAt = if (isStrongHighlight) {
+                sourceHighlight.interactionAppearMs
+            } else {
+                state.highlight.lastStrongHighlightAt
+            }
+        )
     }
 
     private fun updateActiveDanmaku(currentPositionMs: Long) {
@@ -657,6 +765,12 @@ class PlayerViewModel(
         private const val MAX_ACTIVE_DANMAKU = 4
         private const val STRONG_HIGHLIGHT_GAP_MS = 7_000L
     }
+
+    private data class HighlightActivation(
+        val sourceHighlight: HighlightModel,
+        val effectiveHighlight: HighlightModel,
+        val updatedLastStrongHighlightAt: Long
+    )
 
     override fun onCleared() {
         super.onCleared()

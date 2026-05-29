@@ -5,6 +5,7 @@ import type {
   Episode,
   Highlight,
   HighlightStats,
+  UserProfile,
   WatchProgress,
 } from '@prisma/client';
 import { pathToUrl } from '../resource/index.js';
@@ -36,6 +37,7 @@ export function toClientHighlight(
   highlight: Highlight,
   stats?: HighlightStats | null
 ) {
+  const normalizedInteractionOptionsJson = normalizeHighlightOptionsJson(highlight.interactionOptionsJson);
   return {
     id: highlight.id,
     episodeId: highlight.episodeId,
@@ -49,7 +51,7 @@ export function toClientHighlight(
     description: highlight.description,
     intensity: highlight.intensity,
     templateId: highlight.templateId,
-    interactionOptionsJson: highlight.interactionOptionsJson,
+    interactionOptionsJson: normalizedInteractionOptionsJson,
     visualEffectType: highlight.visualEffectType,
     source: highlight.source,
     confidence: highlight.confidence,
@@ -65,6 +67,29 @@ export function toClientHighlight(
         }
       : DEFAULT_HIGHLIGHT_STATS,
   };
+}
+
+function normalizeHighlightOptionsJson(raw: string): string {
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return '[]';
+    const normalized = parsed
+      .map((item) => {
+        if (typeof item === 'string') {
+          return { text: item, action: '' };
+        }
+        if (item && typeof item === 'object') {
+          const text = typeof item.text === 'string' ? item.text : '';
+          const action = typeof item.action === 'string' ? item.action : '';
+          if (text) return { text, action };
+        }
+        return null;
+      })
+      .filter((item): item is { text: string; action: string } => Boolean(item));
+    return JSON.stringify(normalized);
+  } catch {
+    return '[]';
+  }
 }
 
 export function toClientBranchOption(option: BranchOption, baseUrl: string) {
@@ -136,5 +161,21 @@ export function toClientWatchProgress(progress: WatchProgressLike, baseUrl: stri
     updatedAt: progress.updatedAt,
     drama: progress.drama ? toClientDrama(progress.drama, baseUrl) : null,
     episode: progress.episode ? toClientEpisode(progress.episode, baseUrl) : null,
+  };
+}
+
+type UserProfileLike = UserProfile | {
+  userId: string;
+  nickname: string;
+  bio: string;
+  avatarUrl?: string | null;
+};
+
+export function toClientUserProfile(profile: UserProfileLike) {
+  return {
+    userId: profile.userId,
+    nickname: profile.nickname,
+    bio: profile.bio,
+    avatarUrl: profile.avatarUrl ?? null,
   };
 }

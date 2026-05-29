@@ -37,6 +37,8 @@ export function DemoToolsPage() {
                 <li>高光片段统计数据</li>
                 <li>所有分支任务、评论、点赞</li>
                 <li>所有观看进度记录</li>
+                <li>所有收藏、播放评论、弹幕记录</li>
+                <li>所有用户资料缓存</li>
               </ul>
             </div>
             <div>
@@ -71,7 +73,7 @@ export function DemoToolsPage() {
       <ConfirmDialog
         open={dialogOpen}
         title="确认重置演示数据"
-        message="重置后所有互动事件、统计数据、分支任务及观看进度将被清除，此操作不可撤销。是否继续？"
+        message="重置后所有互动事件、统计数据、分支任务、观看进度、收藏、播放评论、弹幕和用户资料缓存都会被清除，此操作不可撤销。是否继续？"
         confirmLabel="确认重置"
         danger
         onConfirm={handleReset}

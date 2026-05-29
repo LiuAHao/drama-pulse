@@ -38,7 +38,9 @@ class BranchViewModelTest {
 
         val state = viewModel.uiState.value
         assertEquals(BranchScreenState.TASK_SUCCESS, state.screenState)
-        assertEquals(selected.title, state.branchTask?.resultTitle)
+        assertEquals(selected.id, state.selectedFixedOption?.id)
+        assertEquals(selected.title, state.selectedFixedOption?.title)
+        assertEquals(null, state.branchTask)
         assertFalse(state.canInteractWithTask)
         assertTrue(state.comments.isEmpty())
     }

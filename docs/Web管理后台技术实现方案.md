@@ -20,8 +20,8 @@
 
 - 资源配置
 - 高光标签查看与修正
-- 互动数据查看
-- 分支任务查看与重试
+- 按内容维度查看播放互动数据
+- 分支任务内容审核与执行排障
 - 演示数据初始化与重置
 
 ### 2.2 后台不承担的内容
@@ -94,6 +94,7 @@ admin-web/
 │   │   ├── episodes/
 │   │   ├── highlights/
 │   │   ├── interactions/
+│   │   ├── playerEngagement/
 │   │   ├── branchTasks/
 │   │   ├── assetsConfig/
 │   │   └── demoTools/
@@ -109,6 +110,7 @@ admin-web/
 │   │   ├── dramas/
 │   │   ├── highlights/
 │   │   ├── interactions/
+│   │   ├── playerEngagement/
 │   │   ├── branchTasks/
 │   │   └── demo/
 │   ├── services/
@@ -144,7 +146,8 @@ Admin Web
 ├── /dramas
 ├── /episodes
 ├── /highlights
-├── /interactions
+├── /interactions            # 高光互动事件
+├── /player-engagement      # 收藏 / 评论 / 弹幕 / 观看记录
 ├── /branch-tasks
 ├── /assets-config
 └── /demo-tools
@@ -176,8 +179,11 @@ Admin Web
 - 当前短剧数量
 - 当前高光数量
 - 候选高光数量
-- 今日互动数
-- 分支任务状态统计
+- 收藏总数
+- 播放评论总数
+- 弹幕总数
+- 观看记录总数
+- 分支任务总数
 - 常用操作入口
 
 ### 6.3 /dramas
@@ -228,33 +234,98 @@ Admin Web
 
 职责：
 
-- 查看互动上报记录与统计聚合
+- 查看高光互动事件上报记录
 
 建议功能：
 
-- 按剧集、高光、时间筛选
-- 查看 `total_count`
-- 查看 `unique_device_count`
-- 查看 `top_option`
-- 查看 `heat_level`
+- 按剧集、高光、设备筛选
+- 查看 `highlight_id`
+- 查看 `interaction_type`
+- 查看 `option_text`
+- 查看 `server_timestamp`
 
-### 6.7 /branch-tasks
+### 6.7 /player-engagement
 
 职责：
 
+- 按内容维度查看播放页沉淀数据
+- 支撑内容运营和联调排查
+
+必须支持：
+
+- 以单页多 tab 方式承载：
+  - 收藏
+  - 评论
+  - 弹幕
+  - 观看记录
+- 每个 tab 支持分页
+- 每个 tab 支持按 `dramaId`
+- 评论 / 弹幕 / 观看记录支持按 `episodeId`
+- 所有 tab 支持按 `userId`
+
+详细要求：
+
+- 收藏：
+  - 展示收藏时间、短剧标题、题材标签、用户 ID、设备 ID
+- 评论：
+  - 展示发送时间、短剧 / 剧集、评论内容、状态、用户 ID、设备 ID
+- 弹幕：
+  - 展示发送时间、短剧 / 剧集、弹幕内容、触发视频时间点、状态、用户 ID
+- 观看记录：
+  - 展示最近更新时间、短剧、当前剧集、观看进度、用户 ID、设备 ID
+
+### 6.8 /branch-tasks
+
+职责：
+
+- 同时承担结果内容审核与执行排障
 - 查看自定义分支任务状态
-- 查看结果摘要
+- 查看结果摘要和互动反馈
 - 对失败任务执行重试
 
 必须支持：
 
 - 按状态筛选 `pending/running/success/failed/timeout/blocked`
+- 按 `dramaId` 和 `episodeId` 筛选
 - 查看用户 Prompt
 - 查看 `result_title/result_hook`
+- 查看 `result_story`
+- 查看 `storyboard_json`
+- 查看 `result_tags_json`
+- 查看 `result_interaction_options_json`
+- 查看点赞数与评论数
 - 查看 `fail_reason`
+- 查看创建、开始、结束时间与耗时
+- 进入详情抽屉或详情页
 - 触发重试
 
-### 6.8 /assets-config
+详情层必须支持：
+
+- 基础信息：
+  - 短剧
+  - 剧集
+  - 任务状态
+  - 用户 Prompt
+- 内容审核区：
+  - 结果标题
+  - Hook
+  - 正文故事
+  - Storyboard JSON
+  - 标签 JSON
+  - 互动选项 JSON
+- 排障区：
+  - 创建时间
+  - 开始时间
+  - 结束时间
+  - 执行耗时
+  - 失败原因
+  - 重试次数
+- 互动反馈区：
+  - 评论列表
+  - 点赞列表
+  - 统计计数
+
+### 6.9 /assets-config
 
 职责：
 
@@ -269,7 +340,7 @@ Admin Web
 - 输入路径后提交
 - 返回校验结果
 
-### 6.9 /demo-tools
+### 6.10 /demo-tools
 
 职责：
 
@@ -280,6 +351,13 @@ Admin Web
 - 重置运行期数据
 - 显示重置结果
 - 明确说明不会覆盖固定资源与高光基础配置
+- 明确说明会清空：
+  - 收藏
+  - 播放评论
+  - 弹幕
+  - 观看进度
+  - 分支任务及其评论点赞
+  - 用户资料缓存
 
 ## 7. 页面布局方案
 
@@ -295,7 +373,8 @@ Admin Web
 - 短剧管理
 - 剧集管理
 - 高光管理
-- 互动数据
+- 高光互动
+- 播放互动
 - 分支任务
 - 资源配置
 - 演示工具
@@ -375,7 +454,12 @@ Admin Web
 - `['admin', 'episodes', filters]`
 - `['admin', 'highlights', filters]`
 - `['admin', 'interactions', filters]`
+- `['admin', 'favorites', filters]`
+- `['admin', 'playerComments', filters]`
+- `['admin', 'danmaku', filters]`
+- `['admin', 'watchProgress', filters]`
 - `['admin', 'branchTasks', filters]`
+- `['admin', 'branchTask', taskId]`
 
 ### 9.3 Mutation 约定
 
@@ -393,7 +477,10 @@ Admin Web
 
 - `GET /admin/dramas`
 - `GET /admin/highlights`
-- `GET /admin/interactions`
+- `GET /admin/favorites`
+- `GET /admin/player-comments`
+- `GET /admin/danmaku`
+- `GET /admin/watch-progress`
 - `GET /admin/branch-tasks`
 
 ### 10.2 短剧与剧集页
@@ -420,14 +507,24 @@ Admin Web
 
 - `GET /admin/interactions`
 
-### 10.5 分支任务页
+### 10.5 播放互动页
+
+依赖接口：
+
+- `GET /admin/favorites`
+- `GET /admin/player-comments`
+- `GET /admin/danmaku`
+- `GET /admin/watch-progress`
+
+### 10.6 分支任务页
 
 依赖接口：
 
 - `GET /admin/branch-tasks`
+- `GET /admin/branch-tasks/:taskId`
 - `POST /admin/branch-tasks/:taskId/retry`
 
-### 10.6 资源配置页
+### 10.7 资源配置页
 
 依赖接口：
 
@@ -438,7 +535,7 @@ Admin Web
 - 后台提交后由服务端写入 `config/resource-paths.local.json`
 - 页面需展示当前生效路径和保存结果
 
-### 10.7 演示工具页
+### 10.8 演示工具页
 
 依赖接口：
 
@@ -473,7 +570,14 @@ Admin Web
 - 点击后弹确认框
 - 成功后列表刷新
 
-### 11.3 演示数据重置交互
+### 11.3 分支任务详情交互
+
+- 点击 `详情` 打开右侧详情抽屉
+- 详情抽屉不得丢失当前列表筛选和分页状态
+- 评论和点赞列表优先展示最新记录
+- JSON 字段以可读格式化文本展示，不直接压成单行
+
+### 11.4 演示数据重置交互
 
 - 危险操作按钮单独标识
 - 二次确认
@@ -533,6 +637,7 @@ Admin Web
 - 高光为空：`当前条件下没有高光记录`
 - 分支任务为空：`暂无分支任务`
 - 互动为空：`暂无互动数据`
+- 播放互动为空：`当前条件下暂无播放互动记录`
 
 ## 15. 组件清单
 
@@ -566,6 +671,8 @@ Admin Web
 - 登录后能进入 `/dashboard`
 - 高光筛选后列表正确刷新
 - 高光编辑成功后列表数据更新
+- 播放互动四个 tab 都能独立筛选和分页
+- 分支任务详情能同时看到内容结果和互动反馈
 - 分支任务重试后状态刷新
 - 演示数据重置后操作提示正确
 
@@ -578,10 +685,11 @@ Admin Web
 3. 完成整体后台布局与导航
 4. 完成短剧页和剧集页
 5. 完成高光管理页
-6. 完成互动数据页
-7. 完成分支任务页
-8. 完成资源配置页和演示工具页
-9. 完成测试和联调修正
+6. 完成高光互动页
+7. 完成播放互动页
+8. 完成分支任务页与详情抽屉
+9. 完成资源配置页和演示工具页
+10. 完成测试和联调修正
 
 ## 18. Agent 分工建议
 
@@ -589,8 +697,9 @@ Admin Web
 
 - Agent A：工程初始化、路由、鉴权、布局
 - Agent B：短剧页、剧集页、高光管理页
-- Agent C：互动数据页、分支任务页
-- Agent D：资源配置页、演示工具页、全局组件和反馈体系
+- Agent C：高光互动页、播放互动页
+- Agent D：分支任务页、详情抽屉
+- Agent E：资源配置页、演示工具页、全局组件和反馈体系
 
 要求：
 
@@ -603,8 +712,10 @@ Admin Web
 当满足以下条件时，Web 管理后台模块算完成：
 
 - 可通过 token 登录进入后台
-- 可查看短剧、剧集、高光、互动和分支任务
+- 可查看短剧、剧集、高光、高光互动、播放互动和分支任务
 - 可编辑高光并执行启停
+- 可在播放互动页查看收藏、评论、弹幕、观看记录
+- 可在分支任务详情里查看结果内容、互动反馈与执行状态
 - 可对失败任务执行重试
 - 可执行演示数据重置
 - 可查看资源路径配置结果

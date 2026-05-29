@@ -69,6 +69,17 @@ fun ProfileScreen(
     onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    if (uiState.isEditingProfile) {
+        EditProfileDialog(
+            nickname = uiState.profileNicknameInput,
+            bio = uiState.profileBioInput,
+            onNicknameChange = { onEvent(ProfileEvent.OnProfileNicknameChanged(it)) },
+            onBioChange = { onEvent(ProfileEvent.OnProfileBioChanged(it)) },
+            onDismiss = { onEvent(ProfileEvent.OnDismissProfileDialog) },
+            onConfirm = { onEvent(ProfileEvent.OnSaveProfile) }
+        )
+    }
+
     if (uiState.isEditingServerUrl) {
         ServerUrlDialog(
             value = uiState.serverUrlInput,
@@ -82,7 +93,7 @@ fun ProfileScreen(
         ProfileScreenState.IDLE, ProfileScreenState.LOADING -> LoadingPanel(modifier)
         ProfileScreenState.ERROR -> ErrorPanel(
             message = uiState.errorMessage ?: "加载失败",
-            onRetry = { onEvent(ProfileEvent.OnEnter) },
+            onRetry = { onEvent(ProfileEvent.OnRefresh) },
             modifier = modifier
         )
         ProfileScreenState.CONTENT, ProfileScreenState.EMPTY -> ProfileContent(
@@ -119,7 +130,9 @@ private fun ProfileContent(
         item(span = { GridItemSpan(3) }) {
             ProfileHeader(
                 nickname = uiState.nickname,
-                avatarUrl = uiState.avatarUrl
+                bio = uiState.bio,
+                avatarUrl = uiState.avatarUrl,
+                onEditClick = { onEvent(ProfileEvent.OnEditProfileClick) }
             )
         }
 
@@ -246,7 +259,9 @@ internal fun ServerUrlDialog(
 @Composable
 private fun ProfileHeader(
     nickname: String,
+    bio: String,
     avatarUrl: String?,
+    onEditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -278,12 +293,63 @@ private fun ProfileHeader(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
+                text = bio.ifBlank { "写一句简介，展示你的追剧气质" },
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
                 text = "编辑资料 >",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                color = Accent,
+                modifier = Modifier.clickable(onClick = onEditClick)
             )
         }
     }
+}
+
+@Composable
+private fun EditProfileDialog(
+    nickname: String,
+    bio: String,
+    onNicknameChange: (String) -> Unit,
+    onBioChange: (String) -> Unit,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("编辑资料") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                OutlinedTextField(
+                    value = nickname,
+                    onValueChange = onNicknameChange,
+                    singleLine = true,
+                    label = { Text("昵称") },
+                    placeholder = { Text("给自己起个名字") }
+                )
+                OutlinedTextField(
+                    value = bio,
+                    onValueChange = onBioChange,
+                    minLines = 2,
+                    maxLines = 3,
+                    label = { Text("简介") },
+                    placeholder = { Text("写一句你的追剧偏好") }
+                )
+            }
+        },
+        confirmButton = {
+            Button(onClick = onConfirm) {
+                Text("保存")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("取消")
+            }
+        }
+    )
 }
 
 @Composable
