@@ -1,0 +1,307 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_13",
+  "episodeNo": 13,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第13集",
+  "episodeSummary": "",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 0,
+      "endTimeMs": 960,
+      "text": "你说什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 2440,
+      "endTimeMs": 4160,
+      "text": "你要跟我一起打牢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 5260,
+      "endTimeMs": 8020,
+      "text": "在外让人闻风丧胆的主持人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 8340,
+      "endTimeMs": 10900,
+      "text": "私下里就像一只没有安全感的小狗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 10940,
+      "endTimeMs": 13120,
+      "text": "前世，如果我愿意多了解他一点",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 13120,
+      "endTimeMs": 14580,
+      "text": "或许就不至于",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 16040,
+      "endTimeMs": 18120,
+      "text": "嗯",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 18600,
+      "endTimeMs": 21120,
+      "text": "你得等我干什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 23900,
+      "endTimeMs": 25340,
+      "text": "今天我在这里",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 25780,
+      "endTimeMs": 27340,
+      "text": "谁都不会伤害你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 27890,
+      "endTimeMs": 29370,
+      "text": "怎么这样",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 29770,
+      "endTimeMs": 33130,
+      "text": "阿紫阿紫，你俩演我呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 33570,
+      "endTimeMs": 36170,
+      "text": "大妞，你这不纯找死吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 37150,
+      "endTimeMs": 38990,
+      "text": "你为了一个男人值得",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 39510,
+      "endTimeMs": 40630,
+      "text": "他值得",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 41310,
+      "endTimeMs": 45070,
+      "text": "are you fit of fire",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 46190,
+      "endTimeMs": 47310,
+      "text": "where were my",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 47520,
+      "endTimeMs": 49360,
+      "text": "我说你知道的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 49460,
+      "endTimeMs": 51340,
+      "text": "这一生谁都可以死",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 51340,
+      "endTimeMs": 52580,
+      "text": "只有你不死",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 52780,
+      "endTimeMs": 56820,
+      "text": "阿芝，我都快死了，你还骗我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 60450,
+      "endTimeMs": 62930,
+      "text": "你们谁要是再敢动她一下",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 63290,
+      "endTimeMs": 64629,
+      "text": "我就杀了你们",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 64629,
+      "endTimeMs": 66890,
+      "text": "哈哈哈哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 67330,
+      "endTimeMs": 71090,
+      "text": "行，那你就和他一起上6年班",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 71710,
+      "endTimeMs": 74070,
+      "text": "阿哲 remember",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 74510,
+      "endTimeMs": 78430,
+      "text": "we together 我杀了你们",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 78430,
+      "endTimeMs": 82590,
+      "text": "Matter on the tail we go for a sin ourself",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 83180,
+      "endTimeMs": 87140,
+      "text": "just promise me when wers from whatever",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

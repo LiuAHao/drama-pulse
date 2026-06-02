@@ -1,0 +1,82 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep20/episode-20.mp3",
+  "segment_count": 15,
+  "segments": [
+    {
+      "text": "野狗",
+      "start_time": 320,
+      "end_time": 1920
+    },
+    {
+      "text": "我说错了吗",
+      "start_time": 4740,
+      "end_time": 6940
+    },
+    {
+      "text": "小青来打呀快打呀",
+      "start_time": 6940,
+      "end_time": 11020
+    },
+    {
+      "text": "甘宁纸，你是不是疯了呀",
+      "start_time": 11420,
+      "end_time": 14060
+    },
+    {
+      "text": "哎",
+      "start_time": 15800,
+      "end_time": 16440
+    },
+    {
+      "text": "江青纸，你脑子是被主持人给打坏了吧",
+      "start_time": 16840,
+      "end_time": 20560
+    },
+    {
+      "text": "哪有自己打自己的切",
+      "start_time": 20560,
+      "end_time": 22720
+    },
+    {
+      "text": "老爷夫人有位",
+      "start_time": 31720,
+      "end_time": 33080
+    },
+    {
+      "text": "储先生来了",
+      "start_time": 33080,
+      "end_time": 34080
+    },
+    {
+      "text": "楚先生什么",
+      "start_time": 35330,
+      "end_time": 37090
+    },
+    {
+      "text": "朱先生",
+      "start_time": 37090,
+      "end_time": 37770
+    },
+    {
+      "text": "报纸人",
+      "start_time": 38370,
+      "end_time": 39330
+    },
+    {
+      "text": "阿哲",
+      "start_time": 43400,
+      "end_time": 44240
+    },
+    {
+      "text": "晚安",
+      "start_time": 48540,
+      "end_time": 49580
+    },
+    {
+      "text": "救",
+      "start_time": 50900,
+      "end_time": 51340
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_10",
+  "episodeNo": 10,
+  "episodeTitle": "第10集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "紫烟回家，发现阿哲不在，福波告知楚爷误会她找别的男人而开车外出。紫烟解释自己买菜后回学校，但楚爷仍未归，留下悬念。",
+  "keyEvents": [
+    "紫烟回家发现阿哲中午出门未归",
+    "福波告知紫烟楚爷误会她去找别的男人，急着开车出去了",
+    "紫烟解释自己刚买完菜回了趟学校"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "紫烟曾回学校，但具体原因不明"
+  ],
+  "openQuestions": [
+    "楚爷开车去了哪里？",
+    "阿哲真的只是去买菜吗？",
+    "紫烟和楚爷之间是否产生信任危机？"
+  ],
+  "episodeEndingState": "楚爷外出未归，紫烟在家等待，关系紧张悬而未决",
+  "focusCharacters": [
+    "紫烟",
+    "楚爷",
+    "福波",
+    "阿哲"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 31,
+    "durationMs": 70651
+  }
+}

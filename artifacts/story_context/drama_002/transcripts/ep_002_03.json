@@ -1,0 +1,357 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_03",
+  "episodeNo": 3,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第3集",
+  "episodeSummary": "",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 6060,
+      "endTimeMs": 11380,
+      "text": "这个该死的病娇又绑我都说非他不嫁了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 13400,
+      "endTimeMs": 14280,
+      "text": "初晨",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 24840,
+      "endTimeMs": 25600,
+      "text": "安之",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 26600,
+      "endTimeMs": 28960,
+      "text": "你说我要是把你的眼睛挖出来",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 30180,
+      "endTimeMs": 31900,
+      "text": "然后泡在酒里",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 33580,
+      "endTimeMs": 35780,
+      "text": "是不是你的眼里就只有我了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 38940,
+      "endTimeMs": 41700,
+      "text": "楚尘：你，你放开我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 44000,
+      "endTimeMs": 46560,
+      "text": "虽然这一世我只想爱出城门",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 46720,
+      "endTimeMs": 49280,
+      "text": "但绝不能再以受辱的方式",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 49410,
+      "endTimeMs": 52330,
+      "text": "必须得好好调教他一下才行",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 54350,
+      "endTimeMs": 55150,
+      "text": "yeah",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 55350,
+      "endTimeMs": 56710,
+      "text": "rion for",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 64980,
+      "endTimeMs": 66020,
+      "text": "我知道",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 67620,
+      "endTimeMs": 69060,
+      "text": "不是同情你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 69210,
+      "endTimeMs": 75330,
+      "text": "你这 are you saying this is why you open the myridicular",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 75490,
+      "endTimeMs": 77210,
+      "text": "So i'm your blur",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 77290,
+      "endTimeMs": 81700,
+      "text": "i hate you for raising me like never forget",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 81700,
+      "endTimeMs": 83500,
+      "text": "你还真是为了逃跑",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 83500,
+      "endTimeMs": 85120,
+      "text": "什么话都说出来",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 85560,
+      "endTimeMs": 87160,
+      "text": "我不会再逃跑了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 87920,
+      "endTimeMs": 88760,
+      "text": "但是",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 89960,
+      "endTimeMs": 94040,
+      "text": "你能不能先帮我把手松开耶",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 94040,
+      "endTimeMs": 95000,
+      "text": "我手边",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 99680,
+      "endTimeMs": 100720,
+      "text": "也好啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 101580,
+      "endTimeMs": 103880,
+      "text": "绑着你难道不锋利",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 103880,
+      "endTimeMs": 105920,
+      "text": "看来今天无论如何都躲不过去",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 105920,
+      "endTimeMs": 108900,
+      "text": "这种事情还是激烈点的好",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 108900,
+      "endTimeMs": 110020,
+      "text": "那不如",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 112380,
+      "endTimeMs": 113420,
+      "text": "你干什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 115780,
+      "endTimeMs": 116620,
+      "text": "是",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 119000,
+      "endTimeMs": 122240,
+      "text": "He says i have changed",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 122380,
+      "endTimeMs": 125940,
+      "text": "are you saying is why you always been to me",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 126180,
+      "endTimeMs": 127820,
+      "text": "ridiculous",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 127900,
+      "endTimeMs": 129419,
+      "text": "so i'm in blood",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

@@ -1,0 +1,377 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_07",
+  "episodeNo": 7,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第7集",
+  "episodeSummary": "",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 4880,
+      "endTimeMs": 7400,
+      "text": "你推我林星驰",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 7520,
+      "endTimeMs": 8600,
+      "text": "你说话呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 8600,
+      "endTimeMs": 10200,
+      "text": "你到底什么意思啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 10650,
+      "endTimeMs": 11570,
+      "text": "叶俊良",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 12330,
+      "endTimeMs": 13890,
+      "text": "我说的很清楚",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 13890,
+      "endTimeMs": 14970,
+      "text": "我不喜欢你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 14970,
+      "endTimeMs": 16490,
+      "text": "你不喜欢我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 16740,
+      "endTimeMs": 19620,
+      "text": "那你明里暗里的跟我表白算什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 19620,
+      "endTimeMs": 20500,
+      "text": "你说我的话",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 20500,
+      "endTimeMs": 21820,
+      "text": "给我做个翻译算什么呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 21820,
+      "endTimeMs": 23700,
+      "text": "我现在好不容易答应你了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 23700,
+      "endTimeMs": 26070,
+      "text": "你给我玩什么玉玺沟通呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 27430,
+      "endTimeMs": 28790,
+      "text": "以前是我眼瞎",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 28990,
+      "endTimeMs": 33310,
+      "text": "我现在只想跟楚晨安在一起",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 34310,
+      "endTimeMs": 35470,
+      "text": "我要跟他结",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 41660,
+      "endTimeMs": 42900,
+      "text": "你要说什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 44920,
+      "endTimeMs": 46480,
+      "text": "是你的缓兵之计",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 47040,
+      "endTimeMs": 49380,
+      "text": "你怕我真把他做成了老人了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 49380,
+      "endTimeMs": 50720,
+      "text": "所以你才这么说对不对",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 50720,
+      "endTimeMs": 53080,
+      "text": "我没有",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 55200,
+      "endTimeMs": 57520,
+      "text": "我没有骗你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 58600,
+      "endTimeMs": 60200,
+      "text": "我会证明给你看",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 63860,
+      "endTimeMs": 65940,
+      "text": "you're gonna know how we",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 74180,
+      "endTimeMs": 77140,
+      "text": "你禁止从阴暗无所",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 78380,
+      "endTimeMs": 81020,
+      "text": "You just help me up",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 81790,
+      "endTimeMs": 83150,
+      "text": "为了爱你 can never",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 84750,
+      "endTimeMs": 85630,
+      "text": "楚尘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 86160,
+      "endTimeMs": 89160,
+      "text": "上一世，你看到我死在他们手里的时候",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 89160,
+      "endTimeMs": 90760,
+      "text": "一定对我很失望",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 90880,
+      "endTimeMs": 93240,
+      "text": "这一世我不会再重蹈覆辙的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 93480,
+      "endTimeMs": 97250,
+      "text": "我一定要亲手刀了他叫我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 98940,
+      "endTimeMs": 101580,
+      "text": "So i kicked the end it all",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 101580,
+      "endTimeMs": 105990,
+      "text": "and sold much more time be meted",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 107170,
+      "endTimeMs": 108670,
+      "text": "更 more than 真",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 108670,
+      "endTimeMs": 112690,
+      "text": "谁能如此，我尝试",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 114120,
+      "endTimeMs": 115880,
+      "text": "here alone",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

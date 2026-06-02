@@ -1,0 +1,617 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_22",
+  "episodeNo": 22,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第22集",
+  "episodeSummary": "",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 0,
+      "endTimeMs": 1200,
+      "text": "那你想怎么样啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 2520,
+      "endTimeMs": 3760,
+      "text": "岳父大人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 6680,
+      "endTimeMs": 7860,
+      "text": "他留下的股份",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 7860,
+      "endTimeMs": 9560,
+      "text": "那可是我江家的遗产",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 10240,
+      "endTimeMs": 12720,
+      "text": "既然青直已经嫁人了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 13140,
+      "endTimeMs": 15940,
+      "text": "那这个股份就该留给我们江家",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 16420,
+      "endTimeMs": 18620,
+      "text": "你们楚家有权有势",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 19020,
+      "endTimeMs": 20660,
+      "text": "应该也不缺这点钱吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 20700,
+      "endTimeMs": 22060,
+      "text": "不缺你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 23560,
+      "endTimeMs": 25680,
+      "text": "我们回家了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 27920,
+      "endTimeMs": 28520,
+      "text": "哎",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 29400,
+      "endTimeMs": 30440,
+      "text": "好玩",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 32220,
+      "endTimeMs": 33860,
+      "text": "才刚开始",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 35070,
+      "endTimeMs": 37790,
+      "text": "爸，你快想办法救救军粮啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 37870,
+      "endTimeMs": 39210,
+      "text": "还救什么救啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 39210,
+      "endTimeMs": 41910,
+      "text": "没看到在江城已指日经跟着楚山结婚了吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 42240,
+      "endTimeMs": 43880,
+      "text": "叶俊良现在就是个废人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 43880,
+      "endTimeMs": 45340,
+      "text": "已经没有利用价值了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 45340,
+      "endTimeMs": 47160,
+      "text": "可是行了，别客时了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 47320,
+      "endTimeMs": 49680,
+      "text": "落在楚山安手里的人就别想了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 49840,
+      "endTimeMs": 51560,
+      "text": "而是想让股份该怎么办吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 53390,
+      "endTimeMs": 55150,
+      "text": "我倒是觉得",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 55270,
+      "endTimeMs": 58910,
+      "text": "这个褚承安并不是真的喜欢江金智",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 59380,
+      "endTimeMs": 62600,
+      "text": "怎么可能，我刚刚看他的样子",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 62600,
+      "endTimeMs": 64140,
+      "text": "就是想要杀人一样",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 64340,
+      "endTimeMs": 65620,
+      "text": "你懂什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 65760,
+      "endTimeMs": 67020,
+      "text": "这个初晨啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 67020,
+      "endTimeMs": 69420,
+      "text": "之前可是出了名的不近于色",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 69420,
+      "endTimeMs": 73520,
+      "text": "依我看他一定是被当作玩物随便玩玩吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 73880,
+      "endTimeMs": 74800,
+      "text": "妈的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 77180,
+      "endTimeMs": 80860,
+      "text": "既然现在股份已经落到了褚承安的手里",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 80860,
+      "endTimeMs": 83500,
+      "text": "那我们直接搞定褚承安不就行了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 84800,
+      "endTimeMs": 86000,
+      "text": "怎么搞定的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 88460,
+      "endTimeMs": 92580,
+      "text": "晴雪，这楚尘安可是天上的凤凰",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 92980,
+      "endTimeMs": 94660,
+      "text": "你要是能得到他的心",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 94740,
+      "endTimeMs": 96500,
+      "text": "别说那点股份了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 96500,
+      "endTimeMs": 97800,
+      "text": "就是整个楚江",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 97800,
+      "endTimeMs": 99200,
+      "text": "甚至整个江北",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 99200,
+      "endTimeMs": 101140,
+      "text": "那都是咱们说了算呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 101140,
+      "endTimeMs": 102420,
+      "text": "不行，妈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0041",
+      "startTimeMs": 102540,
+      "endTimeMs": 103900,
+      "text": "我害怕他",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0042",
+      "startTimeMs": 103980,
+      "endTimeMs": 106440,
+      "text": "哎呀，有什么好害怕的呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0043",
+      "startTimeMs": 106440,
+      "endTimeMs": 107900,
+      "text": "学学人家张青池",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0044",
+      "startTimeMs": 108290,
+      "endTimeMs": 109950,
+      "text": "要想过富贵日子",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0045",
+      "startTimeMs": 109950,
+      "endTimeMs": 111610,
+      "text": "那就得人前冒险",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0046",
+      "startTimeMs": 111810,
+      "endTimeMs": 113090,
+      "text": "再说了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0047",
+      "startTimeMs": 113090,
+      "endTimeMs": 115290,
+      "text": "你哪一点不如他江清池呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0048",
+      "startTimeMs": 116090,
+      "endTimeMs": 118170,
+      "text": "这这能行吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0049",
+      "startTimeMs": 118410,
+      "endTimeMs": 119250,
+      "text": "哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0050",
+      "startTimeMs": 119770,
+      "endTimeMs": 121050,
+      "text": "我看行啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0051",
+      "startTimeMs": 121390,
+      "endTimeMs": 124010,
+      "text": "晴雪呀，可比清直讨人喜欢多了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0052",
+      "startTimeMs": 124010,
+      "endTimeMs": 125270,
+      "text": "那个叶俊良啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0053",
+      "startTimeMs": 125390,
+      "endTimeMs": 126610,
+      "text": "根本配不上你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0054",
+      "startTimeMs": 126610,
+      "endTimeMs": 127990,
+      "text": "以后别想了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0055",
+      "startTimeMs": 128470,
+      "endTimeMs": 130650,
+      "text": "对，刚刚主持完",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0056",
+      "startTimeMs": 130650,
+      "endTimeMs": 132490,
+      "text": "好像还偷偷偷看我来着",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0057",
+      "startTimeMs": 132490,
+      "endTimeMs": 133770,
+      "text": "啊哈，我就说吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0058",
+      "startTimeMs": 133770,
+      "endTimeMs": 135530,
+      "text": "哈哈哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0059",
+      "startTimeMs": 135760,
+      "endTimeMs": 139080,
+      "text": "好爸妈你就放心吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0060",
+      "startTimeMs": 139080,
+      "endTimeMs": 141280,
+      "text": "我一定会把主持人夺回来的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

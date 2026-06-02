@@ -1,0 +1,417 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_18",
+  "episodeNo": 18,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第18集",
+  "episodeSummary": "",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 5939,
+      "endTimeMs": 7900,
+      "text": "请指站住",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 8700,
+      "endTimeMs": 11380,
+      "text": "拿你母亲一向干吗要去哪儿啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 13800,
+      "endTimeMs": 14560,
+      "text": "青芝",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 14960,
+      "endTimeMs": 16840,
+      "text": "是不是我坐了你哪里不好",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 17000,
+      "endTimeMs": 18200,
+      "text": "让你生气了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 18240,
+      "endTimeMs": 20680,
+      "text": "要不我们坐下来好好聊一聊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 20880,
+      "endTimeMs": 21560,
+      "text": "嗯",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 22280,
+      "endTimeMs": 23240,
+      "text": "就是呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 23280,
+      "endTimeMs": 25960,
+      "text": "有什么话坐下来好好说嘛",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 26460,
+      "endTimeMs": 28080,
+      "text": "你追了俊良这么久",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 28080,
+      "endTimeMs": 31460,
+      "text": "我跟你爸早就把她当成半个女婿了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 31460,
+      "endTimeMs": 32500,
+      "text": "呵呵",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 45600,
+      "endTimeMs": 46400,
+      "text": "好啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 46840,
+      "endTimeMs": 50000,
+      "text": "那我就一次性把话都说明白",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 59280,
+      "endTimeMs": 63440,
+      "text": "我妈生前将山宇集团百分之百的股份都留给了我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 64540,
+      "endTimeMs": 66740,
+      "text": "并且要求只要我还活着",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 67180,
+      "endTimeMs": 70740,
+      "text": "这笔股份只能转增任何人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 71050,
+      "endTimeMs": 72530,
+      "text": "供能。机长不同",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 72730,
+      "endTimeMs": 74890,
+      "text": "你母亲头发长、见识短",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 75010,
+      "endTimeMs": 76650,
+      "text": "你哪有能力管理公司啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 77170,
+      "endTimeMs": 78130,
+      "text": "所以",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 78650,
+      "endTimeMs": 81970,
+      "text": "我决定将这笔古风赠予我的丈夫",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 86780,
+      "endTimeMs": 87580,
+      "text": "青池",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 88140,
+      "endTimeMs": 89620,
+      "text": "我就知道你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 91340,
+      "endTimeMs": 92860,
+      "text": "你在我们家干嘛呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 93060,
+      "endTimeMs": 94500,
+      "text": "你自己没有家吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 96360,
+      "endTimeMs": 98640,
+      "text": "呵，你这话什么意思呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 98640,
+      "endTimeMs": 101240,
+      "text": "我在这儿不是为了等你吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 101440,
+      "endTimeMs": 103420,
+      "text": "可是我不是跟你说过吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 103420,
+      "endTimeMs": 104760,
+      "text": "你不喜欢你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 105650,
+      "endTimeMs": 106570,
+      "text": "江星驰",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 107330,
+      "endTimeMs": 109550,
+      "text": "你是不是还和楚承安在一起呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 109550,
+      "endTimeMs": 110610,
+      "text": "他就是个恶魔",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 110610,
+      "endTimeMs": 112090,
+      "text": "他吃得玩死你的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 112460,
+      "endTimeMs": 115260,
+      "text": "那你就当我口味独特",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 115500,
+      "endTimeMs": 116660,
+      "text": "喜欢冰月了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 116660,
+      "endTimeMs": 117900,
+      "text": "蒋介执念",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 119330,
+      "endTimeMs": 120170,
+      "text": "清芷",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 120730,
+      "endTimeMs": 123930,
+      "text": "你跟那个楚正安到底发展到哪一步了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 128680,
+      "endTimeMs": 130479,
+      "text": "我们结婚了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

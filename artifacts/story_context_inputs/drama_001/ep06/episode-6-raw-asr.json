@@ -1,0 +1,282 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep06/episode-6.mp3",
+  "segment_count": 55,
+  "segments": [
+    {
+      "text": "哇哦，真是白米",
+      "start_time": 4220,
+      "end_time": 6460
+    },
+    {
+      "text": "娘，这白米哪来的",
+      "start_time": 6580,
+      "end_time": 8620
+    },
+    {
+      "text": "去年蝗灾",
+      "start_time": 8620,
+      "end_time": 9620
+    },
+    {
+      "text": "村子里就没有谁家里还能拿得出白米啊",
+      "start_time": 9620,
+      "end_time": 12040
+    },
+    {
+      "text": "怀璧其罪",
+      "start_time": 12040,
+      "end_time": 13400
+    },
+    {
+      "text": "虽然这些小子心里有我这个娘",
+      "start_time": 13410,
+      "end_time": 15650
+    },
+    {
+      "text": "但不怕1万",
+      "start_time": 15650,
+      "end_time": 16770
+    },
+    {
+      "text": "就怕万一呀",
+      "start_time": 16770,
+      "end_time": 17810
+    },
+    {
+      "text": "还是得瞒着",
+      "start_time": 17810,
+      "end_time": 19090
+    },
+    {
+      "text": "哦，这粮食是我打算孝敬你们姥姥的",
+      "start_time": 19850,
+      "end_time": 23130
+    },
+    {
+      "text": "之前只知道娘会把家里的好东西拿去给大舅",
+      "start_time": 23330,
+      "end_time": 27010
+    },
+    {
+      "text": "没想到居然是大米这样金贵的东西",
+      "start_time": 27130,
+      "end_time": 30390
+    },
+    {
+      "text": "白米是什么味道啊",
+      "start_time": 30510,
+      "end_time": 32590
+    },
+    {
+      "text": "好想尝尝",
+      "start_time": 32590,
+      "end_time": 33750
+    },
+    {
+      "text": "不过今天的事情让我对他们彻底死心了",
+      "start_time": 33750,
+      "end_time": 38200
+    },
+    {
+      "text": "唉，这么多年来",
+      "start_time": 38880,
+      "end_time": 40680
+    },
+    {
+      "text": "我给程家补贴了多少粮食银子",
+      "start_time": 41010,
+      "end_time": 43650
+    },
+    {
+      "text": "如今也是日子没法过了",
+      "start_time": 43770,
+      "end_time": 45690
+    },
+    {
+      "text": "我才去找他借的",
+      "start_time": 45690,
+      "end_time": 47210
+    },
+    {
+      "text": "谁能想到却被你们大舅砸破了脑袋啊",
+      "start_time": 47610,
+      "end_time": 51570
+    },
+    {
+      "text": "娘不是一直向着程家吗",
+      "start_time": 53140,
+      "end_time": 55380
+    },
+    {
+      "text": "她这是咋了",
+      "start_time": 55420,
+      "end_time": 56660
+    },
+    {
+      "text": "对啊",
+      "start_time": 57200,
+      "end_time": 58080
+    },
+    {
+      "text": "从前娘也被大舅打过",
+      "start_time": 58160,
+      "end_time": 60160
+    },
+    {
+      "text": "我们想替他讨公道",
+      "start_time": 60160,
+      "end_time": 61840
+    },
+    {
+      "text": "还被娘揍了呢",
+      "start_time": 61880,
+      "end_time": 63520
+    },
+    {
+      "text": "娘他不会又打什么主意吧",
+      "start_time": 63680,
+      "end_time": 66610
+    },
+    {
+      "text": "家里面已经没有什么东西了",
+      "start_time": 66970,
+      "end_time": 68790
+    },
+    {
+      "text": "慧娘，把这米煮了吧",
+      "start_time": 68790,
+      "end_time": 70910
+    },
+    {
+      "text": "煮",
+      "start_time": 70910,
+      "end_time": 71570
+    },
+    {
+      "text": "煮了干啥",
+      "start_time": 72350,
+      "end_time": 73430
+    },
+    {
+      "text": "现在各村每家每天只吃一顿",
+      "start_time": 73550,
+      "end_time": 75890
+    },
+    {
+      "text": "咱家今天已经吃过野菜糊糊了",
+      "start_time": 75890,
+      "end_time": 78550
+    },
+    {
+      "text": "是啊，娘这一斤白米就能换四五斤粟米",
+      "start_time": 78670,
+      "end_time": 82860
+    },
+    {
+      "text": "这要都换成了粟米",
+      "start_time": 83100,
+      "end_time": 84740
+    },
+    {
+      "text": "咱家半个月都不用挨饿了",
+      "start_time": 85390,
+      "end_time": 87510
+    },
+    {
+      "text": "还真是不用恶毒婆婆，人设不行",
+      "start_time": 87870,
+      "end_time": 90710
+    },
+    {
+      "text": "让你们煮就煮",
+      "start_time": 91760,
+      "end_time": 92920
+    },
+    {
+      "text": "哪儿那么多废话",
+      "start_time": 92920,
+      "end_time": 94120
+    },
+    {
+      "text": "是",
+      "start_time": 94600,
+      "end_time": 95360
+    },
+    {
+      "text": "诶，那么点米够谁吃啊",
+      "start_time": 102920,
+      "end_time": 105440
+    },
+    {
+      "text": "四蛋都不够吃",
+      "start_time": 105640,
+      "end_time": 107000
+    },
+    {
+      "text": "都煮了都煮了",
+      "start_time": 108980,
+      "end_time": 110860
+    },
+    {
+      "text": "娘，这可够咱们吃好几天的",
+      "start_time": 111060,
+      "end_time": 113560
+    },
+    {
+      "text": "都煮的不是浪费粮食吗",
+      "start_time": 113560,
+      "end_time": 115660
+    },
+    {
+      "text": "你在教我做事啊",
+      "start_time": 115660,
+      "end_time": 117220
+    },
+    {
+      "text": "我咋感觉娘受刺激了",
+      "start_time": 125280,
+      "end_time": 129080
+    },
+    {
+      "text": "娘是想让我们吃饱了去程家讨债",
+      "start_time": 129240,
+      "end_time": 131740
+    },
+    {
+      "text": "我早就想把程家那些王八羔子揍一顿",
+      "start_time": 131740,
+      "end_time": 134840
+    },
+    {
+      "text": "大米饭肯定很好吃",
+      "start_time": 135280,
+      "end_time": 138240
+    },
+    {
+      "text": "怎么不喜欢吃啊",
+      "start_time": 149740,
+      "end_time": 152140
+    },
+    {
+      "text": "这丫头又在搞什么鬼",
+      "start_time": 160190,
+      "end_time": 161690
+    },
+    {
+      "text": "嗯，你怎么不吃啊",
+      "start_time": 161690,
+      "end_time": 163290
+    },
+    {
+      "text": "娘是您之前说我不能上桌",
+      "start_time": 163410,
+      "end_time": 167140
+    },
+    {
+      "text": "只能吃最脏最难吃的东西",
+      "start_time": 167260,
+      "end_time": 169780
+    }
+  ]
+}

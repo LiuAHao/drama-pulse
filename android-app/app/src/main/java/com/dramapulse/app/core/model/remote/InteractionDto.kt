@@ -11,3 +11,18 @@ data class CreateInteractionRequest(
     val optionText: String = "",
     val clientTimestamp: Long
 )
+
+@Serializable
+data class CreateDanmakuHeatReportRequest(
+    val deviceId: String,
+    val episodeId: String,
+    val triggerPositionMs: Long,
+    val sampleContents: List<String>,
+    val clientTimestamp: Long
+)
+
+@Serializable
+data class DanmakuHeatReportDto(
+    val id: String = "",
+    val status: String = "pending"
+)

@@ -5,6 +5,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -30,6 +33,8 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -63,10 +68,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.dramapulse.app.core.data.PlayerCommentEntry
 import com.dramapulse.app.core.data.PlayerDanmakuEntry
 import com.dramapulse.app.core.design.Dimens
+import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.player.ExoPlayerController
 import com.dramapulse.app.core.player.PlaybackState
 import com.dramapulse.app.core.player.PlaybackUiState
-import com.dramapulse.app.ui.component.BranchEntryCard
 import com.dramapulse.app.ui.component.EpisodeSelectorSheet
 import com.dramapulse.app.ui.component.ErrorPanel
 import com.dramapulse.app.ui.component.LoadingPanel
@@ -77,7 +82,7 @@ import com.dramapulse.app.ui.overlay.HighlightOverlay
 
 private val FLOATING_DANMAKU_TOP_PADDING = 64.dp
 private val FLOATING_DANMAKU_OVERLAY_HEIGHT = 120.dp
-private val FLOATING_DANMAKU_TRACK_GAP = 32.dp
+private val FLOATING_DANMAKU_TRACK_GAP = 22.dp
 private val FLOATING_DANMAKU_FONT_SIZE = 18.sp
 private val DANMAKU_COMPOSER_HEIGHT = 38.dp
 
@@ -88,7 +93,7 @@ fun PlayerScreen(
     viewModel: PlayerViewModel,
     playerController: ExoPlayerController,
     onBack: () -> Unit,
-    onNavigateToBranch: (episodeId: String) -> Unit,
+    onNavigateToBranch: (episodeId: String, mode: String, optionId: String?) -> Unit,
     forceReloadOnEnter: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -131,7 +136,7 @@ private fun PlayerContent(
     playerController: ExoPlayerController,
     onEvent: (PlayerEvent) -> Unit,
     onBack: () -> Unit,
-    onNavigateToBranch: (String) -> Unit,
+    onNavigateToBranch: (String, String, String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = androidx.compose.ui.platform.LocalContext.current
@@ -277,6 +282,9 @@ private fun PlayerContent(
             interactionClickCount = uiState.highlight.interactionClickCountByHighlightId[
                 uiState.highlight.activeHighlight?.id
             ] ?: 0,
+            quickPromptConsumedOption = uiState.highlight.activeHighlight?.let { active ->
+                uiState.highlight.quickPromptConsumedOptionByHighlightId[active.id]
+            },
             onInteractionClick = { highlightId, text ->
                 onEvent(PlayerEvent.OnInteractionClick(highlightId, text))
             },
@@ -363,11 +371,18 @@ private fun PlayerContent(
                     .background(Color.Black.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.BottomCenter
             ) {
-                BranchEntryCard(
-                    onGoToBranch = {
+                TailBranchEntrySheet(
+                    branchOptions = uiState.overlay.branchOptions,
+                    onSelectFixed = { option ->
                         val epId = uiState.meta.currentEpisode?.id
                         if (epId != null) {
-                            onNavigateToBranch(epId)
+                            onNavigateToBranch(epId, "fixed", option.id)
+                        }
+                    },
+                    onSelectCustom = {
+                        val epId = uiState.meta.currentEpisode?.id
+                        if (epId != null) {
+                            onNavigateToBranch(epId, "custom", null)
                         }
                     },
                     onDismiss = { onEvent(PlayerEvent.DismissBranchEntry) }
@@ -396,6 +411,101 @@ private fun PlayerContent(
                     }
                 )
             }
+        }
+    }
+}
+
+@Composable
+private fun TailBranchEntrySheet(
+    branchOptions: List<BranchOptionModel>,
+    onSelectFixed: (BranchOptionModel) -> Unit,
+    onSelectCustom: () -> Unit,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+            .background(Color.Black.copy(alpha = 0.9f))
+            .padding(20.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                text = "全剧终",
+                style = MaterialTheme.typography.headlineLarge,
+                color = Color.White
+            )
+            Text(
+                text = "请选择接下来的结局分支",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White.copy(alpha = 0.72f)
+            )
+
+            branchOptions.take(2).forEachIndexed { index, option ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(Color.White.copy(alpha = 0.08f))
+                        .clickable { onSelectFixed(option) }
+                        .padding(14.dp)
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(
+                            text = "现成分支 ${index + 1}",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = Color(0xFFFFB74D)
+                        )
+                        Text(
+                            text = option.title,
+                            style = MaterialTheme.typography.titleMedium,
+                            color = Color.White
+                        )
+                        if (option.description.isNotBlank()) {
+                            Text(
+                                text = option.description,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = Color.White.copy(alpha = 0.68f)
+                            )
+                        }
+                    }
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(14.dp))
+                    .border(width = 1.dp, color = Color.White.copy(alpha = 0.2f), shape = RoundedCornerShape(14.dp))
+                    .clickable { onSelectCustom() }
+                    .padding(14.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Text(
+                        text = "自定义分支",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White
+                    )
+                    Text(
+                        text = "输入你想看的剧情走向，生成属于你的结局",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White.copy(alpha = 0.68f)
+                    )
+                }
+            }
+
+            Text(
+                text = "关闭",
+                style = MaterialTheme.typography.bodySmall,
+                color = Color.White.copy(alpha = 0.42f),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable { onDismiss() }
+            )
         }
     }
 }
@@ -776,7 +886,7 @@ private fun DanmakuOverlay(
         messages.forEachIndexed { index: Int, danmaku: PlayerDanmakuEntry ->
             DanmakuItem(
                 text = danmaku.content,
-                trackIndex = index,
+                trackIndex = danmaku.lane.coerceAtLeast(0),
                 screenWidthPx = screenWidthPx
             )
         }

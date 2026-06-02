@@ -27,7 +27,8 @@ data class PlayerDanmakuEntry(
     val id: String,
     val content: String,
     val createdAtEpochMs: Long,
-    val triggerPositionMs: Long
+    val triggerPositionMs: Long,
+    val lane: Int = 0
 )
 
 interface PlayerUiRepository {
@@ -42,6 +43,7 @@ interface PlayerUiRepository {
         episodeId: String,
         content: String,
         triggerPositionMs: Long,
+        lane: Int = 0,
         createdAtEpochMs: Long = System.currentTimeMillis()
     ): List<PlayerDanmakuEntry>
     suspend fun getFavoriteCount(): Int = 0
@@ -159,6 +161,7 @@ class PersistentPlayerUiRepository(
         episodeId: String,
         content: String,
         triggerPositionMs: Long,
+        lane: Int,
         createdAtEpochMs: Long
     ): List<PlayerDanmakuEntry> {
         val current = snapshot.danmakuByEpisodeId[episodeId].orEmpty()
@@ -168,7 +171,8 @@ class PersistentPlayerUiRepository(
                     id = "danmaku_${System.currentTimeMillis()}",
                     content = content,
                     createdAtEpochMs = createdAtEpochMs,
-                    triggerPositionMs = triggerPositionMs
+                    triggerPositionMs = triggerPositionMs,
+                    lane = lane
                 )
             ) + current
         ).sortedByDescending { it.createdAtEpochMs }
@@ -246,9 +250,10 @@ class InMemoryPlayerUiRepository : PlayerUiRepository {
         episodeId: String,
         content: String,
         triggerPositionMs: Long,
+        lane: Int,
         createdAtEpochMs: Long
     ): List<PlayerDanmakuEntry> {
-        return delegate.addDanmaku(episodeId, content, triggerPositionMs, createdAtEpochMs)
+        return delegate.addDanmaku(episodeId, content, triggerPositionMs, lane, createdAtEpochMs)
     }
 }
 
@@ -328,7 +333,8 @@ class RemoteFirstPlayerUiRepository(
                     id = dto.id,
                     content = dto.content,
                     createdAtEpochMs = dto.createdAt.toEpochMillisOrNow(),
-                    triggerPositionMs = dto.triggerPositionMs
+                    triggerPositionMs = dto.triggerPositionMs,
+                    lane = 0
                 )
             }.also { localCache.replaceDanmaku(episodeId, it) }
         }.getOrElse {
@@ -340,6 +346,7 @@ class RemoteFirstPlayerUiRepository(
         episodeId: String,
         content: String,
         triggerPositionMs: Long,
+        lane: Int,
         createdAtEpochMs: Long
     ): List<PlayerDanmakuEntry> {
         api.createDanmakuMessage(
@@ -350,7 +357,20 @@ class RemoteFirstPlayerUiRepository(
                 deviceId = deviceId
             )
         ).unwrap()
-        return getDanmaku(episodeId)
+        val refreshed = getDanmaku(episodeId)
+        val localEcho = PlayerDanmakuEntry(
+            id = "danmaku_local_${System.currentTimeMillis()}",
+            content = content,
+            createdAtEpochMs = createdAtEpochMs,
+            triggerPositionMs = triggerPositionMs,
+            lane = lane
+        )
+        val merged = (listOf(localEcho) + refreshed)
+            .distinctBy { "${it.content}_${it.triggerPositionMs}_${it.createdAtEpochMs}" }
+            .sortedByDescending { it.createdAtEpochMs }
+            .take(30)
+        localCache.replaceDanmaku(episodeId, merged)
+        return merged
     }
 
     override suspend fun getFavoriteCount(): Int {

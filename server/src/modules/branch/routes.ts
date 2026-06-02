@@ -14,6 +14,8 @@ import {
 import { getUserIdFromDeviceId, requireUserMatchesRequestDeviceId, resolveDeviceId } from '../../services/userIdentity/index.js';
 import { getBaseUrlFromRequest } from '../../services/resource/index.js';
 import { toClientBranchOption, toClientBranchTask } from '../../services/clientPayload/index.js';
+import { BRANCH_RESULT_SOURCE } from '../../services/branchTask/constants.js';
+import { loadFixedBranchArtifact } from '../../services/branchTask/fixedBranchGenerator.js';
 
 export async function branchRoutes(fastify: FastifyInstance) {
   // GET /episodes/:episodeId/branch-options
@@ -41,7 +43,17 @@ export async function branchRoutes(fastify: FastifyInstance) {
       orderBy: { sortIndex: 'asc' },
     });
 
-    const result = branchOptions.map((option) => toClientBranchOption(option, baseUrl));
+    const artifacts = await Promise.all(branchOptions.map((option) => loadFixedBranchArtifact(option)));
+
+    const result = branchOptions.map((option, index) => {
+      const payload = artifacts[index];
+      return toClientBranchOption(
+        option,
+        baseUrl,
+        payload?.artifact ?? null,
+        payload?.relativePath ?? null,
+      );
+    });
 
     return reply.send(success(result));
   });
@@ -72,6 +84,7 @@ export async function branchRoutes(fastify: FastifyInstance) {
         deviceId,
         episodeId: body.episodeId,
         userPrompt: body.userPrompt,
+        resultSource: BRANCH_RESULT_SOURCE,
         status: 'pending',
       },
     });

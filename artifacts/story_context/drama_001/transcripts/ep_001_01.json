@@ -1,0 +1,607 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_01",
+  "episodeNo": 1,
+  "dramaTitle": "荒年全村啃树皮，我有系统满仓肉",
+  "episodeTitle": "第1集",
+  "episodeSummary": "主角穿越到荒年，绑定系统，开始逆袭之路。",
+  "mainGenre": "爽文",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 2280,
+      "endTimeMs": 3990,
+      "text": "快快快，程总来了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 3990,
+      "endTimeMs": 5300,
+      "text": "快快快，成功来了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 5300,
+      "endTimeMs": 6620,
+      "text": "陈老陈放",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 6740,
+      "endTimeMs": 8860,
+      "text": "请问一路以来支撑你的动力是什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 8860,
+      "endTimeMs": 10700,
+      "text": "我脑往后退！冲啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 11260,
+      "endTimeMs": 12540,
+      "text": "盛路公司上职后",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 12540,
+      "endTimeMs": 13860,
+      "text": "您第一件事想干什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 14000,
+      "endTimeMs": 14840,
+      "text": "对不起",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 14920,
+      "endTimeMs": 15880,
+      "text": "无可奉告",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 15880,
+      "endTimeMs": 17920,
+      "text": "让一让让让让让让",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 17920,
+      "endTimeMs": 18880,
+      "text": "我叫程中安",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 18880,
+      "endTimeMs": 19840,
+      "text": "33岁",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 19840,
+      "endTimeMs": 20800,
+      "text": "未婚未孕",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 20800,
+      "endTimeMs": 22040,
+      "text": "年轻有为",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 22740,
+      "endTimeMs": 24740,
+      "text": "很多人问我的动力是什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 25540,
+      "endTimeMs": 26380,
+      "text": "当然是钱",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 26380,
+      "endTimeMs": 28860,
+      "text": "和男人不对",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 31180,
+      "endTimeMs": 32900,
+      "text": "是很多男人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 36240,
+      "endTimeMs": 38640,
+      "text": "至于上市后的第一件事情",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 39640,
+      "endTimeMs": 40920,
+      "text": "自然是",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 53980,
+      "endTimeMs": 57140,
+      "text": "啊啊啊！师座快冲",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 57260,
+      "endTimeMs": 59020,
+      "text": "快快快救救我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 59020,
+      "endTimeMs": 62860,
+      "text": "赵留下难哦",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 70210,
+      "endTimeMs": 70930,
+      "text": "娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 72330,
+      "endTimeMs": 75410,
+      "text": "大哥娘好像没气了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 75890,
+      "endTimeMs": 78950,
+      "text": "娘孩儿不孝啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 78950,
+      "endTimeMs": 81230,
+      "text": "娘娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 84900,
+      "endTimeMs": 86500,
+      "text": "吵死了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 86660,
+      "endTimeMs": 88100,
+      "text": "这是哪啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 88260,
+      "endTimeMs": 90260,
+      "text": "我不是在上市所敲钟吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 90480,
+      "endTimeMs": 92280,
+      "text": "娘娘没死",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 92280,
+      "endTimeMs": 93600,
+      "text": "娘醒了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 94600,
+      "endTimeMs": 96840,
+      "text": "你们叫我什么娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 97320,
+      "endTimeMs": 98460,
+      "text": "开什么玩笑",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 98460,
+      "endTimeMs": 99820,
+      "text": "我都还没结婚呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 99820,
+      "endTimeMs": 101600,
+      "text": "哪来这么大儿子和闺女",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 101760,
+      "endTimeMs": 103920,
+      "text": "做梦，我一定是在做",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 105070,
+      "endTimeMs": 106590,
+      "text": "娘娘！娘娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 106950,
+      "endTimeMs": 107710,
+      "text": "你怎么了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 107710,
+      "endTimeMs": 108910,
+      "text": "你醒醒啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0041",
+      "startTimeMs": 109470,
+      "endTimeMs": 112110,
+      "text": "你不要死啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0042",
+      "startTimeMs": 113670,
+      "endTimeMs": 114950,
+      "text": "你们要去哪儿",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0043",
+      "startTimeMs": 116350,
+      "endTimeMs": 117870,
+      "text": "程家那群狗娘养的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0044",
+      "startTimeMs": 117870,
+      "endTimeMs": 118990,
+      "text": "把娘打成这样",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0045",
+      "startTimeMs": 118990,
+      "endTimeMs": 120090,
+      "text": "我去给娘报仇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0046",
+      "startTimeMs": 120090,
+      "endTimeMs": 121830,
+      "text": "娘平时什么都想着他们",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0047",
+      "startTimeMs": 121950,
+      "endTimeMs": 123590,
+      "text": "什么好东西都给他们",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0048",
+      "startTimeMs": 124210,
+      "endTimeMs": 125770,
+      "text": "竟然还这么欺负娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0049",
+      "startTimeMs": 126570,
+      "endTimeMs": 127770,
+      "text": "那活不了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0050",
+      "startTimeMs": 128330,
+      "endTimeMs": 129690,
+      "text": "他们也别想好过",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0051",
+      "startTimeMs": 130050,
+      "endTimeMs": 131570,
+      "text": "你们，全都给我站住",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0052",
+      "startTimeMs": 131930,
+      "endTimeMs": 133890,
+      "text": "二弟三弟，你们别去",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0053",
+      "startTimeMs": 134390,
+      "endTimeMs": 136230,
+      "text": "娘心里只有她娘家",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0054",
+      "startTimeMs": 136550,
+      "endTimeMs": 139430,
+      "text": "你们四个儿子就像茅坑捡的一样",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0055",
+      "startTimeMs": 139430,
+      "endTimeMs": 141570,
+      "text": "要是她知道你们又去招惹程家",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0056",
+      "startTimeMs": 141570,
+      "endTimeMs": 143270,
+      "text": "肯定又会打你们的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0057",
+      "startTimeMs": 149720,
+      "endTimeMs": 151680,
+      "text": "敢不听我的话对不对",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0058",
+      "startTimeMs": 152400,
+      "endTimeMs": 153080,
+      "text": "嗯",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0059",
+      "startTimeMs": 154640,
+      "endTimeMs": 158200,
+      "text": "大河村程弯弯我穿越了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

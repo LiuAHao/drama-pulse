@@ -1,0 +1,127 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep05/episode-5.mp3",
+  "segment_count": 24,
+  "segments": [
+    {
+      "text": "我都已经把股份让给你",
+      "start_time": 6990,
+      "end_time": 10510
+    },
+    {
+      "text": "能不能放我",
+      "start_time": 10510,
+      "end_time": 12110
+    },
+    {
+      "text": "你放过我吧吧哈",
+      "start_time": 12310,
+      "end_time": 16350
+    },
+    {
+      "text": "静止",
+      "start_time": 17800,
+      "end_time": 18640
+    },
+    {
+      "text": "别怪你爸心狠",
+      "start_time": 19330,
+      "end_time": 21090
+    },
+    {
+      "text": "当初我以为",
+      "start_time": 21290,
+      "end_time": 22450
+    },
+    {
+      "text": "只要弄死了你妈",
+      "start_time": 22450,
+      "end_time": 24010
+    },
+    {
+      "text": "公司就全都是我的了",
+      "start_time": 24050,
+      "end_time": 26050
+    },
+    {
+      "text": "结果没有想到早就立了遗嘱",
+      "start_time": 26290,
+      "end_time": 29390
+    },
+    {
+      "text": "还把股份给了你",
+      "start_time": 29390,
+      "end_time": 32049
+    },
+    {
+      "text": "哥哥喂，星辰俊良说",
+      "start_time": 48360,
+      "end_time": 52280
+    },
+    {
+      "text": "你被楚成安那个魔头绑架了",
+      "start_time": 52400,
+      "end_time": 55000
+    },
+    {
+      "text": "是不是真的",
+      "start_time": 55320,
+      "end_time": 56560
+    },
+    {
+      "text": "前世",
+      "start_time": 56880,
+      "end_time": 57620
+    },
+    {
+      "text": "这个时候他确定绑架我的人是楚城安",
+      "start_time": 57620,
+      "end_time": 61380
+    },
+    {
+      "text": "之后不仅不担心",
+      "start_time": 61380,
+      "end_time": 62900
+    },
+    {
+      "text": "甚至还很高兴",
+      "start_time": 63100,
+      "end_time": 64620
+    },
+    {
+      "text": "看来那个时候",
+      "start_time": 65160,
+      "end_time": 66680
+    },
+    {
+      "text": "他们就希望我死在主城门",
+      "start_time": 67040,
+      "end_time": 69040
+    },
+    {
+      "text": "生小石",
+      "start_time": 69040,
+      "end_time": 70640
+    },
+    {
+      "text": "听没听见我这说话呀",
+      "start_time": 71040,
+      "end_time": 72600
+    },
+    {
+      "text": "谁说我是被绑架的",
+      "start_time": 73020,
+      "end_time": 74780
+    },
+    {
+      "text": "我是自愿跟他回来的",
+      "start_time": 74780,
+      "end_time": 76500
+    },
+    {
+      "text": "我喜欢楚尘安",
+      "start_time": 77300,
+      "end_time": 78660
+    }
+  ]
+}

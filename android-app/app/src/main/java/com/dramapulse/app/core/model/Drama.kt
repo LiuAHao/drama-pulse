@@ -142,7 +142,13 @@ data class BranchOptionModel(
     val description: String,
     val resultType: String,
     val coverUrl: String,
-    val resultContentUrl: String = ""
+    val resultContentUrl: String = "",
+    val generatedPayloadUrl: String = "",
+    val generatedAt: String = "",
+    val resultHook: String = "",
+    val resultStory: String = "",
+    val storyboard: List<StoryboardScene> = emptyList(),
+    val shotPromptJson: String = "[]"
 )
 
 data class BranchTaskModel(
@@ -153,6 +159,7 @@ data class BranchTaskModel(
     val resultHook: String,
     val resultStory: String,
     val storyboard: List<StoryboardScene>,
+    val storyboardImages: List<StoryboardImage>,
     val likeCount: Int,
     val commentCount: Int
 )
@@ -175,6 +182,11 @@ data class StoryboardScene(
     val scene: Int,
     val description: String,
     val duration: Int
+)
+
+data class StoryboardImage(
+    val scene: Int,
+    val imageUrl: String
 )
 
 data class BranchCommentModel(

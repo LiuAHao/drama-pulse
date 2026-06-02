@@ -1,0 +1,162 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep22/episode-22.mp3",
+  "segment_count": 31,
+  "segments": [
+    {
+      "text": "行，那就这么说定了",
+      "start_time": 0,
+      "end_time": 2000
+    },
+    {
+      "text": "到时候如果大哥高中了，别想赖账",
+      "start_time": 2240,
+      "end_time": 5400
+    },
+    {
+      "text": "大不了我去告御状",
+      "start_time": 5720,
+      "end_time": 8119
+    },
+    {
+      "text": "好家伙，鸡汤",
+      "start_time": 18280,
+      "end_time": 20120
+    },
+    {
+      "text": "这是给昭儿的呀",
+      "start_time": 24440,
+      "end_time": 27020
+    },
+    {
+      "text": "喝了你干啥",
+      "start_time": 27020,
+      "end_time": 28700
+    },
+    {
+      "text": "这是给昭儿的祭汤让开",
+      "start_time": 28700,
+      "end_time": 31000
+    },
+    {
+      "text": "那只老母鸡的二两银子我已经赔了",
+      "start_time": 35440,
+      "end_time": 38120
+    },
+    {
+      "text": "既然我已经赔了",
+      "start_time": 38120,
+      "end_time": 39560
+    },
+    {
+      "text": "那这鸡汤就是我老赵家的",
+      "start_time": 39560,
+      "end_time": 42150
+    },
+    {
+      "text": "哎，我也要喝，我也要喝",
+      "start_time": 42150,
+      "end_time": 43740
+    },
+    {
+      "text": "嗯哎哎，你们别都喝完了",
+      "start_time": 43740,
+      "end_time": 46510
+    },
+    {
+      "text": "给慧娘和四弟留一点补补身子啊",
+      "start_time": 46510,
+      "end_time": 48910
+    },
+    {
+      "text": "你这个赔钱货",
+      "start_time": 49230,
+      "end_time": 50630
+    },
+    {
+      "text": "你这辈子都别想回来",
+      "start_time": 50630,
+      "end_time": 52470
+    },
+    {
+      "text": "赵家分出去了",
+      "start_time": 52670,
+      "end_time": 54270
+    },
+    {
+      "text": "你还跟娘家老死不相往来",
+      "start_time": 54310,
+      "end_time": 56750
+    },
+    {
+      "text": "以后被欺负了",
+      "start_time": 56750,
+      "end_time": 58390
+    },
+    {
+      "text": "别指望程家给你出头",
+      "start_time": 58550,
+      "end_time": 60870
+    },
+    {
+      "text": "诶",
+      "start_time": 63340,
+      "end_time": 64580
+    },
+    {
+      "text": "我记得这只簪子是大山爹送我的定情信物",
+      "start_time": 64780,
+      "end_time": 68620
+    },
+    {
+      "text": "我还以为丢了呢",
+      "start_time": 68850,
+      "end_time": 70130
+    },
+    {
+      "text": "原来是被程家偷走了",
+      "start_time": 70130,
+      "end_time": 72050
+    },
+    {
+      "text": "现在也该物归原主了吧",
+      "start_time": 72090,
+      "end_time": 74570
+    },
+    {
+      "text": "嘿嘿，还有这些那些",
+      "start_time": 74570,
+      "end_time": 77370
+    },
+    {
+      "text": "全都是我带回来的",
+      "start_time": 77680,
+      "end_time": 79320
+    },
+    {
+      "text": "大山二狗、三牛",
+      "start_time": 79400,
+      "end_time": 80720
+    },
+    {
+      "text": "全都给我搬回家去",
+      "start_time": 80840,
+      "end_time": 82240
+    },
+    {
+      "text": "是",
+      "start_time": 82240,
+      "end_time": 82760
+    },
+    {
+      "text": "哎呦哎，你们真是去啊",
+      "start_time": 83080,
+      "end_time": 85710
+    },
+    {
+      "text": "全都",
+      "start_time": 85710,
+      "end_time": 86700
+    }
+  ]
+}

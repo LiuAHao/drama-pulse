@@ -362,13 +362,13 @@ Idle
 当前冻结为：
 
 - 两个高光点都保留
-- 如果间隔过近，后一个只展示弱提示或轻反馈
-- 不连续弹完整主互动组件
+- 同一时刻仍只激活 1 个当前命中高光
+- 不再因为“距离上一个强高光太近”而自动改写它的强度
 
 实现建议：
 
-- 维护 `lastStrongHighlightAt`
-- 若当前高光与上一个强互动高光间隔小于阈值，则降级为 `WeakPrompt`
+- 通过时间轴命中和优先级排序决定当前激活项
+- 客户端只消费最终 `intensity`：`< 3 -> 分组弹幕 / 云朵弹幕`，`>= 3 -> 正式交互组件`
 
 ## 8.4 互动表现
 
@@ -897,7 +897,6 @@ android-app/app/src/main/java/com/dramapulse/app/
 - `clickCount`
 - `burstLevel`
 - `cooldownUntilMs`
-- `lastStrongHighlightAt`
 
 `HighlightRenderSpec`
 

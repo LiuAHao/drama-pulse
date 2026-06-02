@@ -128,6 +128,8 @@ private class FailingProfileApi : DramaPulseApi {
     override suspend fun getDanmakuMessages(episodeId: String): ApiResponse<List<DanmakuMessageDto>> = throw UnsupportedOperationException()
     override suspend fun createDanmakuMessage(episodeId: String, request: CreateDanmakuMessageRequest) =
         throw UnsupportedOperationException()
+    override suspend fun createDanmakuHeatReport(request: com.dramapulse.app.core.model.remote.CreateDanmakuHeatReportRequest): ApiResponse<com.dramapulse.app.core.model.remote.DanmakuHeatReportDto> =
+        throw UnsupportedOperationException()
 }
 
 private class ToggleableProfileApi : DramaPulseApi {
@@ -185,6 +187,8 @@ private class ToggleableProfileApi : DramaPulseApi {
         throw UnsupportedOperationException()
     override suspend fun getDanmakuMessages(episodeId: String): ApiResponse<List<DanmakuMessageDto>> = throw UnsupportedOperationException()
     override suspend fun createDanmakuMessage(episodeId: String, request: CreateDanmakuMessageRequest) =
+        throw UnsupportedOperationException()
+    override suspend fun createDanmakuHeatReport(request: com.dramapulse.app.core.model.remote.CreateDanmakuHeatReportRequest): ApiResponse<com.dramapulse.app.core.model.remote.DanmakuHeatReportDto> =
         throw UnsupportedOperationException()
 }
 

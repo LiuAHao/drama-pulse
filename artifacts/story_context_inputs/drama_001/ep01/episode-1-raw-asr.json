@@ -1,0 +1,302 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep01/episode-1.mp3",
+  "segment_count": 59,
+  "segments": [
+    {
+      "text": "快快快，程总来了",
+      "start_time": 2280,
+      "end_time": 3990
+    },
+    {
+      "text": "快快快，成功来了",
+      "start_time": 3990,
+      "end_time": 5300
+    },
+    {
+      "text": "陈老陈放",
+      "start_time": 5300,
+      "end_time": 6620
+    },
+    {
+      "text": "请问一路以来支撑你的动力是什么",
+      "start_time": 6740,
+      "end_time": 8860
+    },
+    {
+      "text": "我脑往后退！冲啊",
+      "start_time": 8860,
+      "end_time": 10700
+    },
+    {
+      "text": "盛路公司上职后",
+      "start_time": 11260,
+      "end_time": 12540
+    },
+    {
+      "text": "您第一件事想干什么",
+      "start_time": 12540,
+      "end_time": 13860
+    },
+    {
+      "text": "对不起",
+      "start_time": 14000,
+      "end_time": 14840
+    },
+    {
+      "text": "无可奉告",
+      "start_time": 14920,
+      "end_time": 15880
+    },
+    {
+      "text": "让一让让让让让让",
+      "start_time": 15880,
+      "end_time": 17920
+    },
+    {
+      "text": "我叫程中安",
+      "start_time": 17920,
+      "end_time": 18880
+    },
+    {
+      "text": "33岁",
+      "start_time": 18880,
+      "end_time": 19840
+    },
+    {
+      "text": "未婚未孕",
+      "start_time": 19840,
+      "end_time": 20800
+    },
+    {
+      "text": "年轻有为",
+      "start_time": 20800,
+      "end_time": 22040
+    },
+    {
+      "text": "很多人问我的动力是什么",
+      "start_time": 22740,
+      "end_time": 24740
+    },
+    {
+      "text": "当然是钱",
+      "start_time": 25540,
+      "end_time": 26380
+    },
+    {
+      "text": "和男人不对",
+      "start_time": 26380,
+      "end_time": 28860
+    },
+    {
+      "text": "是很多男人",
+      "start_time": 31180,
+      "end_time": 32900
+    },
+    {
+      "text": "至于上市后的第一件事情",
+      "start_time": 36240,
+      "end_time": 38640
+    },
+    {
+      "text": "自然是",
+      "start_time": 39640,
+      "end_time": 40920
+    },
+    {
+      "text": "啊啊啊！师座快冲",
+      "start_time": 53980,
+      "end_time": 57140
+    },
+    {
+      "text": "快快快救救我",
+      "start_time": 57260,
+      "end_time": 59020
+    },
+    {
+      "text": "赵留下难哦",
+      "start_time": 59020,
+      "end_time": 62860
+    },
+    {
+      "text": "娘",
+      "start_time": 70210,
+      "end_time": 70930
+    },
+    {
+      "text": "大哥娘好像没气了",
+      "start_time": 72330,
+      "end_time": 75410
+    },
+    {
+      "text": "娘孩儿不孝啊",
+      "start_time": 75890,
+      "end_time": 78950
+    },
+    {
+      "text": "娘娘",
+      "start_time": 78950,
+      "end_time": 81230
+    },
+    {
+      "text": "吵死了",
+      "start_time": 84900,
+      "end_time": 86500
+    },
+    {
+      "text": "这是哪啊",
+      "start_time": 86660,
+      "end_time": 88100
+    },
+    {
+      "text": "我不是在上市所敲钟吗",
+      "start_time": 88260,
+      "end_time": 90260
+    },
+    {
+      "text": "娘娘没死",
+      "start_time": 90480,
+      "end_time": 92280
+    },
+    {
+      "text": "娘醒了",
+      "start_time": 92280,
+      "end_time": 93600
+    },
+    {
+      "text": "你们叫我什么娘",
+      "start_time": 94600,
+      "end_time": 96840
+    },
+    {
+      "text": "开什么玩笑",
+      "start_time": 97320,
+      "end_time": 98460
+    },
+    {
+      "text": "我都还没结婚呢",
+      "start_time": 98460,
+      "end_time": 99820
+    },
+    {
+      "text": "哪来这么大儿子和闺女",
+      "start_time": 99820,
+      "end_time": 101600
+    },
+    {
+      "text": "做梦，我一定是在做",
+      "start_time": 101760,
+      "end_time": 103920
+    },
+    {
+      "text": "娘娘！娘娘",
+      "start_time": 105070,
+      "end_time": 106590
+    },
+    {
+      "text": "你怎么了",
+      "start_time": 106950,
+      "end_time": 107710
+    },
+    {
+      "text": "你醒醒啊",
+      "start_time": 107710,
+      "end_time": 108910
+    },
+    {
+      "text": "你不要死啊",
+      "start_time": 109470,
+      "end_time": 112110
+    },
+    {
+      "text": "你们要去哪儿",
+      "start_time": 113670,
+      "end_time": 114950
+    },
+    {
+      "text": "程家那群狗娘养的",
+      "start_time": 116350,
+      "end_time": 117870
+    },
+    {
+      "text": "把娘打成这样",
+      "start_time": 117870,
+      "end_time": 118990
+    },
+    {
+      "text": "我去给娘报仇",
+      "start_time": 118990,
+      "end_time": 120090
+    },
+    {
+      "text": "娘平时什么都想着他们",
+      "start_time": 120090,
+      "end_time": 121830
+    },
+    {
+      "text": "什么好东西都给他们",
+      "start_time": 121950,
+      "end_time": 123590
+    },
+    {
+      "text": "竟然还这么欺负娘",
+      "start_time": 124210,
+      "end_time": 125770
+    },
+    {
+      "text": "那活不了",
+      "start_time": 126570,
+      "end_time": 127770
+    },
+    {
+      "text": "他们也别想好过",
+      "start_time": 128330,
+      "end_time": 129690
+    },
+    {
+      "text": "你们，全都给我站住",
+      "start_time": 130050,
+      "end_time": 131570
+    },
+    {
+      "text": "二弟三弟，你们别去",
+      "start_time": 131930,
+      "end_time": 133890
+    },
+    {
+      "text": "娘心里只有她娘家",
+      "start_time": 134390,
+      "end_time": 136230
+    },
+    {
+      "text": "你们四个儿子就像茅坑捡的一样",
+      "start_time": 136550,
+      "end_time": 139430
+    },
+    {
+      "text": "要是她知道你们又去招惹程家",
+      "start_time": 139430,
+      "end_time": 141570
+    },
+    {
+      "text": "肯定又会打你们的",
+      "start_time": 141570,
+      "end_time": 143270
+    },
+    {
+      "text": "敢不听我的话对不对",
+      "start_time": 149720,
+      "end_time": 151680
+    },
+    {
+      "text": "嗯",
+      "start_time": 152400,
+      "end_time": 153080
+    },
+    {
+      "text": "大河村程弯弯我穿越了",
+      "start_time": 154640,
+      "end_time": 158200
+    }
+  ]
+}

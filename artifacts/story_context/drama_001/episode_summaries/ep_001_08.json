@@ -1,0 +1,35 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_08",
+  "episodeNo": 8,
+  "episodeTitle": "第8集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "母亲角色在早晨给家庭成员分配当日任务：大山去地里查看，二狗挑水，三娘砍柴，准备应对炎热天气。",
+  "keyEvents": [
+    "母亲集合众人并点名（大山、灰娘等）。",
+    "母亲分配任务：大山负责去地里查看情况。",
+    "母亲分配任务：二狗需要挑两桶水回来供大家洗澡。",
+    "母亲分配任务：三娘负责砍柴回来。"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "母亲（为娘）是本集任务分配的主导者。"
+  ],
+  "openQuestions": [
+    "大山去地里会看到什么情况？",
+    "二狗挑水途中是否会有意外？",
+    "三娘砍柴时是否会遇到困难？"
+  ],
+  "episodeEndingState": "众人接受了母亲分配的任务，准备开始各自的工作。",
+  "focusCharacters": [
+    "大山",
+    "二狗",
+    "三娘",
+    "为娘"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 69,
+    "durationMs": 198080
+  }
+}

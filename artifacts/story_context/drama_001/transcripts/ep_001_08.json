@@ -1,0 +1,707 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_08",
+  "episodeNo": 8,
+  "dramaTitle": "荒年全村啃树皮，我有系统满仓肉",
+  "episodeTitle": "第8集",
+  "episodeSummary": "",
+  "mainGenre": "爽文",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 14680,
+      "endTimeMs": 17640,
+      "text": "立正向右看齐",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 19500,
+      "endTimeMs": 20180,
+      "text": "报名",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 20180,
+      "endTimeMs": 21140,
+      "text": "大山到",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 21300,
+      "endTimeMs": 22420,
+      "text": "2号到",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 22540,
+      "endTimeMs": 24820,
+      "text": "39~4代到",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 25220,
+      "endTimeMs": 27100,
+      "text": "回娘到咋的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 27380,
+      "endTimeMs": 29060,
+      "text": "早上白米饭没吃够啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 29660,
+      "endTimeMs": 30780,
+      "text": "灰娘到",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 31540,
+      "endTimeMs": 32140,
+      "text": "行",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 32380,
+      "endTimeMs": 33860,
+      "text": "今天呢，就由为娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 33860,
+      "endTimeMs": 35860,
+      "text": "我来给大家分配任务",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 39280,
+      "endTimeMs": 40360,
+      "text": "大山，你呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 40520,
+      "endTimeMs": 42520,
+      "text": "负责去地里看看什么情况",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 44040,
+      "endTimeMs": 46900,
+      "text": "二狗，你多去挑两桶水回来",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 46900,
+      "endTimeMs": 48220,
+      "text": "这大热天的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 48220,
+      "endTimeMs": 49600,
+      "text": "今天咱都洗个澡",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 49640,
+      "endTimeMs": 50400,
+      "text": "是",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 51300,
+      "endTimeMs": 54800,
+      "text": "三娘，你呢，负责去砍点柴回来捧烈鸟",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 54800,
+      "endTimeMs": 57060,
+      "text": "三娘，那我干什么呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 57440,
+      "endTimeMs": 59480,
+      "text": "四蛋，跟慧娘跟我一起上山",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 59800,
+      "endTimeMs": 61760,
+      "text": "咱这天天吃白米饭可不行",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 61760,
+      "endTimeMs": 64400,
+      "text": "今天咱去挖点野菜当配菜吃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 65080,
+      "endTimeMs": 67760,
+      "text": "嘶嗯嗯，都听明白了吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 67800,
+      "endTimeMs": 68920,
+      "text": "明白明白",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 68920,
+      "endTimeMs": 71720,
+      "text": "有这么几个好大儿还挺好玩的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 71720,
+      "endTimeMs": 74160,
+      "text": "行，那就出发",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 80560,
+      "endTimeMs": 82920,
+      "text": "娘自打我进门就没干过活",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 82920,
+      "endTimeMs": 85060,
+      "text": "现在居然要跟我们一起挖野菜",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 85060,
+      "endTimeMs": 86600,
+      "text": "难不成是怕我偷懒",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 87000,
+      "endTimeMs": 88640,
+      "text": "想盯着我干活",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 94940,
+      "endTimeMs": 98260,
+      "text": "叮，发现天然无污染苦菊菜",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 99270,
+      "endTimeMs": 101550,
+      "text": "发现天然野生麻力菇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 102270,
+      "endTimeMs": 105030,
+      "text": "发现天然野生黑牛肝菌",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 108500,
+      "endTimeMs": 111980,
+      "text": "这野生菇可比野菜值钱多了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 111980,
+      "endTimeMs": 114700,
+      "text": "这么一点就卖了48文钱",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 115110,
+      "endTimeMs": 117030,
+      "text": "这里的蘑菇大部分有毒",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 117030,
+      "endTimeMs": 118230,
+      "text": "村民不敢摘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 118230,
+      "endTimeMs": 119190,
+      "text": "倒是便宜了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 119190,
+      "endTimeMs": 121050,
+      "text": "我有了这个系统在",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 121050,
+      "endTimeMs": 122790,
+      "text": "就不怕采到毒蘑菇了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0041",
+      "startTimeMs": 122790,
+      "endTimeMs": 125770,
+      "text": "哈，娘，你发现了什么啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0042",
+      "startTimeMs": 125770,
+      "endTimeMs": 126870,
+      "text": "这里树叶多",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0043",
+      "startTimeMs": 126870,
+      "endTimeMs": 128430,
+      "text": "一般比较阴凉湿润",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0044",
+      "startTimeMs": 128430,
+      "endTimeMs": 129350,
+      "text": "会长蘑菇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0045",
+      "startTimeMs": 129350,
+      "endTimeMs": 131790,
+      "text": "你们四处找找看哦",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0046",
+      "startTimeMs": 137760,
+      "endTimeMs": 140520,
+      "text": "娘这里有好多蘑菇啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0047",
+      "startTimeMs": 147740,
+      "endTimeMs": 149700,
+      "text": "是大河村常见的鸡菌菇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0048",
+      "startTimeMs": 149700,
+      "endTimeMs": 150380,
+      "text": "没毒",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0049",
+      "startTimeMs": 150500,
+      "endTimeMs": 151580,
+      "text": "能卖12文钱",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0050",
+      "startTimeMs": 151580,
+      "endTimeMs": 154380,
+      "text": "一斤四蛋！你真棒",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0051",
+      "startTimeMs": 156030,
+      "endTimeMs": 157990,
+      "text": "女王竟然夸我了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0052",
+      "startTimeMs": 158160,
+      "endTimeMs": 161060,
+      "text": "这是娘第一次夸我四蛋",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0053",
+      "startTimeMs": 161060,
+      "endTimeMs": 162300,
+      "text": "你在这采蘑菇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0054",
+      "startTimeMs": 162300,
+      "endTimeMs": 163640,
+      "text": "你要去那边看一看",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0055",
+      "startTimeMs": 163680,
+      "endTimeMs": 166040,
+      "text": "你呀，千万不要乱跑哦",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0056",
+      "startTimeMs": 167020,
+      "endTimeMs": 169180,
+      "text": "娘竟然摸我的头了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0057",
+      "startTimeMs": 169700,
+      "endTimeMs": 171420,
+      "text": "娘的手好温暖",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0058",
+      "startTimeMs": 171740,
+      "endTimeMs": 173260,
+      "text": "从昨天开始",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0059",
+      "startTimeMs": 173500,
+      "endTimeMs": 175300,
+      "text": "娘就不一样了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0060",
+      "startTimeMs": 176640,
+      "endTimeMs": 178680,
+      "text": "我喜欢现在的娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0061",
+      "startTimeMs": 179880,
+      "endTimeMs": 182640,
+      "text": "我一定要让娘再夸我一次",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0062",
+      "startTimeMs": 187900,
+      "endTimeMs": 190540,
+      "text": "这小子是多久没洗头了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0063",
+      "startTimeMs": 190780,
+      "endTimeMs": 193100,
+      "text": "摸一下就满手油呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0064",
+      "startTimeMs": 193500,
+      "endTimeMs": 195600,
+      "text": "哎，算了算了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0065",
+      "startTimeMs": 195600,
+      "endTimeMs": 197220,
+      "text": "我也好久没洗澡了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0066",
+      "startTimeMs": 197900,
+      "endTimeMs": 198580,
+      "text": "皮",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0067",
+      "startTimeMs": 199480,
+      "endTimeMs": 203800,
+      "text": "嗯哼啊啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0068",
+      "startTimeMs": 203960,
+      "endTimeMs": 204960,
+      "text": "兔兔",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0069",
+      "startTimeMs": 206280,
+      "endTimeMs": 212760,
+      "text": "啊啊啊嘿诶",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

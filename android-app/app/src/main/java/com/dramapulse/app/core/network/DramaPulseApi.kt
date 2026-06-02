@@ -23,6 +23,11 @@ interface DramaPulseApi {
     @POST("/interactions")
     suspend fun createInteraction(@Body request: CreateInteractionRequest): ApiResponse<HighlightStatsDto>
 
+    @POST("/interactions/danmaku-heat-report")
+    suspend fun createDanmakuHeatReport(
+        @Body request: CreateDanmakuHeatReportRequest
+    ): ApiResponse<DanmakuHeatReportDto>
+
     // Branch
     @GET("/episodes/{episodeId}/branch-options")
     suspend fun getBranchOptions(@Path("episodeId") episodeId: String): ApiResponse<List<BranchOptionDto>>

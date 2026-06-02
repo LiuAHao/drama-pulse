@@ -1,0 +1,37 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_02",
+  "episodeNo": 2,
+  "episodeTitle": "第2集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "女主角穿越成尖酸刻薄、好吃懒做的恶毒婆婆，有四个女儿和一个怀孕儿媳。她不仅不孝顺公婆、不认儿子儿媳，还在儿子战死后独吞蓄银，大闹分家并全部贴补娘家。",
+  "keyEvents": [
+    "穿越成恶毒婆婆",
+    "独吞儿子战死抚恤金",
+    "大闹分家从赵家单出去",
+    "将蓄银全部贴补给娘家"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "婆婆有四个女儿和一个怀孕儿媳",
+    "儿子已战死",
+    "婆婆原本靠儿子抚恤金生活",
+    "婆婆娘家贪婪地接受贴补"
+  ],
+  "openQuestions": [
+    "怀孕儿媳和四个女儿将如何应对婆婆的恶行？",
+    "穿越者会改变原有恶毒性格吗？"
+  ],
+  "episodeEndingState": "婆婆将蓄银全部交给娘家，娘家母亲欣喜收下，儿媳和女儿们处境更加艰难。",
+  "focusCharacters": [
+    "穿越婆婆",
+    "怀孕儿媳",
+    "四个女儿",
+    "娘家母亲"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 81,
+    "durationMs": 271560
+  }
+}

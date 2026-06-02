@@ -1,0 +1,132 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep06/episode-6.mp3",
+  "segment_count": 25,
+  "segments": [
+    {
+      "text": "我喜欢褚承安",
+      "start_time": 0,
+      "end_time": 1280
+    },
+    {
+      "text": "是不是褚承安逼你这么蠢",
+      "start_time": 1680,
+      "end_time": 3600
+    },
+    {
+      "text": "否则他就要杀了你",
+      "start_time": 3680,
+      "end_time": 6280
+    },
+    {
+      "text": "不都说了是我自愿的",
+      "start_time": 7510,
+      "end_time": 9830
+    },
+    {
+      "text": "怎么会是强迫呢",
+      "start_time": 9830,
+      "end_time": 11550
+    },
+    {
+      "text": "江青石，你胡说什么呀",
+      "start_time": 12250,
+      "end_time": 14310
+    },
+    {
+      "text": "你喜欢的不是我吗",
+      "start_time": 14310,
+      "end_time": 16050
+    },
+    {
+      "text": "我告诉你",
+      "start_time": 16650,
+      "end_time": 17730
+    },
+    {
+      "text": "我根本就不喜欢你",
+      "start_time": 18130,
+      "end_time": 19950
+    },
+    {
+      "text": "我喜欢的人一直都是楚成白",
+      "start_time": 19950,
+      "end_time": 22490
+    },
+    {
+      "text": "江小姐怎么突然转性了",
+      "start_time": 23330,
+      "end_time": 25650
+    },
+    {
+      "text": "不过这样也好",
+      "start_time": 25890,
+      "end_time": 27290
+    },
+    {
+      "text": "不然又像以前所",
+      "start_time": 27290,
+      "end_time": 28770
+    },
+    {
+      "text": "每次被抓回来都关上他三天半夜",
+      "start_time": 29090,
+      "end_time": 31970
+    },
+    {
+      "text": "昨晚阿志太辛苦了",
+      "start_time": 32980,
+      "end_time": 34540
+    },
+    {
+      "text": "去给她煮碗",
+      "start_time": 34740,
+      "end_time": 35500
+    },
+    {
+      "text": "其他让他好好活",
+      "start_time": 35500,
+      "end_time": 36960
+    },
+    {
+      "text": "哎，我这就去",
+      "start_time": 36960,
+      "end_time": 38820
+    },
+    {
+      "text": "听罢了",
+      "start_time": 40200,
+      "end_time": 41300
+    },
+    {
+      "text": "大家日子都好过",
+      "start_time": 41300,
+      "end_time": 42640
+    },
+    {
+      "text": "安之",
+      "start_time": 43240,
+      "end_time": 44000
+    },
+    {
+      "text": "你又在憋什么坏呀",
+      "start_time": 44640,
+      "end_time": 46360
+    },
+    {
+      "text": "we are ",
+      "start_time": 50580,
+      "end_time": 51580
+    },
+    {
+      "text": "we are robe ",
+      "start_time": 52940,
+      "end_time": 55820
+    },
+    {
+      "text": "啊！ we are ",
+      "start_time": 58960,
+      "end_time": 60840
+    }
+  ]
+}

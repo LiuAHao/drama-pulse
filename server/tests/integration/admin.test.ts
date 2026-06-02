@@ -177,6 +177,34 @@ describe('POST /admin/highlights/:highlightId/enable and disable', () => {
 });
 
 describe('Admin player engagement data', () => {
+  it('should return interactions without bigint serialization errors', async () => {
+    const interactionRes = await app.inject({
+      method: 'POST',
+      url: '/interactions',
+      payload: {
+        deviceId: 'admin-interaction-device',
+        episodeId: 'ep_001_01',
+        highlightId: 'hl_001_01',
+        interactionType: 'emotion_button',
+        optionText: '爽了',
+        clientTimestamp: Date.now(),
+      },
+    });
+    expect(interactionRes.statusCode).toBe(200);
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/admin/interactions?page=1&pageSize=20',
+      headers: ADMIN_AUTH,
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.code).toBe(0);
+    expect(Array.isArray(body.data.items)).toBe(true);
+    expect(typeof body.data.items[0].clientTimestamp).toBe('string');
+  });
+
   it('should return favorites with content filters', async () => {
     await prisma.favoriteDrama.createMany({
       data: [
@@ -628,6 +656,108 @@ describe('GET /admin/branch-tasks/:taskId', () => {
     await prisma.branchTask.delete({
       where: { id: task.id },
     });
+  });
+});
+
+describe('POST /admin/episodes/:episodeId/branch-options/refresh', () => {
+  it('should regenerate fixed branch options from story context package and persist sidecar artifacts', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/admin/episodes/ep_002_23/branch-options/refresh',
+      headers: {
+        ...ADMIN_AUTH,
+        host: '192.168.1.88:8787',
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.code).toBe(0);
+    expect(body.data.options).toHaveLength(2);
+    expect(body.data.options[0].title).not.toBe('重新开始');
+    expect(body.data.options[0].description.length).toBeGreaterThan(0);
+    expect(body.data.options[0].title).not.toBe(body.data.options[1].title);
+    expect(body.data.options[0].description).not.toBe(body.data.options[1].description);
+    expect(body.data.options[0].generatedPayloadPath).toContain('/static/assets/generated/fixed-branches/ep_002_23/');
+
+    const option = await prisma.branchOption.findUniqueOrThrow({
+      where: { id: 'bo_002_01' },
+    });
+    expect(option.title).toBe(body.data.options[0].title);
+    expect(option.description).toBe(body.data.options[0].description);
+
+    const artifactPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_002_23/bo_002_01.json',
+    );
+    const raw = await fs.readFile(artifactPath, 'utf-8');
+    const artifact = JSON.parse(raw);
+    expect(artifact.resultTitle).toBe(body.data.options[0].title);
+    expect(artifact.resultStory).toContain('江青纸');
+    expect(artifact.candidateKey).toBeDefined();
+    expect(artifact.artifactSignature).toBeDefined();
+    expect(artifact.storyboardManifestJson).toBeDefined();
+    expect(artifact.referenceAssetsJson).toBeDefined();
+
+    const manifestPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_002_23/manifest.json',
+    );
+    const manifestRaw = await fs.readFile(manifestPath, 'utf-8');
+    const manifest = JSON.parse(manifestRaw);
+    expect(manifest.episodeId).toBe('ep_002_23');
+    expect(manifest.optionIds).toContain('bo_002_01');
+    expect(manifest.optionUpdatedAtSnapshots.bo_002_01).toBe(option.updatedAt.toISOString());
+    expect(manifest.artifactSignatures.bo_002_01).toBe(artifact.artifactSignature);
+
+    const branchOptionsRes = await app.inject({
+      method: 'GET',
+      url: '/episodes/ep_002_23/branch-options',
+      headers: { host: '192.168.1.88:8787' },
+    });
+    expect(branchOptionsRes.statusCode).toBe(200);
+    const branchOptionsBody = branchOptionsRes.json();
+    expect(branchOptionsBody.data[0].generatedPayloadPath).toContain('/static/assets/generated/fixed-branches/ep_002_23/');
+    expect(branchOptionsBody.data[0].resultStory).toContain('江青纸');
+    expect(branchOptionsBody.data[0].shotPromptJson).toContain('江青纸');
+    expect(branchOptionsBody.data[0].storyboardManifestJson).toBeDefined();
+  });
+
+  it('should produce clearly distinct fallback branches when llm generation is disabled', async () => {
+    const res = await app.inject({
+      method: 'POST',
+      url: '/admin/episodes/ep_001_23/branch-options/refresh',
+      headers: {
+        ...ADMIN_AUTH,
+        host: '192.168.1.88:8787',
+      },
+    });
+
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.options).toHaveLength(2);
+    expect(body.data.options[0].title).not.toBe(body.data.options[1].title);
+    expect(body.data.options[0].description).not.toBe(body.data.options[1].description);
+
+    const optionAPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_001_23/bo_001_01.json',
+    );
+    const optionBPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_001_23/bo_001_02.json',
+    );
+    const [rawA, rawB] = await Promise.all([
+      fs.readFile(optionAPath, 'utf-8'),
+      fs.readFile(optionBPath, 'utf-8'),
+    ]);
+    const artifactA = JSON.parse(rawA);
+    const artifactB = JSON.parse(rawB);
+
+    expect(artifactA.resultTitle).not.toBe(artifactB.resultTitle);
+    expect(artifactA.resultHook).not.toBe(artifactB.resultHook);
+    expect(artifactA.resultStory).not.toBe(artifactB.resultStory);
+    expect(artifactA.storyboardJson).not.toBe(artifactB.storyboardJson);
   });
 });
 

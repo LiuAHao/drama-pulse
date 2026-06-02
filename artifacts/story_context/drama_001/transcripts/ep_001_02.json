@@ -1,0 +1,827 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_02",
+  "episodeNo": 2,
+  "dramaTitle": "荒年全村啃树皮，我有系统满仓肉",
+  "episodeTitle": "第2集",
+  "episodeSummary": "",
+  "mainGenre": "爽文",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 4720,
+      "endTimeMs": 6200,
+      "text": "穿越就算了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 6440,
+      "endTimeMs": 8160,
+      "text": "还穿成了一个尖酸刻薄",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 8160,
+      "endTimeMs": 9840,
+      "text": "好吃懒做的恶毒婆婆",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 10160,
+      "endTimeMs": 12040,
+      "text": "啊哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 12220,
+      "endTimeMs": 16540,
+      "text": "叫你不听话啊哈啊哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 16740,
+      "endTimeMs": 18540,
+      "text": "人生有四个女儿",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 18540,
+      "endTimeMs": 19860,
+      "text": "一个怀着孕的儿媳",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 20340,
+      "endTimeMs": 21980,
+      "text": "却上不孝顺公婆",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 22220,
+      "endTimeMs": 23940,
+      "text": "下不认为儿子儿媳",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 26240,
+      "endTimeMs": 32320,
+      "text": "呃鬼拿来你不得拿走啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 32320,
+      "endTimeMs": 35280,
+      "text": "这是我儿子战死的钱呐",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 35490,
+      "endTimeMs": 37970,
+      "text": "丈夫死后，为了独吞蓄银",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 38090,
+      "endTimeMs": 40410,
+      "text": "大闹着从赵家单分出去",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 49020,
+      "endTimeMs": 49980,
+      "text": "开跑开跑",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 49980,
+      "endTimeMs": 52110,
+      "text": "哎呦哎呀，好妹妹啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 52110,
+      "endTimeMs": 54590,
+      "text": "随后更是将旭银全部贴补给了娘家",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 54590,
+      "endTimeMs": 55830,
+      "text": "哎呦，这么多啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 55830,
+      "endTimeMs": 57030,
+      "text": "娘，你看你看",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 57270,
+      "endTimeMs": 59350,
+      "text": "谁曾想成家翻脸不认人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 59790,
+      "endTimeMs": 61950,
+      "text": "昨天元申去程家讨粮",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 62990,
+      "endTimeMs": 63590,
+      "text": "娘",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 64110,
+      "endTimeMs": 66030,
+      "text": "我求求你给我点吃的吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 66030,
+      "endTimeMs": 67870,
+      "text": "我真的要饿死了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 68200,
+      "endTimeMs": 70700,
+      "text": "哎，如今是荒年",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 70700,
+      "endTimeMs": 72340,
+      "text": "谁家的日子不好过",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 72340,
+      "endTimeMs": 74240,
+      "text": "你没吃的找你婆家去",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 74240,
+      "endTimeMs": 76560,
+      "text": "跟我们要什么呀",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 76690,
+      "endTimeMs": 77530,
+      "text": "大哥",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 77700,
+      "endTimeMs": 81120,
+      "text": "之前我丈夫战死的那22体恤银全都给你们了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 81120,
+      "endTimeMs": 82740,
+      "text": "你们可不能这么对我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 82740,
+      "endTimeMs": 84440,
+      "text": "当初是我求着你给的吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 84440,
+      "endTimeMs": 85740,
+      "text": "滚回你的照片",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 93680,
+      "endTimeMs": 96320,
+      "text": "嘿，你终于醒了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 96520,
+      "endTimeMs": 100920,
+      "text": "我还以为再也没娘了哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 102590,
+      "endTimeMs": 107910,
+      "text": "嗯哼，娘娘这四个儿子都对元神孝顺至极",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 108030,
+      "endTimeMs": 109870,
+      "text": "元神却对他们动辄打骂",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 109870,
+      "endTimeMs": 111430,
+      "text": "一心只为娘家人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 111590,
+      "endTimeMs": 112910,
+      "text": "实属人渣",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 113560,
+      "endTimeMs": 115240,
+      "text": "既来之则安之",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 115320,
+      "endTimeMs": 116540,
+      "text": "既然穿越了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0041",
+      "startTimeMs": 116540,
+      "endTimeMs": 119260,
+      "text": "那我便替原身好好照顾这些孩子",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0042",
+      "startTimeMs": 119260,
+      "endTimeMs": 120640,
+      "text": "好好活下去",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0043",
+      "startTimeMs": 121030,
+      "endTimeMs": 123510,
+      "text": "哎，你们快起来吧！起来吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0044",
+      "startTimeMs": 125550,
+      "endTimeMs": 126570,
+      "text": "怎么会这么饿",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0045",
+      "startTimeMs": 126570,
+      "endTimeMs": 128190,
+      "text": "这是多久没吃过饭了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0046",
+      "startTimeMs": 132960,
+      "endTimeMs": 134880,
+      "text": "娘，您饿了吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0047",
+      "startTimeMs": 135040,
+      "endTimeMs": 136480,
+      "text": "这是野菜糊糊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0048",
+      "startTimeMs": 136600,
+      "endTimeMs": 137680,
+      "text": "您吃吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0049",
+      "startTimeMs": 143280,
+      "endTimeMs": 144440,
+      "text": "嗯",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0050",
+      "startTimeMs": 145680,
+      "endTimeMs": 147240,
+      "text": "这也太难吃了吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0051",
+      "startTimeMs": 147800,
+      "endTimeMs": 149880,
+      "text": "对不起娘都是儿媳的错",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0052",
+      "startTimeMs": 149880,
+      "endTimeMs": 152640,
+      "text": "可是家里实在没有其他的粮食",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0053",
+      "startTimeMs": 152640,
+      "endTimeMs": 153800,
+      "text": "我什么都没做",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0054",
+      "startTimeMs": 153800,
+      "endTimeMs": 155320,
+      "text": "儿媳妇就吓成这样",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0055",
+      "startTimeMs": 155330,
+      "endTimeMs": 157090,
+      "text": "程弯弯到底做了多少恶",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0056",
+      "startTimeMs": 157170,
+      "endTimeMs": 159130,
+      "text": "诶，你快起来吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0057",
+      "startTimeMs": 169220,
+      "endTimeMs": 170220,
+      "text": "你们吃吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0058",
+      "startTimeMs": 170300,
+      "endTimeMs": 171780,
+      "text": "嗯哼啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0059",
+      "startTimeMs": 176300,
+      "endTimeMs": 179500,
+      "text": "一群小兔崽子还敢偷吃老娘的东西啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0060",
+      "startTimeMs": 179500,
+      "endTimeMs": 180440,
+      "text": "还吃不吃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0061",
+      "startTimeMs": 180440,
+      "endTimeMs": 183460,
+      "text": "吃不吃啊啊啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0062",
+      "startTimeMs": 184790,
+      "endTimeMs": 187630,
+      "text": "娘你真的不吃吗",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0063",
+      "startTimeMs": 187950,
+      "endTimeMs": 189870,
+      "text": "不会打我们吧",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0064",
+      "startTimeMs": 190030,
+      "endTimeMs": 195030,
+      "text": "我看来态度转变太快也不是件好事",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0065",
+      "startTimeMs": 196780,
+      "endTimeMs": 199140,
+      "text": "我没胃口吃不吃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0066",
+      "startTimeMs": 199140,
+      "endTimeMs": 200020,
+      "text": "不吃到了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0067",
+      "startTimeMs": 200100,
+      "endTimeMs": 202740,
+      "text": "吃吃吃吃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0068",
+      "startTimeMs": 204060,
+      "endTimeMs": 205700,
+      "text": "吃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0069",
+      "startTimeMs": 213110,
+      "endTimeMs": 215830,
+      "text": "好久没吃过这么饱的饭了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0070",
+      "startTimeMs": 215830,
+      "endTimeMs": 217550,
+      "text": "这种难以下咽的东西",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0071",
+      "startTimeMs": 217910,
+      "endTimeMs": 220230,
+      "text": "却是他们维系生存的粮食",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0072",
+      "startTimeMs": 250820,
+      "endTimeMs": 253080,
+      "text": "这大河村去年是蝗灾",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0073",
+      "startTimeMs": 253080,
+      "endTimeMs": 254420,
+      "text": "今年又是旱灾",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0074",
+      "startTimeMs": 255220,
+      "endTimeMs": 256940,
+      "text": "再加上连日的干旱",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0075",
+      "startTimeMs": 257860,
+      "endTimeMs": 260260,
+      "text": "这全家就剩这点野菜吃了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0076",
+      "startTimeMs": 261260,
+      "endTimeMs": 261860,
+      "text": "唉",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0077",
+      "startTimeMs": 262300,
+      "endTimeMs": 265500,
+      "text": "全家上下六口还有个未出世的孩子",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0078",
+      "startTimeMs": 265940,
+      "endTimeMs": 268020,
+      "text": "就这点野菜能够吃啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0079",
+      "startTimeMs": 268340,
+      "endTimeMs": 270020,
+      "text": "这到底是什么修罗场",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0080",
+      "startTimeMs": 270020,
+      "endTimeMs": 270860,
+      "text": "开局的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0081",
+      "startTimeMs": 272560,
+      "endTimeMs": 276280,
+      "text": "我发现天然无污染野蕨菜",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

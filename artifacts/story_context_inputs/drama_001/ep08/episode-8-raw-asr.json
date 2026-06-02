@@ -1,0 +1,352 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep08/episode-8.mp3",
+  "segment_count": 69,
+  "segments": [
+    {
+      "text": "立正向右看齐",
+      "start_time": 14680,
+      "end_time": 17640
+    },
+    {
+      "text": "报名",
+      "start_time": 19500,
+      "end_time": 20180
+    },
+    {
+      "text": "大山到",
+      "start_time": 20180,
+      "end_time": 21140
+    },
+    {
+      "text": "2号到",
+      "start_time": 21300,
+      "end_time": 22420
+    },
+    {
+      "text": "39~4代到",
+      "start_time": 22540,
+      "end_time": 24820
+    },
+    {
+      "text": "回娘到咋的",
+      "start_time": 25220,
+      "end_time": 27100
+    },
+    {
+      "text": "早上白米饭没吃够啊",
+      "start_time": 27380,
+      "end_time": 29060
+    },
+    {
+      "text": "灰娘到",
+      "start_time": 29660,
+      "end_time": 30780
+    },
+    {
+      "text": "行",
+      "start_time": 31540,
+      "end_time": 32140
+    },
+    {
+      "text": "今天呢，就由为娘",
+      "start_time": 32380,
+      "end_time": 33860
+    },
+    {
+      "text": "我来给大家分配任务",
+      "start_time": 33860,
+      "end_time": 35860
+    },
+    {
+      "text": "大山，你呢",
+      "start_time": 39280,
+      "end_time": 40360
+    },
+    {
+      "text": "负责去地里看看什么情况",
+      "start_time": 40520,
+      "end_time": 42520
+    },
+    {
+      "text": "二狗，你多去挑两桶水回来",
+      "start_time": 44040,
+      "end_time": 46900
+    },
+    {
+      "text": "这大热天的",
+      "start_time": 46900,
+      "end_time": 48220
+    },
+    {
+      "text": "今天咱都洗个澡",
+      "start_time": 48220,
+      "end_time": 49600
+    },
+    {
+      "text": "是",
+      "start_time": 49640,
+      "end_time": 50400
+    },
+    {
+      "text": "三娘，你呢，负责去砍点柴回来捧烈鸟",
+      "start_time": 51300,
+      "end_time": 54800
+    },
+    {
+      "text": "三娘，那我干什么呀",
+      "start_time": 54800,
+      "end_time": 57060
+    },
+    {
+      "text": "四蛋，跟慧娘跟我一起上山",
+      "start_time": 57440,
+      "end_time": 59480
+    },
+    {
+      "text": "咱这天天吃白米饭可不行",
+      "start_time": 59800,
+      "end_time": 61760
+    },
+    {
+      "text": "今天咱去挖点野菜当配菜吃",
+      "start_time": 61760,
+      "end_time": 64400
+    },
+    {
+      "text": "嘶嗯嗯，都听明白了吧",
+      "start_time": 65080,
+      "end_time": 67760
+    },
+    {
+      "text": "明白明白",
+      "start_time": 67800,
+      "end_time": 68920
+    },
+    {
+      "text": "有这么几个好大儿还挺好玩的",
+      "start_time": 68920,
+      "end_time": 71720
+    },
+    {
+      "text": "行，那就出发",
+      "start_time": 71720,
+      "end_time": 74160
+    },
+    {
+      "text": "娘自打我进门就没干过活",
+      "start_time": 80560,
+      "end_time": 82920
+    },
+    {
+      "text": "现在居然要跟我们一起挖野菜",
+      "start_time": 82920,
+      "end_time": 85060
+    },
+    {
+      "text": "难不成是怕我偷懒",
+      "start_time": 85060,
+      "end_time": 86600
+    },
+    {
+      "text": "想盯着我干活",
+      "start_time": 87000,
+      "end_time": 88640
+    },
+    {
+      "text": "叮，发现天然无污染苦菊菜",
+      "start_time": 94940,
+      "end_time": 98260
+    },
+    {
+      "text": "发现天然野生麻力菇",
+      "start_time": 99270,
+      "end_time": 101550
+    },
+    {
+      "text": "发现天然野生黑牛肝菌",
+      "start_time": 102270,
+      "end_time": 105030
+    },
+    {
+      "text": "这野生菇可比野菜值钱多了",
+      "start_time": 108500,
+      "end_time": 111980
+    },
+    {
+      "text": "这么一点就卖了48文钱",
+      "start_time": 111980,
+      "end_time": 114700
+    },
+    {
+      "text": "这里的蘑菇大部分有毒",
+      "start_time": 115110,
+      "end_time": 117030
+    },
+    {
+      "text": "村民不敢摘",
+      "start_time": 117030,
+      "end_time": 118230
+    },
+    {
+      "text": "倒是便宜了",
+      "start_time": 118230,
+      "end_time": 119190
+    },
+    {
+      "text": "我有了这个系统在",
+      "start_time": 119190,
+      "end_time": 121050
+    },
+    {
+      "text": "就不怕采到毒蘑菇了",
+      "start_time": 121050,
+      "end_time": 122790
+    },
+    {
+      "text": "哈，娘，你发现了什么啊",
+      "start_time": 122790,
+      "end_time": 125770
+    },
+    {
+      "text": "这里树叶多",
+      "start_time": 125770,
+      "end_time": 126870
+    },
+    {
+      "text": "一般比较阴凉湿润",
+      "start_time": 126870,
+      "end_time": 128430
+    },
+    {
+      "text": "会长蘑菇",
+      "start_time": 128430,
+      "end_time": 129350
+    },
+    {
+      "text": "你们四处找找看哦",
+      "start_time": 129350,
+      "end_time": 131790
+    },
+    {
+      "text": "娘这里有好多蘑菇啊",
+      "start_time": 137760,
+      "end_time": 140520
+    },
+    {
+      "text": "是大河村常见的鸡菌菇",
+      "start_time": 147740,
+      "end_time": 149700
+    },
+    {
+      "text": "没毒",
+      "start_time": 149700,
+      "end_time": 150380
+    },
+    {
+      "text": "能卖12文钱",
+      "start_time": 150500,
+      "end_time": 151580
+    },
+    {
+      "text": "一斤四蛋！你真棒",
+      "start_time": 151580,
+      "end_time": 154380
+    },
+    {
+      "text": "女王竟然夸我了",
+      "start_time": 156030,
+      "end_time": 157990
+    },
+    {
+      "text": "这是娘第一次夸我四蛋",
+      "start_time": 158160,
+      "end_time": 161060
+    },
+    {
+      "text": "你在这采蘑菇",
+      "start_time": 161060,
+      "end_time": 162300
+    },
+    {
+      "text": "你要去那边看一看",
+      "start_time": 162300,
+      "end_time": 163640
+    },
+    {
+      "text": "你呀，千万不要乱跑哦",
+      "start_time": 163680,
+      "end_time": 166040
+    },
+    {
+      "text": "娘竟然摸我的头了",
+      "start_time": 167020,
+      "end_time": 169180
+    },
+    {
+      "text": "娘的手好温暖",
+      "start_time": 169700,
+      "end_time": 171420
+    },
+    {
+      "text": "从昨天开始",
+      "start_time": 171740,
+      "end_time": 173260
+    },
+    {
+      "text": "娘就不一样了",
+      "start_time": 173500,
+      "end_time": 175300
+    },
+    {
+      "text": "我喜欢现在的娘",
+      "start_time": 176640,
+      "end_time": 178680
+    },
+    {
+      "text": "我一定要让娘再夸我一次",
+      "start_time": 179880,
+      "end_time": 182640
+    },
+    {
+      "text": "这小子是多久没洗头了",
+      "start_time": 187900,
+      "end_time": 190540
+    },
+    {
+      "text": "摸一下就满手油呀",
+      "start_time": 190780,
+      "end_time": 193100
+    },
+    {
+      "text": "哎，算了算了",
+      "start_time": 193500,
+      "end_time": 195600
+    },
+    {
+      "text": "我也好久没洗澡了",
+      "start_time": 195600,
+      "end_time": 197220
+    },
+    {
+      "text": "皮",
+      "start_time": 197900,
+      "end_time": 198580
+    },
+    {
+      "text": "嗯哼啊啊",
+      "start_time": 199480,
+      "end_time": 203800
+    },
+    {
+      "text": "兔兔",
+      "start_time": 203960,
+      "end_time": 204960
+    },
+    {
+      "text": "啊啊啊嘿诶",
+      "start_time": 206280,
+      "end_time": 212760
+    }
+  ]
+}

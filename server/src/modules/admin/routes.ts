@@ -15,13 +15,22 @@ import {
   adminBranchTaskFilterSchema,
   adminWatchProgressFilterSchema,
   assetsConfigSchema,
+  episodeIdParamSchema,
 } from '../../shared/schemas/index.js';
 import { getBaseUrlFromRequest, getResourceConfigPath, getResourceRoots, pathToUrl, getResourceRoots as getRoots } from '../../services/resource/index.js';
 import { toClientBranchTask, toClientDrama, toClientEpisode, toClientWatchProgress } from '../../services/clientPayload/index.js';
+import { refreshFixedBranchOptionsForEpisode } from '../../services/branchTask/fixedBranchGenerator.js';
 import fs from 'fs/promises';
 import path from 'path';
+import os from 'os';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 
 const MAX_RETRY = 3;
+const execFileAsync = promisify(execFile);
+const REPO_ROOT = path.resolve(process.cwd(), '..');
+const HIGHLIGHT_SCRIPT_DIR = path.join(REPO_ROOT, 'scripts', 'highlight');
+let cachedHighlightPythonBin: string | null = null;
 
 async function fileExists(candidatePath: string): Promise<boolean> {
   try {
@@ -66,6 +75,277 @@ async function findTranscriptPath(
   }
 
   return null;
+}
+
+async function findStoryContextPath(
+  exportsRoot: string,
+  episodeId: string,
+  episodeNo: number,
+): Promise<string | null> {
+  const directCandidates = [
+    path.join(exportsRoot, 'highlight-demo', `${episodeId}-story-context.json`),
+    path.join(exportsRoot, 'highlight-demo', `episode-${episodeNo}-story-context.json`),
+    path.join(exportsRoot, `${episodeId}-story-context.json`),
+  ];
+
+  for (const candidatePath of directCandidates) {
+    if (await fileExists(candidatePath)) {
+      return candidatePath;
+    }
+  }
+
+  const nestedHighlightDemoCandidates = [
+    path.join(exportsRoot, 'highlight-demo', `ep${episodeNo}`),
+    path.join(exportsRoot, 'highlight-demo', `episode-${episodeNo}`),
+    path.join(exportsRoot, 'highlight-demo', `${episodeId}`),
+  ];
+
+  for (const dir of nestedHighlightDemoCandidates) {
+    const candidatePath = path.join(dir, `episode-${episodeNo}-story-context.json`);
+    if (await fileExists(candidatePath)) {
+      return candidatePath;
+    }
+  }
+
+  return null;
+}
+
+async function resolveHighlightPythonBin(): Promise<string> {
+  if (cachedHighlightPythonBin) {
+    return cachedHighlightPythonBin;
+  }
+
+  const candidates = [
+    process.env.HIGHLIGHT_PYTHON_BIN,
+    process.env.PYTHON_BIN,
+    'python3',
+    '/opt/homebrew/Caskroom/miniforge/base/bin/python3',
+    '/opt/homebrew/bin/python3',
+    '/usr/bin/python3',
+  ].filter((value): value is string => Boolean(value));
+
+  for (const candidate of candidates) {
+    try {
+      await execFileAsync(candidate, ['-c', 'import openai'], {
+        cwd: REPO_ROOT,
+        timeout: 15_000,
+        maxBuffer: 1024 * 1024,
+      });
+      cachedHighlightPythonBin = candidate;
+      return candidate;
+    } catch {
+      continue;
+    }
+  }
+
+  throw new Error(
+    'no usable Python interpreter found for highlight review (missing openai package)',
+  );
+}
+
+function toStageOneCandidatePayload(highlight: {
+  episodeId: string;
+  startTimeMs: number;
+  endTimeMs: number;
+  type: string;
+  title: string;
+  description: string;
+  intensity: number;
+  templateId: string;
+  interactionOptionsJson: string;
+  reason: string;
+  confidence: number;
+  supportingSegmentIdsJson: string;
+  speakerGuess: string | null;
+  targetCharacterGuess: string | null;
+  mentionedCharactersJson: string;
+  characterGuessConfidence: number | null;
+}): Record<string, unknown> {
+  const parseArray = (raw: string): unknown[] => {
+    try {
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  };
+
+  return {
+    episodeId: highlight.episodeId,
+    startTimeMs: highlight.startTimeMs,
+    endTimeMs: highlight.endTimeMs,
+    highlightType: highlight.type,
+    title: highlight.title,
+    description: highlight.description,
+    intensity: highlight.intensity,
+    templateId: highlight.templateId,
+    interactionOptions: parseArray(highlight.interactionOptionsJson),
+    reason: highlight.reason,
+    confidence: highlight.confidence,
+    supportingSegmentIds: parseArray(highlight.supportingSegmentIdsJson),
+    speakerGuess: highlight.speakerGuess || undefined,
+    targetCharacterGuess: highlight.targetCharacterGuess || undefined,
+    mentionedCharacters: parseArray(highlight.mentionedCharactersJson),
+    characterGuessConfidence: highlight.characterGuessConfidence,
+  };
+}
+
+async function runAiHighlightReview(highlight: {
+  id: string;
+  episodeId: string;
+  startTimeMs: number;
+  endTimeMs: number;
+  type: string;
+  title: string;
+  description: string;
+  intensity: number;
+  templateId: string;
+  interactionOptionsJson: string;
+  reason: string;
+  confidence: number;
+  supportingSegmentIdsJson: string;
+  speakerGuess: string | null;
+  targetCharacterGuess: string | null;
+  mentionedCharactersJson: string;
+  characterGuessConfidence: number | null;
+  episode: { id: string; episodeNo: number; dramaId: string };
+}) {
+  const roots = getRoots();
+  const transcriptPath = await findTranscriptPath(
+    roots.exportsRoot,
+    highlight.episode.dramaId,
+    highlight.episode.id,
+    highlight.episode.episodeNo,
+  );
+  if (!transcriptPath) {
+    throw new Error('transcript file not found for highlight review');
+  }
+
+  const storyContextPath = await findStoryContextPath(
+    roots.exportsRoot,
+    highlight.episode.id,
+    highlight.episode.episodeNo,
+  );
+
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'drama-pulse-highlight-review-'));
+  const inputPath = path.join(tempDir, 'candidate.json');
+  const reviewedPath = path.join(tempDir, 'reviewed.json');
+  const finalPath = path.join(tempDir, 'final.json');
+
+  try {
+    const pythonBin = await resolveHighlightPythonBin();
+
+    await fs.writeFile(
+      inputPath,
+      JSON.stringify([toStageOneCandidatePayload(highlight)], null, 2),
+      'utf-8',
+    );
+
+    const command = [
+      pythonBin,
+      path.join(HIGHLIGHT_SCRIPT_DIR, 'review_highlights.py'),
+      inputPath,
+      '-t',
+      transcriptPath,
+      '--save-reviewed',
+      reviewedPath,
+      '-o',
+      finalPath,
+    ];
+
+    if (storyContextPath) {
+      command.push('--story-context', storyContextPath);
+    }
+
+    await execFileAsync(command[0], command.slice(1), {
+      cwd: REPO_ROOT,
+      timeout: 10 * 60 * 1000,
+      maxBuffer: 1024 * 1024 * 8,
+    });
+
+    const reviewedPayload = JSON.parse(await fs.readFile(reviewedPath, 'utf-8')) as Array<Record<string, unknown>>;
+    const finalPayload = JSON.parse(await fs.readFile(finalPath, 'utf-8')) as Array<Record<string, unknown>>;
+
+    return {
+      reviewed: reviewedPayload[0] ?? null,
+      final: finalPayload[0] ?? null,
+    };
+  } finally {
+    await fs.rm(tempDir, { recursive: true, force: true });
+  }
+}
+
+async function applyApprovedAiReview(
+  highlight: {
+    id: string;
+    source: string;
+    confidence: number;
+  },
+  aiResult: {
+    reviewed: Record<string, unknown> | null;
+    final: Record<string, unknown> | null;
+  },
+) {
+  const reviewed = aiResult.reviewed;
+  const final = aiResult.final;
+
+  if (!reviewed) {
+    return {
+      approved: false,
+      reviewDecision: '',
+      reviewReason: 'ai review returned empty result',
+      updated: null,
+    };
+  }
+
+  const reviewDecision = String(reviewed.reviewDecision || '');
+  const approved = Boolean(reviewed.approved);
+
+  if (!final || !approved || (reviewDecision !== 'approve' && reviewDecision !== 'revise')) {
+    return {
+      approved: false,
+      reviewDecision,
+      reviewReason: String(reviewed.reviewReason || ''),
+      updated: null,
+    };
+  }
+
+  const updated = await prisma.highlight.update({
+    where: { id: highlight.id },
+    data: {
+      startTimeMs: Number(final.startTimeMs),
+      endTimeMs: Number(final.endTimeMs),
+      interactionStartMs: Number(final.interactionStartMs),
+      interactionAppearMs: Number(final.interactionAppearMs),
+      interactionEndMs: Number(final.interactionEndMs),
+      type: String(final.highlightType),
+      title: String(final.title || '').trim(),
+      description: String(final.description || '').trim(),
+      intensity: Number(final.intensity),
+      templateId: String(final.templateId || '').trim(),
+      interactionOptionsJson: JSON.stringify(final.interactionOptions || [], null, 0),
+      visualEffectType: String(final.visualEffectType || '').trim(),
+      confidence: Number(final.confidence ?? highlight.confidence),
+      reason: String(final.reason || '').trim(),
+      supportingSegmentIdsJson: JSON.stringify(final.supportingSegmentIds || [], null, 0),
+      speakerGuess: final.speakerGuess ? String(final.speakerGuess) : '',
+      targetCharacterGuess: final.targetCharacterGuess ? String(final.targetCharacterGuess) : '',
+      mentionedCharactersJson: JSON.stringify(final.mentionedCharacters || [], null, 0),
+      characterGuessConfidence:
+        typeof final.characterGuessConfidence === 'number'
+          ? final.characterGuessConfidence
+          : null,
+      status: 'confirmed',
+      source: highlight.source === 'ai' ? 'ai_manual' : highlight.source,
+    },
+  });
+
+  return {
+    approved: true,
+    reviewDecision,
+    reviewReason: String(reviewed.reviewReason || ''),
+    updated,
+  };
 }
 
 function isLocalNetwork(ip: string | undefined): boolean {
@@ -514,6 +794,140 @@ export async function adminRoutes(fastify: FastifyInstance) {
     reply.send(success({ id: updated.id, status: updated.status, source: updated.source }));
   });
 
+  // POST /admin/highlights/:highlightId/ai-review - run DeepSeek review and confirm if approved
+  fastify.post('/admin/highlights/:highlightId/ai-review', async (request, reply) => {
+    const { highlightId } = highlightIdParamSchema.parse(request.params);
+
+    const highlight = await prisma.highlight.findUnique({
+      where: { id: highlightId },
+      include: {
+        episode: {
+          select: {
+            id: true,
+            episodeNo: true,
+            dramaId: true,
+          },
+        },
+      },
+    });
+
+    if (!highlight) {
+      reply.status(404).send({ code: 40004, message: 'highlight not found', data: null });
+      return;
+    }
+
+    if (highlight.status !== 'candidate') {
+      reply.status(400).send({ code: 40001, message: 'only candidate highlights can be AI reviewed', data: null });
+      return;
+    }
+
+    let aiResult: Awaited<ReturnType<typeof runAiHighlightReview>>;
+    try {
+      aiResult = await runAiHighlightReview(highlight);
+    } catch (error) {
+      reply.status(500).send({
+        code: 50001,
+        message: error instanceof Error ? error.message : 'ai review failed',
+        data: null,
+      });
+      return;
+    }
+
+    const reviewed = aiResult.reviewed;
+    const applied = await applyApprovedAiReview(highlight, aiResult);
+
+    if (!applied.approved || !applied.updated) {
+      reply.send(success({
+        id: highlight.id,
+        status: highlight.status,
+        source: highlight.source,
+        aiReview: {
+          approved: false,
+          reviewDecision: applied.reviewDecision,
+          reviewReason: applied.reviewReason,
+        },
+      }));
+      return;
+    }
+
+    reply.send(success({
+      id: applied.updated.id,
+      status: applied.updated.status,
+      source: applied.updated.source,
+      aiReview: {
+        approved: true,
+        reviewDecision: applied.reviewDecision,
+        reviewReason: applied.reviewReason,
+      },
+    }));
+  });
+
+  // POST /admin/highlights/ai-review-batch - run DeepSeek review for candidate highlights under current filters
+  fastify.post('/admin/highlights/ai-review-batch', async (request, reply) => {
+    const query = adminHighlightFilterSchema.partial({
+      page: true,
+      pageSize: true,
+    }).parse(request.query);
+    const where: Record<string, unknown> = { status: 'candidate' };
+    if (query.episodeId) where.episodeId = query.episodeId;
+
+    const candidates = await prisma.highlight.findMany({
+      where,
+      orderBy: { startTimeMs: 'asc' },
+      include: {
+        episode: {
+          select: {
+            id: true,
+            episodeNo: true,
+            dramaId: true,
+          },
+        },
+      },
+    });
+
+    const results: Array<{
+      id: string;
+      title: string;
+      approved: boolean;
+      reviewDecision: string;
+      reviewReason: string;
+      error?: string;
+    }> = [];
+
+    for (const highlight of candidates) {
+      try {
+        const aiResult = await runAiHighlightReview(highlight);
+        const applied = await applyApprovedAiReview(highlight, aiResult);
+        results.push({
+          id: highlight.id,
+          title: highlight.title,
+          approved: applied.approved,
+          reviewDecision: applied.reviewDecision,
+          reviewReason: applied.reviewReason,
+        });
+      } catch (error) {
+        results.push({
+          id: highlight.id,
+          title: highlight.title,
+          approved: false,
+          reviewDecision: 'error',
+          reviewReason: '',
+          error: error instanceof Error ? error.message : 'ai review failed',
+        });
+      }
+    }
+
+    const approvedCount = results.filter((item) => item.approved).length;
+    const failedCount = results.length - approvedCount;
+
+    reply.send(success({
+      total: results.length,
+      approvedCount,
+      failedCount,
+      results,
+    }));
+  });
+
   // POST /admin/highlights/:highlightId/enable
   fastify.post('/admin/highlights/:highlightId/enable', async (request, reply) => {
     const { highlightId } = highlightIdParamSchema.parse(request.params);
@@ -558,18 +972,29 @@ export async function adminRoutes(fastify: FastifyInstance) {
       prisma.interactionEvent.count({ where }),
     ]);
 
-    reply.send(success({ items, total, page, pageSize }));
+    reply.send(success({
+      items: items.map((item) => ({
+        ...item,
+        clientTimestamp: item.clientTimestamp.toString(),
+      })),
+      total,
+      page,
+      pageSize,
+    }));
   });
 
   // GET /admin/branch-tasks - list branch tasks with filters, paginated
   fastify.get('/admin/branch-tasks', async (request, reply) => {
     const baseUrl = getBaseUrlFromRequest(request);
     const query = adminBranchTaskFilterSchema.parse(request.query);
-    const { page, pageSize, status, episodeId, dramaId } = query;
+    const { page, pageSize, status, episodeId, dramaId, branchType, pipelineStage, imageTaskStatus } = query;
 
     const where: Record<string, unknown> = {};
     if (status) where.status = status;
     if (episodeId) where.episodeId = episodeId;
+    if (branchType) where.branchType = branchType;
+    if (pipelineStage) where.pipelineStage = pipelineStage;
+    if (imageTaskStatus) where.imageTaskStatus = imageTaskStatus;
     if (dramaId) {
       where.episode = { is: { dramaId } };
     }
@@ -821,11 +1246,28 @@ export async function adminRoutes(fastify: FastifyInstance) {
         startedAt: null,
         finishedAt: null,
         failReason: '',
+        pipelineStage: '',
         retryCount: { increment: 1 },
       },
     });
 
     reply.send(success(updated));
+  });
+
+  // POST /admin/episodes/:episodeId/branch-options/refresh - regenerate fixed branch options
+  fastify.post('/admin/episodes/:episodeId/branch-options/refresh', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const { episodeId } = episodeIdParamSchema.parse(request.params);
+    const refreshed = await refreshFixedBranchOptionsForEpisode(episodeId);
+
+    reply.send(success({
+      ...refreshed,
+      options: refreshed.options.map((option) => ({
+        ...option,
+        resultContentPath: pathToUrl(option.resultContentPath, baseUrl),
+        generatedPayloadPath: pathToUrl(option.generatedPayloadPath, baseUrl),
+      })),
+    }));
   });
 
   // POST /admin/demo/reset - reset runtime data

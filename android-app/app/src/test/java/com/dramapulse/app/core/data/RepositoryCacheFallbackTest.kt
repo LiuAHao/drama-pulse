@@ -140,6 +140,8 @@ private class ToggleableDramaPulseApi : DramaPulseApi {
     override suspend fun getDanmakuMessages(episodeId: String): ApiResponse<List<DanmakuMessageDto>> = throw UnsupportedOperationException()
     override suspend fun createDanmakuMessage(episodeId: String, request: CreateDanmakuMessageRequest): ApiResponse<DanmakuMessageDto> =
         throw UnsupportedOperationException()
+    override suspend fun createDanmakuHeatReport(request: com.dramapulse.app.core.model.remote.CreateDanmakuHeatReportRequest): ApiResponse<com.dramapulse.app.core.model.remote.DanmakuHeatReportDto> =
+        throw UnsupportedOperationException()
 }
 
 private fun buildDramaDto(): DramaDto {

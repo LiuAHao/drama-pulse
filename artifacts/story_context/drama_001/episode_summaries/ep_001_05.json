@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_05",
+  "episodeNo": 5,
+  "episodeTitle": "第5集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "本集展现村民间借粮遭拒，赵大嫂子一反常态示弱，主角一家辛苦挖野菜换米仅剩十文钱，决定上山干活谋生。",
+  "keyEvents": [
+    "赵大嫂子一反常态示弱",
+    "村民拒绝借粮",
+    "主角一家挖野菜换大米仅剩十文钱"
+  ],
+  "characterChanges": [
+    "赵大嫂子从泼辣变得示弱"
+  ],
+  "newReveals": [
+    "主角一家生活拮据，靠挖野菜维生"
+  ],
+  "openQuestions": [
+    "赵大嫂子为何示弱？",
+    "主角一家上山干活能否改善困境？"
+  ],
+  "episodeEndingState": "主角一家决定上山干活谋生。",
+  "focusCharacters": [
+    "赵大嫂子",
+    "王婶子",
+    "主角（未指名）"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 37,
+    "durationMs": 98781
+  }
+}

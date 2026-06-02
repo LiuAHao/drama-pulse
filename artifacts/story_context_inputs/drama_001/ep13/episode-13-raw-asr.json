@@ -1,0 +1,87 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep13/episode-13.mp3",
+  "segment_count": 16,
+  "segments": [
+    {
+      "text": "娘，你们回来啦",
+      "start_time": 5359,
+      "end_time": 7440
+    },
+    {
+      "text": "二狗跟三牛呢",
+      "start_time": 9050,
+      "end_time": 10450
+    },
+    {
+      "text": "他们还没回来呢",
+      "start_time": 10530,
+      "end_time": 11810
+    },
+    {
+      "text": "可能贪玩耽误了吧",
+      "start_time": 11890,
+      "end_time": 13810
+    },
+    {
+      "text": "来老四抓的兔子哇",
+      "start_time": 15460,
+      "end_time": 18180
+    },
+    {
+      "text": "我咋觉得这兔子好像变大了不少",
+      "start_time": 18970,
+      "end_time": 21970
+    },
+    {
+      "text": "是的，我也觉得",
+      "start_time": 22250,
+      "end_time": 24690
+    },
+    {
+      "text": "啊",
+      "start_time": 56360,
+      "end_time": 57120
+    },
+    {
+      "text": "你们肯定是看错了",
+      "start_time": 58200,
+      "end_time": 60000
+    },
+    {
+      "text": "愣着干什么",
+      "start_time": 60000,
+      "end_time": 60960
+    },
+    {
+      "text": "赶紧拿去扒了皮",
+      "start_time": 60960,
+      "end_time": 61940
+    },
+    {
+      "text": "晚上吃兔肉得嘞",
+      "start_time": 61940,
+      "end_time": 63520
+    },
+    {
+      "text": "什么败家玩意儿",
+      "start_time": 68400,
+      "end_time": 69840
+    },
+    {
+      "text": "老赵家她娶了你",
+      "start_time": 69840,
+      "end_time": 71080
+    },
+    {
+      "text": "这样一个败家娘们儿",
+      "start_time": 71080,
+      "end_time": 72200
+    },
+    {
+      "text": "进门真是倒了八辈子的血霉",
+      "start_time": 72200,
+      "end_time": 74400
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_20",
+  "episodeNo": 20,
+  "episodeTitle": "第20集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "甘宁纸情绪失控自打脸部，被江青纸斥责，随后储先生突然到访，现场陷入紧张，有人呼救。",
+  "keyEvents": [
+    "甘宁纸自己打自己，被江青纸指责脑子坏了",
+    "江青纸质问甘宁纸是否被主持人打坏脑子",
+    "老爷夫人通报储先生到来",
+    "有人喊出‘救’字"
+  ],
+  "characterChanges": [
+    "甘宁纸表现出自残行为，精神状态异常"
+  ],
+  "newReveals": [
+    "储先生登场，身份似有分量"
+  ],
+  "openQuestions": [
+    "甘宁纸为何自残？",
+    "储先生与甘宁纸等人是何关系？",
+    "呼救声来自谁？是否有人遭遇危险？"
+  ],
+  "episodeEndingState": "危机骤起，有人求救，储先生到场",
+  "focusCharacters": [
+    "甘宁纸",
+    "江青纸",
+    "主持人",
+    "储先生"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 15,
+    "durationMs": 51020
+  }
+}

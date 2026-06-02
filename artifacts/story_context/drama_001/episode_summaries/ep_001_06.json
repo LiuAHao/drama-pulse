@@ -1,0 +1,36 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_06",
+  "episodeNo": 6,
+  "episodeTitle": "第6集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "儿子发现家里有白米，追问来源，母亲谎称是孝敬姥姥的。儿子得知母亲曾拿大米补贴大舅和程家，如今因蝗灾日子难过，感到彻底死心。",
+  "keyEvents": [
+    "儿子发现家中藏有白米，追问母亲来源",
+    "母亲解释白米是准备孝敬姥姥的",
+    "儿子回忆起母亲曾以大米等物资补贴程家和大舅"
+  ],
+  "characterChanges": [
+    "儿子对母亲和程家彻底死心"
+  ],
+  "newReveals": [
+    "白米并非自家所产，而是母亲打算送给姥姥的",
+    "母亲多年来一直暗中补贴程家粮食和银子"
+  ],
+  "openQuestions": [
+    "母亲是否会继续瞒着儿子给姥姥送白米？",
+    "儿子彻底死心后会采取什么行动？"
+  ],
+  "episodeEndingState": "儿子对母亲长期补贴大户亲戚的行为感到绝望，母子关系出现裂痕。",
+  "focusCharacters": [
+    "儿子",
+    "母亲",
+    "姥姥",
+    "大舅"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 55,
+    "durationMs": 165560
+  }
+}

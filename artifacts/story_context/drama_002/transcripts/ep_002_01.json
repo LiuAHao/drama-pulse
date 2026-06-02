@@ -1,0 +1,857 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_01",
+  "episodeNo": 1,
+  "dramaTitle": "撕夜",
+  "episodeTitle": "第1集",
+  "episodeSummary": "故事开始，主角初入城市。",
+  "mainGenre": "情感",
+  "characterRelationshipSummary": "",
+  "episodeConflictSummary": "",
+  "audienceStanceHint": "",
+  "toneHint": "",
+  "source": "bcut",
+  "language": "zh",
+  "segments": [
+    {
+      "segmentId": "seg_0001",
+      "startTimeMs": 700,
+      "endTimeMs": 2300,
+      "text": "嗯哼哼",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0002",
+      "startTimeMs": 7120,
+      "endTimeMs": 9200,
+      "text": "节哀，您也保重",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0003",
+      "startTimeMs": 9440,
+      "endTimeMs": 11790,
+      "text": "您说这孩子好好的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0004",
+      "startTimeMs": 11790,
+      "endTimeMs": 14550,
+      "text": "怎么就自杀了呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0005",
+      "startTimeMs": 15590,
+      "endTimeMs": 16190,
+      "text": "妈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0006",
+      "startTimeMs": 16630,
+      "endTimeMs": 19910,
+      "text": "薇薇肯定不是故意要丢下我们的孩子",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0007",
+      "startTimeMs": 20140,
+      "endTimeMs": 21620,
+      "text": "真能演啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0008",
+      "startTimeMs": 22020,
+      "endTimeMs": 25620,
+      "text": "分明就是你们四个将我活活勒死",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0009",
+      "startTimeMs": 26200,
+      "endTimeMs": 29240,
+      "text": "爸，你为了得到妈妈留给我的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0010",
+      "startTimeMs": 29560,
+      "endTimeMs": 31680,
+      "text": "不惜对我下毒手",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0011",
+      "startTimeMs": 32119,
+      "endTimeMs": 33760,
+      "text": "还有我的卫衣",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0012",
+      "startTimeMs": 34230,
+      "endTimeMs": 38190,
+      "text": "贾谊和偶像其实早就和他们串通一气",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0013",
+      "startTimeMs": 38190,
+      "endTimeMs": 39670,
+      "text": "还和江晴雪偷情",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0014",
+      "startTimeMs": 39950,
+      "endTimeMs": 42150,
+      "text": "为的也是强击某种功夫",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0015",
+      "startTimeMs": 42200,
+      "endTimeMs": 44560,
+      "text": "哎，可算是哭完了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0016",
+      "startTimeMs": 44640,
+      "endTimeMs": 45920,
+      "text": "累死我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0017",
+      "startTimeMs": 46600,
+      "endTimeMs": 47320,
+      "text": "辛苦了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0018",
+      "startTimeMs": 47320,
+      "endTimeMs": 50100,
+      "text": "宝贝，回去可以敷眼睛啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0019",
+      "startTimeMs": 50100,
+      "endTimeMs": 50720,
+      "text": "嗯",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0020",
+      "startTimeMs": 52590,
+      "endTimeMs": 53430,
+      "text": "静止",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0021",
+      "startTimeMs": 54110,
+      "endTimeMs": 55830,
+      "text": "别怪你爸心狠",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0022",
+      "startTimeMs": 56070,
+      "endTimeMs": 58790,
+      "text": "当初我以为我弄死了你妈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0023",
+      "startTimeMs": 58830,
+      "endTimeMs": 60810,
+      "text": "公司就全都是我的了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0024",
+      "startTimeMs": 60810,
+      "endTimeMs": 63830,
+      "text": "结果没有想到他早就立了李书",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0025",
+      "startTimeMs": 63830,
+      "endTimeMs": 66530,
+      "text": "还把股份给了你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0026",
+      "startTimeMs": 67510,
+      "endTimeMs": 71940,
+      "text": "哎，妈妈不是车祸死的来了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0027",
+      "startTimeMs": 72660,
+      "endTimeMs": 75140,
+      "text": "该死的都死了",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0028",
+      "startTimeMs": 75140,
+      "endTimeMs": 75780,
+      "text": "哼",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0029",
+      "startTimeMs": 76400,
+      "endTimeMs": 77360,
+      "text": "曾大明",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0030",
+      "startTimeMs": 77520,
+      "endTimeMs": 80920,
+      "text": "以后你可得对我们母女俩好一点",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0031",
+      "startTimeMs": 81140,
+      "endTimeMs": 83820,
+      "text": "晴雪可是你的亲生女儿",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0032",
+      "startTimeMs": 84020,
+      "endTimeMs": 86260,
+      "text": "放心，以后呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0033",
+      "startTimeMs": 87080,
+      "endTimeMs": 89200,
+      "text": "你就是我唯一的老婆",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0034",
+      "startTimeMs": 89200,
+      "endTimeMs": 91340,
+      "text": "你就是我唯一的女儿",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0035",
+      "startTimeMs": 91340,
+      "endTimeMs": 94320,
+      "text": "哈哈哈哈哈哈哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0036",
+      "startTimeMs": 94750,
+      "endTimeMs": 97160,
+      "text": "原来你长得跟爸爸在一起",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0037",
+      "startTimeMs": 97160,
+      "endTimeMs": 99960,
+      "text": "根本不是后来加入你的亲戚",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0038",
+      "startTimeMs": 100040,
+      "endTimeMs": 102560,
+      "text": "你们不光害死了我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0039",
+      "startTimeMs": 102560,
+      "endTimeMs": 104520,
+      "text": "还害死了我妈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0040",
+      "startTimeMs": 105420,
+      "endTimeMs": 109940,
+      "text": "杀了你，我要杀了你们啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0041",
+      "startTimeMs": 110420,
+      "endTimeMs": 115060,
+      "text": "哈哈哈哈哈哈哈哈",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0042",
+      "startTimeMs": 115100,
+      "endTimeMs": 116100,
+      "text": "张星驰",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0043",
+      "startTimeMs": 126680,
+      "endTimeMs": 129880,
+      "text": "楚城安这个恶魔来干什么",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0044",
+      "startTimeMs": 130600,
+      "endTimeMs": 133040,
+      "text": "我都死了，他还不肯放过我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0045",
+      "startTimeMs": 133440,
+      "endTimeMs": 137280,
+      "text": "活着的时候霸占我的人死了还要霸占我的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0046",
+      "startTimeMs": 149020,
+      "endTimeMs": 152040,
+      "text": "啊啊啊啊啊啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0047",
+      "startTimeMs": 152040,
+      "endTimeMs": 154860,
+      "text": "淳淳阿姨在为我报仇",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0048",
+      "startTimeMs": 154940,
+      "endTimeMs": 156760,
+      "text": "不都是他们逼我的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0049",
+      "startTimeMs": 156760,
+      "endTimeMs": 158100,
+      "text": "都是他们逼我的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0050",
+      "startTimeMs": 158340,
+      "endTimeMs": 164060,
+      "text": "啊啊啊啊啊啊啊啊啊啊啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0051",
+      "startTimeMs": 164220,
+      "endTimeMs": 165420,
+      "text": "请你",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0052",
+      "startTimeMs": 165540,
+      "endTimeMs": 169860,
+      "text": "Are you oh oh",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0053",
+      "startTimeMs": 170510,
+      "endTimeMs": 173710,
+      "text": "as i was spoken without your love",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0054",
+      "startTimeMs": 173910,
+      "endTimeMs": 177910,
+      "text": "and nobody else i call my name again",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0055",
+      "startTimeMs": 178330,
+      "endTimeMs": 182870,
+      "text": "不管生死的重爱啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0056",
+      "startTimeMs": 182870,
+      "endTimeMs": 184030,
+      "text": "你都是我的",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0057",
+      "startTimeMs": 184190,
+      "endTimeMs": 188950,
+      "text": "we good good ！ i don't like rivers 尘埃",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0058",
+      "startTimeMs": 188950,
+      "endTimeMs": 192110,
+      "text": "你说什么陪我",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0059",
+      "startTimeMs": 192190,
+      "endTimeMs": 195310,
+      "text": "you just wanna get the ali",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0060",
+      "startTimeMs": 197760,
+      "endTimeMs": 200520,
+      "text": "住手安哦，阿哲",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0061",
+      "startTimeMs": 202770,
+      "endTimeMs": 205770,
+      "text": "你为什么就不听话呢",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0062",
+      "startTimeMs": 207210,
+      "endTimeMs": 209710,
+      "text": "你为什么就不能乖乖陪在我身边",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0063",
+      "startTimeMs": 209710,
+      "endTimeMs": 210890,
+      "text": "good bye",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0064",
+      "startTimeMs": 211520,
+      "endTimeMs": 212160,
+      "text": "first",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0065",
+      "startTimeMs": 212720,
+      "endTimeMs": 214120,
+      "text": "all the time",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0066",
+      "startTimeMs": 215400,
+      "endTimeMs": 217400,
+      "text": "when you feel",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0067",
+      "startTimeMs": 219560,
+      "endTimeMs": 220920,
+      "text": "ask me why",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0068",
+      "startTimeMs": 223000,
+      "endTimeMs": 224480,
+      "text": "而 should f",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0069",
+      "startTimeMs": 226450,
+      "endTimeMs": 228290,
+      "text": "for reason",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0070",
+      "startTimeMs": 228450,
+      "endTimeMs": 234890,
+      "text": "我喝了毒药会多看我一眼",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0071",
+      "startTimeMs": 235500,
+      "endTimeMs": 237100,
+      "text": "你为什么要这么做",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0072",
+      "startTimeMs": 237100,
+      "endTimeMs": 238940,
+      "text": "我不看我一眼",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0073",
+      "startTimeMs": 239260,
+      "endTimeMs": 243000,
+      "text": "明明你只是把我当成你的玩物啊",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0074",
+      "startTimeMs": 243000,
+      "endTimeMs": 244380,
+      "text": "永身不能同言",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0075",
+      "startTimeMs": 244380,
+      "endTimeMs": 245200,
+      "text": "爱",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0076",
+      "startTimeMs": 247000,
+      "endTimeMs": 248080,
+      "text": "你那就死",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0077",
+      "startTimeMs": 248080,
+      "endTimeMs": 248760,
+      "text": "同穴",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0078",
+      "startTimeMs": 261800,
+      "endTimeMs": 266320,
+      "text": "啊，原来这个世界最愚蠢的人是我自己",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0079",
+      "startTimeMs": 267210,
+      "endTimeMs": 268970,
+      "text": "抱着真心爱我的人",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0080",
+      "startTimeMs": 268970,
+      "endTimeMs": 273690,
+      "text": "不要为了渣男没",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0081",
+      "startTimeMs": 276180,
+      "endTimeMs": 281270,
+      "text": "still up your mind 褚承恩",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0082",
+      "startTimeMs": 282910,
+      "endTimeMs": 284150,
+      "text": "如果有来世",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0083",
+      "startTimeMs": 285390,
+      "endTimeMs": 287710,
+      "text": "就算你是病娇恶魔",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    },
+    {
+      "segmentId": "seg_0084",
+      "startTimeMs": 290120,
+      "endTimeMs": 291840,
+      "text": "我也一定非你不嫁",
+      "speakerGuess": null,
+      "targetCharacterGuess": null,
+      "mentionedCharacters": [],
+      "characterGuessConfidence": null
+    }
+  ]
+}

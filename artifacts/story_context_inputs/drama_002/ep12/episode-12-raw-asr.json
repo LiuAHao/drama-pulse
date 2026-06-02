@@ -1,0 +1,107 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep12/episode-12.mp3",
+  "segment_count": 20,
+  "segments": [
+    {
+      "text": "我现在就送你上路吧",
+      "start_time": 0,
+      "end_time": 3480
+    },
+    {
+      "text": "扯开妈的谁他妈打我",
+      "start_time": 3720,
+      "end_time": 7230
+    },
+    {
+      "text": "谁给老子滚出来",
+      "start_time": 10380,
+      "end_time": 12740
+    },
+    {
+      "text": "哎，来一个陪你了",
+      "start_time": 19400,
+      "end_time": 21800
+    },
+    {
+      "text": "哎，有没有事",
+      "start_time": 21880,
+      "end_time": 23160
+    },
+    {
+      "text": "哪里受伤了",
+      "start_time": 23160,
+      "end_time": 24360
+    },
+    {
+      "text": "你是来陪我一起死",
+      "start_time": 24760,
+      "end_time": 26280
+    },
+    {
+      "text": "谁说要陪你死",
+      "start_time": 26520,
+      "end_time": 27880
+    },
+    {
+      "text": "我是来救你救我",
+      "start_time": 28390,
+      "end_time": 31950
+    },
+    {
+      "text": "你应该希望我早点死吧",
+      "start_time": 32759,
+      "end_time": 35560
+    },
+    {
+      "text": "这样你就可以自由了",
+      "start_time": 36400,
+      "end_time": 38080
+    },
+    {
+      "text": "反正你也不喜欢我",
+      "start_time": 38880,
+      "end_time": 40600
+    },
+    {
+      "text": "傅成爱，你要是再说这种话",
+      "start_time": 41040,
+      "end_time": 42880
+    },
+    {
+      "text": "我真的就不理你了",
+      "start_time": 42880,
+      "end_time": 44220
+    },
+    {
+      "text": "这辈子",
+      "start_time": 44220,
+      "end_time": 45200
+    },
+    {
+      "text": "我要我们一起活下去",
+      "start_time": 46040,
+      "end_time": 48040
+    },
+    {
+      "text": "something wrong i didn't know that it was wrong ",
+      "start_time": 53080,
+      "end_time": 58160
+    },
+    {
+      "text": "开游戏 it's all over ",
+      "start_time": 58530,
+      "end_time": 61250
+    },
+    {
+      "text": "这辈子就算是也是七老80寿终正寝",
+      "start_time": 74490,
+      "end_time": 80010
+    },
+    {
+      "text": "为为了谁都不惜黑夜除爱之",
+      "start_time": 80320,
+      "end_time": 84600
+    }
+  ]
+}

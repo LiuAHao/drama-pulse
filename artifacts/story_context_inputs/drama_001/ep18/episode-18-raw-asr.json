@@ -1,0 +1,92 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep18/episode-18.mp3",
+  "segment_count": 17,
+  "segments": [
+    {
+      "text": "哈哈哈",
+      "start_time": 17040,
+      "end_time": 18720
+    },
+    {
+      "text": "娘这也太奢侈了吧",
+      "start_time": 20120,
+      "end_time": 22480
+    },
+    {
+      "text": "大山能这么吃真的行吗",
+      "start_time": 31340,
+      "end_time": 34960
+    },
+    {
+      "text": "娘这么做肯定有娘的道理",
+      "start_time": 35480,
+      "end_time": 37420
+    },
+    {
+      "text": "听娘的就行了啊",
+      "start_time": 37420,
+      "end_time": 38960
+    },
+    {
+      "text": "算了",
+      "start_time": 40300,
+      "end_time": 41020
+    },
+    {
+      "text": "家里有吃的就吃吧",
+      "start_time": 41020,
+      "end_time": 42560
+    },
+    {
+      "text": "免得婆婆又把东西送给程家人",
+      "start_time": 42560,
+      "end_time": 44940
+    },
+    {
+      "text": "这几个混小子跑哪贪玩去了",
+      "start_time": 46890,
+      "end_time": 49490
+    },
+    {
+      "text": "还不回来",
+      "start_time": 49490,
+      "end_time": 50410
+    },
+    {
+      "text": "不好了，娘，铁柱哥说",
+      "start_time": 51800,
+      "end_time": 55340
+    },
+    {
+      "text": "看见二哥三哥去仇家村了",
+      "start_time": 55340,
+      "end_time": 58040
+    },
+    {
+      "text": "呵",
+      "start_time": 58250,
+      "end_time": 58930
+    },
+    {
+      "text": "这俩小子昨天就想去讨债",
+      "start_time": 59050,
+      "end_time": 61410
+    },
+    {
+      "text": "还以为消停了",
+      "start_time": 61730,
+      "end_time": 63170
+    },
+    {
+      "text": "没想到今天又跑去程家了",
+      "start_time": 63170,
+      "end_time": 65810
+    },
+    {
+      "text": "大山拿上刀，跟我去趟程家走哦",
+      "start_time": 68800,
+      "end_time": 72200
+    }
+  ]
+}

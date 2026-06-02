@@ -9,6 +9,7 @@ import type {
   WatchProgress,
 } from '@prisma/client';
 import { pathToUrl } from '../resource/index.js';
+import type { FixedBranchArtifact } from '../branchTask/fixedBranchGenerator.js';
 
 const DEFAULT_HIGHLIGHT_STATS = {
   totalCount: 0,
@@ -92,11 +93,27 @@ function normalizeHighlightOptionsJson(raw: string): string {
   }
 }
 
-export function toClientBranchOption(option: BranchOption, baseUrl: string) {
+export function toClientBranchOption(
+  option: BranchOption,
+  baseUrl: string,
+  generatedArtifact?: FixedBranchArtifact | null,
+  generatedPayloadPath?: string | null,
+) {
   return {
     ...option,
     resultContentPath: pathToUrl(option.resultContentPath, baseUrl),
     coverPath: pathToUrl(option.coverPath, baseUrl),
+    generatedPayloadPath: generatedPayloadPath ? pathToUrl(generatedPayloadPath, baseUrl) : '',
+    generatedAt: generatedArtifact?.generatedAt ?? '',
+    resultHook: generatedArtifact?.resultHook ?? '',
+    resultStory: generatedArtifact?.resultStory ?? '',
+    storyboardJson: generatedArtifact?.storyboardJson ?? '[]',
+    shotPromptJson: generatedArtifact?.shotPromptJson ?? '[]',
+    storyboardImagesJson: generatedArtifact?.storyboardImagesJson ?? '[]',
+    storyboardManifestJson: generatedArtifact?.storyboardManifestJson ?? '{}',
+    narrationPayloadJson: generatedArtifact?.narrationPayloadJson ?? '{}',
+    referenceAssetsJson: generatedArtifact?.referenceAssetsJson ?? '{}',
+    resultTagsJson: generatedArtifact?.resultTagsJson ?? '[]',
   };
 }
 
@@ -131,6 +148,22 @@ export function toClientBranchTask(task: BranchTaskLike, baseUrl: string) {
     resultHook: task.resultHook,
     resultStory: task.resultStory,
     storyboardJson: task.storyboardJson,
+    branchType: task.branchType,
+    pipelineStage: task.pipelineStage,
+    promptPackageJson: task.promptPackageJson,
+    storyExpansionJson: task.storyExpansionJson,
+    shotPromptJson: task.shotPromptJson,
+    storyContextJson: (task as any).storyContextJson ?? '{}',
+    storyContextVersion: (task as any).storyContextVersion ?? '',
+    storyContextAssetPath: (task as any).storyContextAssetPath ?? '',
+    tailStateSnapshotJson: (task as any).tailStateSnapshotJson ?? '{}',
+    characterBibleJson: (task as any).characterBibleJson ?? '[]',
+    referenceAssetsJson: (task as any).referenceAssetsJson ?? '{}',
+    storyboardImagesJson: (task as any).storyboardImagesJson ?? '[]',
+    storyboardManifestJson: (task as any).storyboardManifestJson ?? '{}',
+    narrationPayloadJson: (task as any).narrationPayloadJson ?? '{}',
+    imageTaskStatus: (task as any).imageTaskStatus ?? 'not_started',
+    imageTaskPayloadJson: (task as any).imageTaskPayloadJson ?? '{}',
     resultTagsJson: task.resultTagsJson,
     resultInteractionOptionsJson: task.resultInteractionOptionsJson,
     resultSource: task.resultSource,

@@ -1,0 +1,39 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_15",
+  "episodeNo": 15,
+  "episodeTitle": "第15集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "阿奶送来的粟米被娘抢走，兔兔死亡，大山质问阿奶，家庭冲突加剧，灾荒年粮食匮乏。",
+  "keyEvents": [
+    "阿奶送来一袋粟米被娘抢走",
+    "兔兔死亡",
+    "大山质问阿奶为什么娘总是抢走东西",
+    "阿奶认为现在说话不中用了",
+    "灾荒年只有发霉的粟米可吃"
+  ],
+  "characterChanges": [
+    "大山对娘的行为产生怀疑",
+    "阿奶感到自身权威下降"
+  ],
+  "newReveals": [
+    "娘昨晚曾拿出白米，但依然抢走粟米"
+  ],
+  "openQuestions": [
+    "娘为何要抢走粟米？",
+    "大山将如何应对娘的霸道行为？",
+    "阿奶是否还有办法帮助孩子们？"
+  ],
+  "episodeEndingState": "家庭内部矛盾激化，粮食短缺和亲人间的不信任加深。",
+  "focusCharacters": [
+    "阿奶",
+    "大山",
+    "娘",
+    "阿乃"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 31,
+    "durationMs": 117641
+  }
+}

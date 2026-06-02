@@ -97,13 +97,25 @@ fun HighlightStatsDto.toModel(): HighlightStatsModel {
 }
 
 fun BranchOptionDto.toModel(): BranchOptionModel {
+    val scenes = try {
+        json.decodeFromString<List<StoryboardSceneDto>>(storyboardJson)
+            .map { StoryboardScene(scene = it.scene, description = it.description, duration = it.duration) }
+    } catch (_: Exception) {
+        emptyList()
+    }
     return BranchOptionModel(
         id = id,
         title = title,
         description = description,
         resultType = resultType,
         coverUrl = coverPath,
-        resultContentUrl = resultContentPath
+        resultContentUrl = resultContentPath,
+        generatedPayloadUrl = generatedPayloadPath,
+        generatedAt = generatedAt,
+        resultHook = resultHook,
+        resultStory = resultStory,
+        storyboard = scenes,
+        shotPromptJson = shotPromptJson
     )
 }
 
@@ -111,6 +123,12 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
     val scenes = try {
         json.decodeFromString<List<StoryboardSceneDto>>(storyboardJson)
             .map { StoryboardScene(scene = it.scene, description = it.description, duration = it.duration) }
+    } catch (_: Exception) {
+        emptyList()
+    }
+    val images = try {
+        json.decodeFromString<List<StoryboardImageDto>>(storyboardImagesJson)
+            .map { StoryboardImage(scene = it.scene, imageUrl = it.imageUrl) }
     } catch (_: Exception) {
         emptyList()
     }
@@ -122,6 +140,7 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
         resultHook = resultHook,
         resultStory = resultStory,
         storyboard = scenes,
+        storyboardImages = images,
         likeCount = count?.likes ?: 0,
         commentCount = count?.comments ?: 0
     )
@@ -132,6 +151,12 @@ private data class StoryboardSceneDto(
     val scene: Int,
     val description: String,
     val duration: Int
+)
+
+@kotlinx.serialization.Serializable
+private data class StoryboardImageDto(
+    val scene: Int,
+    val imageUrl: String = ""
 )
 
 fun BranchCommentDto.toModel(): BranchCommentModel {

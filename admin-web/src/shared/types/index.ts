@@ -126,6 +126,11 @@ export interface BranchTask {
   resultTagsJson: string;
   resultInteractionOptionsJson: string;
   resultSource: string;
+  branchType: string;
+  pipelineStage: string;
+  promptPackageJson: string;
+  storyExpansionJson: string;
+  shotPromptJson: string;
   failReason: string;
   retryCount: number;
   episode?: Episode | null;
@@ -163,6 +168,25 @@ export interface BranchTaskDetail {
   comments: BranchTaskComment[];
   likes: BranchTaskLike[];
   durationMs: number | null;
+}
+
+export interface BranchOption {
+  id: string;
+  episodeId: string;
+  title: string;
+  description: string;
+  resultType: string;
+  resultContentPath: string;
+  coverPath: string;
+  generatedPayloadPath: string;
+  generatedAt: string;
+  resultHook: string;
+  resultStory: string;
+  storyboardJson: string;
+  shotPromptJson: string;
+  resultTagsJson: string;
+  sortIndex: number;
+  status: string;
 }
 
 export interface FavoriteRecord {

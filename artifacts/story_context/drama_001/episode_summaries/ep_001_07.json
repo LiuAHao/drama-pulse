@@ -1,0 +1,32 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_07",
+  "episodeNo": 7,
+  "episodeTitle": "第7集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "婆婆因儿媳怀孕而变本加厉，命令她跪下，并禁止上桌吃饭，只允许吃最差的食物，儿媳在压迫下不敢反抗。",
+  "keyEvents": [
+    "婆婆命令儿媳跪下。",
+    "婆婆指出儿媳怀孕也不能改变地位。",
+    "婆婆规定儿媳只能吃最难吃最脏的东西，否则就饿着。",
+    "儿媳在婆婆的威压下表示不敢违抗。"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "婆婆明确儿媳在家地位最低，不能上桌吃饭。"
+  ],
+  "openQuestions": [
+    "儿子是否会站出来保护儿媳？",
+    "儿媳后续会如何应对这种压迫？"
+  ],
+  "episodeEndingState": "儿媳在婆婆的威胁下屈服，不敢反驳。",
+  "focusCharacters": [
+    "婆婆",
+    "儿媳"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 53,
+    "durationMs": 131140
+  }
+}

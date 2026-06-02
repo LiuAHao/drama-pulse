@@ -73,14 +73,20 @@ class BranchViewModelTest {
                 title = "甜蜜结局",
                 description = "主角收获爱情与事业双丰收",
                 resultType = "video",
-                coverUrl = ""
+                coverUrl = "",
+                resultHook = "她终于等到了想要的答案。",
+                resultStory = "固定分支一的结果正文。",
+                storyboard = listOf(StoryboardScene(1, "她走进大厅", 4))
             ),
             BranchOptionModel(
                 id = "bo-2",
                 title = "反转结局",
                 description = "一个意想不到的结局",
                 resultType = "video",
-                coverUrl = ""
+                coverUrl = "",
+                resultHook = "她先下手为强。",
+                resultStory = "固定分支二的结果正文。",
+                storyboard = listOf(StoryboardScene(1, "她提前设局", 4))
             )
         )
 
@@ -145,6 +151,7 @@ class BranchViewModelTest {
                     StoryboardScene(1, "她回到现场", 5),
                     StoryboardScene(2, "真相被揭开", 8)
                 ),
+                storyboardImages = emptyList(),
                 likeCount = 12,
                 commentCount = 2
             )

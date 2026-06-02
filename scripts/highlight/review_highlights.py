@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-DeepSeek secondary review for Seedance highlight candidates.
+DeepSeek secondary review for stage-1 highlight candidates.
 
-Reads Seedance candidates + transcript, reviews each candidate individually,
+Reads stage-1 candidates + transcript, reviews each candidate individually,
 then writes final import-ready candidates after DeepSeek review filtering.
 
 Usage:
-    python review_highlights.py seedance_candidates.json --transcript transcript.json -o reviewed.json
+    python review_highlights.py stage1_candidates.json --transcript transcript.json -o reviewed.json
     python review_highlights.py candidates.json -t transcript.json -o out.json --model deepseek-v4-pro
 """
 
@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from pathlib import Path
@@ -22,71 +21,24 @@ from typing import Any
 
 from openai import OpenAI
 
+from deepseek_client import DEFAULT_ENV_FILES, create_deepseek_client, load_env_files
 from story_context_utils import load_story_context_file, merge_transcript_with_story_context
 from validate_candidates import validate_candidates_payload
-
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_ENV_FILES = [REPO_ROOT / ".env", REPO_ROOT / "server" / ".env"]
 
 CONTEXT_BEFORE_COUNT = 5
 CONTEXT_AFTER_COUNT = 5
 SUPPORTING_CONTEXT_EXTRA = 2
 
-HIGHLIGHT_TYPES = ["feel_good", "reversal", "conflict", "sweet", "suspense"]
+HIGHLIGHT_TYPES = ["feel_good", "funny", "reversal", "conflict", "sweet"]
 TEMPLATE_BY_TYPE = {
     "feel_good": "emotion_button",
+    "funny": "emotion_button",
     "reversal": "emotion_button",
     "conflict": "vote_side",
     "sweet": "emotion_button",
-    "suspense": "suspense_lock",
 }
 
 VALID_DECISIONS = {"approve", "reject", "merge", "revise"}
-
-
-def load_env_files(paths: list[Path]) -> dict[str, str]:
-    env: dict[str, str] = {}
-    for path in paths:
-        if not path.exists():
-            continue
-        for raw_line in path.read_text(encoding="utf-8").splitlines():
-            line = raw_line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            env[key.strip()] = value.strip()
-    return env
-
-
-def create_deepseek_client(env: dict[str, str]) -> tuple[OpenAI, str]:
-    api_key = (
-        os.getenv("DEEPSEEK_API_KEY")
-        or env.get("DEEPSEEK_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or env.get("OPENAI_API_KEY")
-    )
-    if not api_key:
-        raise RuntimeError("Missing DEEPSEEK_API_KEY / OPENAI_API_KEY for DeepSeek")
-
-    base_url = os.getenv("DEEPSEEK_BASE_URL") or env.get("DEEPSEEK_BASE_URL")
-    if not base_url:
-        endpoint = os.getenv("DEEPSEEK_ENDPOINT") or env.get("DEEPSEEK_ENDPOINT")
-        if endpoint and endpoint.startswith(("http://", "https://")):
-            base_url = endpoint
-    if not base_url:
-        base_url = "https://api.deepseek.com/v1"
-    elif base_url.rstrip("/") == "https://api.deepseek.com":
-        base_url = "https://api.deepseek.com/v1"
-    model = (
-        os.getenv("DEEPSEEK_MODEL")
-        or env.get("DEEPSEEK_MODEL")
-        or "deepseek-v4-pro"
-    )
-
-    return OpenAI(api_key=api_key, base_url=base_url), model
-
-
 def find_segment_range(
     segments: list[dict[str, Any]], start_ms: int, end_ms: int
 ) -> tuple[int, int]:
@@ -153,7 +105,7 @@ def build_review_system_prompt() -> str:
 
 复核原则：
 1. 高光必须命中情绪峰值。
-2. 如果候选前半段只是铺垫，直接压缩时间区间。
+2. 可以删除无效铺垫，但“语义完整”优先于“极限压缩”。
 3. 如果该候选不够成立，直接 reject。
 4. interactionStartMs / interactionAppearMs / interactionEndMs 要考虑客户端组件持续存在窗口。
 5. interactionStartMs 表示用户可重复点击的交互窗口开始；interactionAppearMs 表示组件真正出现时间，通常应略晚于 startTimeMs。
@@ -165,11 +117,29 @@ def build_review_system_prompt() -> str:
 11. 删除书面化、过度理性、像旁白总结的话，例如“从长计议”“围观后续发展”“期待后续逆袭”这类表达。
 12. 低强度高光（1-2）优先保留轻量浮窗弹幕式话术；高强度高光（4-5）优先保留强情绪、强站队、强爆发的话术。
 13. interactionOptions 应短、准、带情绪，不要长句，不要解释剧情。
+14. 不要把高光压缩成单个称呼、单个感叹词、单个字，或只有结果没有触发原因的残片。
+15. 片段至少要能独立支撑 title 和 description；如果当前时间区间支撑不了文案，就扩时间，或者把文案改弱，不要硬保留夸张标题。
+16. reversal 类型通常要保留“信息揭示/身份变化”与“关键反应”这两部分；funny 类型通常要保留“铺垫/吐槽”与“笑点落锤”；sweet 类型通常要保留“动作/照顾”与“被暖到的反馈”。
+17. feel_good 类型通常要保留“压力或困局”到“转机/反杀/决心落点”的最短完整闭环；conflict 类型通常要保留“冲突挑起”与“站队爆发”的最短完整闭环。
+18. 如果同一候选的前文里才出现真正触发点，而当前支撑字幕只剩反应词，不要继续压短，应回收触发句。
+19. merge 只用于本质上同一情绪峰值的重复候选；如果是同一窗口内时间上明显分离的第二峰值，不要因为同类型就合并掉。
+20. interactionStartMs 通常应等于 startTimeMs，最多只允许略晚，不要晚于 startTimeMs 超过 3 秒；如果只是想让按钮晚一点出现，请后移 interactionAppearMs，不要后移 interactionStartMs。
+21. 你必须复核 intensity，不要机械沿用旧值，也不要默认写 3：
+   - 1 = 轻微共鸣/轻吐槽
+   - 2 = 明确情绪点，但仍是局部小波峰
+   - 3 = 标准高光
+   - 4 = 强情绪峰值，明显值得触发强互动
+   - 5 = 本集最炸裂或最具代表性的极强峰值，极少使用
+22. 如果时间区间被压短、语义强度下降，intensity 也应相应下调；如果补全后形成完整爆发闭环，可以上调。
+23. 强度和客户端表现强绑定：
+   - intensity < 3：客户端只会渲染轻量分组弹幕 / 云朵弹幕
+   - intensity >= 3：客户端才会渲染正式交互组件
+   所以如果这段不值得打断用户注意力，就不要给到 3 以上。
 
 输出要求：
 1. 只输出 JSON 数组，不要输出解释文字，不要使用 markdown 代码块。
 2. 每个元素必须包含字段：
-   candidateIndex, reviewDecision, approved, startTimeMs, endTimeMs, interactionStartMs, interactionAppearMs, interactionEndMs, highlightType, title, description, templateId, interactionOptions, reason, reviewReason, confidence
+   candidateIndex, reviewDecision, approved, startTimeMs, endTimeMs, interactionStartMs, interactionAppearMs, interactionEndMs, highlightType, title, description, intensity, templateId, interactionOptions, reason, reviewReason, confidence
 3. 可选字段：
    supportingSegmentIds, speakerGuess, targetCharacterGuess, mentionedCharacters, characterGuessConfidence, mergeTarget
 4. reviewDecision 只能是: approve, reject, merge, revise
@@ -239,6 +209,8 @@ def build_review_user_prompt(
         f"- 如果和其他候选重复，merge",
         f"- 如果已经足够准确，approve",
         f"- 请把 interactionOptions 改成更像观众会点的一键弹幕，避免太书面、太理性、太像策划文案。",
+        f"- 请同时复核 intensity，确认它是 1-5 里的哪一级，不要默认写 3。",
+        f"- 请保证最终时间区间能独立支撑 title / description，不要只剩一个字、一个称呼或一句失去上下文的反应词。",
     ]
 
     return "\n".join(parts)
@@ -327,7 +299,11 @@ def review_candidates(
     model_override: str = "",
 ) -> list[dict[str, Any]]:
     env = load_env_files(DEFAULT_ENV_FILES)
-    client, default_model = create_deepseek_client(env)
+    client, default_model = create_deepseek_client(
+        env,
+        purpose="highlight review",
+        model_env_keys=("DEEPSEEK_HIGHLIGHT_REVIEW_MODEL",),
+    )
     model = model_override or default_model
 
     reviewed: list[dict[str, Any]] = []
@@ -345,6 +321,7 @@ def review_candidates(
 
             # Propagate fields from original candidate that review doesn't output
             result.setdefault("episodeId", candidate.get("episodeId", ""))
+            result.setdefault("intensity", candidate.get("intensity", 3))
 
             decision = result.get("reviewDecision", "?")
             approved = result.get("approved", False)
@@ -370,7 +347,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="DeepSeek secondary review for highlight candidates."
     )
-    parser.add_argument("input", type=str, help="Path to Seedance candidates JSON")
+    parser.add_argument("input", type=str, help="Path to stage-1 candidates JSON")
     parser.add_argument("-t", "--transcript", required=True, help="Path to transcript JSON")
     parser.add_argument("-o", "--output", type=str, default="", help="Output final candidate JSON path")
     parser.add_argument(

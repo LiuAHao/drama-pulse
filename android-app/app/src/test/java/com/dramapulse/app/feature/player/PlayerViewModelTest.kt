@@ -1,14 +1,21 @@
 package com.dramapulse.app.feature.player
 
 import com.dramapulse.app.core.data.ContentRepository
+import com.dramapulse.app.core.data.BranchCommentPage
+import com.dramapulse.app.core.data.BranchRepository
 import com.dramapulse.app.core.data.DramaListResult
 import com.dramapulse.app.core.data.InteractionRepository
+import com.dramapulse.app.core.data.HighlightHeatReportResult
 import com.dramapulse.app.core.data.InMemoryPlayerUiRepository
 import com.dramapulse.app.core.data.PlayerCommentEntry
 import com.dramapulse.app.core.data.PlayerDanmakuEntry
 import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.data.WatchProgressEntry
+import com.dramapulse.app.core.model.BranchCommentModel
+import com.dramapulse.app.core.model.BranchOptionModel
+import com.dramapulse.app.core.model.BranchTaskModel
+import com.dramapulse.app.core.model.BranchTaskStatus
 import com.dramapulse.app.core.model.DramaCardModel
 import com.dramapulse.app.core.model.EpisodeModel
 import com.dramapulse.app.core.model.HighlightModel
@@ -61,6 +68,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -102,6 +110,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -135,6 +144,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -162,6 +172,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -188,6 +199,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -214,6 +226,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -254,6 +267,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -309,6 +323,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -356,6 +371,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -409,6 +425,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -446,6 +463,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -478,6 +496,7 @@ class PlayerViewModelTest {
             contentRepository = repos.contentRepository,
             progressRepository = repos.progressRepository,
             interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
             playerUiRepository = repos.playerUiRepository,
             playerController = repos.playerController
         )
@@ -499,9 +518,59 @@ class PlayerViewModelTest {
         val contentRepository: FakeContentRepositoryForTest,
         val progressRepository: FakeProgressRepositoryForTest = FakeProgressRepositoryForTest(emptyList()),
         val interactionRepository: InteractionRepository = FakeInteractionRepositoryForTest(),
+        val branchRepository: BranchRepository = FakeBranchRepositoryForPlayerTest(),
         val playerUiRepository: PlayerUiRepository = InMemoryPlayerUiRepository(),
         val playerController: RecordingPlayerController = RecordingPlayerController()
     )
+
+    private class FakeBranchRepositoryForPlayerTest : BranchRepository {
+        override suspend fun getBranchOptions(episodeId: String): List<BranchOptionModel> = emptyList()
+
+        override suspend fun createBranchTask(episodeId: String, userPrompt: String): BranchTaskModel {
+            return BranchTaskModel(
+                id = "player-test-task",
+                status = BranchTaskStatus.PENDING,
+                userPrompt = userPrompt,
+                resultTitle = "",
+                resultHook = "",
+                resultStory = "",
+                storyboard = emptyList(),
+                storyboardImages = emptyList(),
+                likeCount = 0,
+                commentCount = 0
+            )
+        }
+
+        override suspend fun getBranchTask(taskId: String): BranchTaskModel {
+            return BranchTaskModel(
+                id = taskId,
+                status = BranchTaskStatus.PENDING,
+                userPrompt = "",
+                resultTitle = "",
+                resultHook = "",
+                resultStory = "",
+                storyboard = emptyList(),
+                storyboardImages = emptyList(),
+                likeCount = 0,
+                commentCount = 0
+            )
+        }
+
+        override suspend fun likeBranchTask(taskId: String): Int = 0
+
+        override suspend fun createComment(taskId: String, content: String): BranchCommentModel {
+            return BranchCommentModel(id = "comment", content = content, createdAt = "")
+        }
+
+        override suspend fun getComments(taskId: String, page: Int, pageSize: Int): BranchCommentPage {
+            return BranchCommentPage(
+                items = emptyList(),
+                total = 0,
+                page = page,
+                totalPages = 0
+            )
+        }
+    }
 
     private class FakeContentRepositoryForTest(
         private val episodes: List<EpisodeModel>,
@@ -562,6 +631,14 @@ class PlayerViewModelTest {
                 topOption = optionText
             )
         }
+
+        override suspend fun reportDanmakuHeat(
+            episodeId: String,
+            triggerPositionMs: Long,
+            sampleContents: List<String>
+        ): HighlightHeatReportResult {
+            return HighlightHeatReportResult(reportId = "fake-report", status = "ok")
+        }
     }
 
     private class FailingPlayerUiRepository : PlayerUiRepository {
@@ -580,6 +657,7 @@ class PlayerViewModelTest {
             episodeId: String,
             content: String,
             triggerPositionMs: Long,
+            lane: Int,
             createdAtEpochMs: Long
         ): List<PlayerDanmakuEntry> = throw IllegalStateException("弹幕发送失败")
     }

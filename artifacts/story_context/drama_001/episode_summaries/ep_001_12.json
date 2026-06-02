@@ -1,0 +1,30 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_12",
+  "episodeNo": 12,
+  "episodeTitle": "第12集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "四蛋抓到兔子，提议给娘做兔肉和围脖，但担心娘若不同意会变回从前模样。",
+  "keyEvents": [
+    "四蛋抓到一只兔子",
+    "提议晚上吃兔肉",
+    "四蛋说要剥皮做围脖给娘",
+    "四蛋担心娘不同意会变回从前样子"
+  ],
+  "characterChanges": [],
+  "newReveals": [],
+  "openQuestions": [
+    "娘是否会同意用兔皮做围脖？",
+    "娘会不会因此变回从前的样子？"
+  ],
+  "episodeEndingState": "四蛋心中充满担忧",
+  "focusCharacters": [
+    "四蛋",
+    "娘"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 25,
+    "durationMs": 54770
+  }
+}

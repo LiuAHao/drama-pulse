@@ -1,0 +1,38 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_11",
+  "episodeNo": 11,
+  "episodeTitle": "第11集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "羊突然变得温柔开心，主角担心是梦。抢到一只兔子后，大家讨论清蒸还是红烧，但有人想养兔子当朋友。发现兔子价值54文钱，但家里六口人不够吃，对比商城便宜价格，陷入纠结。",
+  "keyEvents": [
+    "羊变得温柔开心",
+    "主角抢到了兔子",
+    "辩论吃兔子还是养兔子",
+    "发现兔子价值54文钱",
+    "对比商城养殖场兔子6文钱一斤"
+  ],
+  "characterChanges": [
+    "羊从原本状态变得温柔开心"
+  ],
+  "newReveals": [
+    "野生放养粗毛兔一斤八两值54文钱",
+    "商城养殖场兔子只要6文钱一斤"
+  ],
+  "openQuestions": [
+    "这是不是一场梦？",
+    "兔子最终会被吃还是被养？",
+    "是否要卖掉兔子？"
+  ],
+  "episodeEndingState": "主角一行人面对兔子的价值与家庭需求，处于是否售卖或食用的犹豫中",
+  "focusCharacters": [
+    "羊",
+    "小子",
+    "兔兔"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 28,
+    "durationMs": 70050
+  }
+}

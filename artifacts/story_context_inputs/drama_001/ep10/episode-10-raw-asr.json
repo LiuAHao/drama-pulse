@@ -1,0 +1,237 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep10/episode-10.mp3",
+  "segment_count": 46,
+  "segments": [
+    {
+      "text": "住手",
+      "start_time": 360,
+      "end_time": 1120
+    },
+    {
+      "text": "嗯哼嗯嗯呃来呃呃",
+      "start_time": 1760,
+      "end_time": 7750
+    },
+    {
+      "text": "四代，你这是干什么呀",
+      "start_time": 8400,
+      "end_time": 10280
+    },
+    {
+      "text": "男儿膝下有黄金",
+      "start_time": 10280,
+      "end_time": 11620
+    },
+    {
+      "text": "怎么能随便给别人跪呢",
+      "start_time": 11620,
+      "end_time": 13200
+    },
+    {
+      "text": "娘啊，对不起啊",
+      "start_time": 13360,
+      "end_time": 15760
+    },
+    {
+      "text": "嘿嘿嘿",
+      "start_time": 15760,
+      "end_time": 16720
+    },
+    {
+      "text": "丑弯弯，你来的正好",
+      "start_time": 16970,
+      "end_time": 18710
+    },
+    {
+      "text": "四代跟我抢兔子",
+      "start_time": 18710,
+      "end_time": 19930
+    },
+    {
+      "text": "你快替我收拾他",
+      "start_time": 19930,
+      "end_time": 21110
+    },
+    {
+      "text": "你说话不算数啊",
+      "start_time": 21110,
+      "end_time": 23600
+    },
+    {
+      "text": "你刚才明明说好",
+      "start_time": 23600,
+      "end_time": 25420
+    },
+    {
+      "text": "如果我从你脚下穿过去",
+      "start_time": 25420,
+      "end_time": 27740
+    },
+    {
+      "text": "你就不告诉我娘的",
+      "start_time": 27740,
+      "end_time": 29960
+    },
+    {
+      "text": "我就说话不算数",
+      "start_time": 29960,
+      "end_time": 31460
+    },
+    {
+      "text": "咋滴，丑娃娃",
+      "start_time": 31460,
+      "end_time": 32950
+    },
+    {
+      "text": "你愣着干什么",
+      "start_time": 32950,
+      "end_time": 33930
+    },
+    {
+      "text": "快替我收拾他",
+      "start_time": 33930,
+      "end_time": 34810
+    },
+    {
+      "text": "不然我就告诉阿乃和爹",
+      "start_time": 34810,
+      "end_time": 36530
+    },
+    {
+      "text": "哼",
+      "start_time": 36810,
+      "end_time": 37410
+    },
+    {
+      "text": "好，很好",
+      "start_time": 37840,
+      "end_time": 40440
+    },
+    {
+      "text": "就是原神那个人渣无止境的偏心向着娘家",
+      "start_time": 40580,
+      "end_time": 44000
+    },
+    {
+      "text": "才让程家一个小屁孩都敢指手画脚",
+      "start_time": 44000,
+      "end_time": 46440
+    },
+    {
+      "text": "直呼我的名字",
+      "start_time": 46440,
+      "end_time": 47820
+    },
+    {
+      "text": "娘我错了",
+      "start_time": 52400,
+      "end_time": 55040
+    },
+    {
+      "text": "兔子我不要了",
+      "start_time": 55120,
+      "end_time": 57240
+    },
+    {
+      "text": "呵呵",
+      "start_time": 57520,
+      "end_time": 58800
+    },
+    {
+      "text": "啊啊啊",
+      "start_time": 60580,
+      "end_time": 62540
+    },
+    {
+      "text": "臭坏坏，你敢打我",
+      "start_time": 63940,
+      "end_time": 65980
+    },
+    {
+      "text": "你叫我什么",
+      "start_time": 66600,
+      "end_time": 68720
+    },
+    {
+      "text": "二姑",
+      "start_time": 68720,
+      "end_time": 69380
+    },
+    {
+      "text": "你你别打了",
+      "start_time": 69380,
+      "end_time": 71080
+    },
+    {
+      "text": "知道我是你二姑",
+      "start_time": 72760,
+      "end_time": 74320
+    },
+    {
+      "text": "我就打你了",
+      "start_time": 74320,
+      "end_time": 75680
+    },
+    {
+      "text": "咋的",
+      "start_time": 75680,
+      "end_time": 77180
+    },
+    {
+      "text": "呜呜，你打我",
+      "start_time": 77180,
+      "end_time": 78830
+    },
+    {
+      "text": "我要告诉阿奶和爹",
+      "start_time": 78830,
+      "end_time": 80390
+    },
+    {
+      "text": "让他们来收拾你",
+      "start_time": 80390,
+      "end_time": 82310
+    },
+    {
+      "text": "嘿嘿，站住",
+      "start_time": 82390,
+      "end_time": 84470
+    },
+    {
+      "text": "你还要咋地",
+      "start_time": 84800,
+      "end_time": 86580
+    },
+    {
+      "text": "兔子放下",
+      "start_time": 86580,
+      "end_time": 87540
+    },
+    {
+      "text": "那是我家四蛋抓的",
+      "start_time": 87540,
+      "end_time": 88940
+    },
+    {
+      "text": "你没资格拿兔子！哼哼",
+      "start_time": 88940,
+      "end_time": 91880
+    },
+    {
+      "text": "我的兔子，嘿嘿嗯",
+      "start_time": 91880,
+      "end_time": 95040
+    },
+    {
+      "text": "啊，以后别人欺负你，你就打回去",
+      "start_time": 113140,
+      "end_time": 117140
+    },
+    {
+      "text": "娘永远是你坚实的后盾啊",
+      "start_time": 117140,
+      "end_time": 119220
+    }
+  ]
+}

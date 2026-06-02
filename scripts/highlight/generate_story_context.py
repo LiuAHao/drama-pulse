@@ -17,58 +17,12 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 from pathlib import Path
 from typing import Any
 
 from openai import OpenAI
 
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_ENV_FILES = [REPO_ROOT / ".env", REPO_ROOT / "server" / ".env"]
-
-
-def load_env_files(paths: list[Path]) -> dict[str, str]:
-    env: dict[str, str] = {}
-    for path in paths:
-        if not path.exists():
-            continue
-        for raw_line in path.read_text(encoding="utf-8").splitlines():
-            line = raw_line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            env[key.strip()] = value.strip()
-    return env
-
-
-def create_context_client(env: dict[str, str]) -> tuple[OpenAI, str]:
-    api_key = (
-        os.getenv("ARK_API_KEY")
-        or env.get("ARK_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or env.get("OPENAI_API_KEY")
-    )
-    if not api_key:
-        raise RuntimeError("Missing ARK_API_KEY / OPENAI_API_KEY for story context generation")
-
-    base_url = (
-        os.getenv("ARK_BASE_URL")
-        or env.get("ARK_BASE_URL")
-        or os.getenv("OPENAI_BASE_URL")
-        or env.get("OPENAI_BASE_URL")
-        or "https://ark.cn-beijing.volces.com/api/v3"
-    )
-    model = (
-        os.getenv("ARK_ENDPOINT")
-        or env.get("ARK_ENDPOINT")
-        or os.getenv("ARK_MODEL")
-        or env.get("ARK_MODEL")
-    )
-    if not model:
-        raise RuntimeError("Missing ARK_ENDPOINT / ARK_MODEL for story context generation")
-
-    return OpenAI(api_key=api_key, base_url=base_url), model
+from deepseek_client import DEFAULT_ENV_FILES, create_deepseek_client, load_env_files
 
 
 def build_system_prompt() -> str:
@@ -145,7 +99,11 @@ def extract_json_object(text: str) -> dict[str, Any]:
 
 def generate_context(transcript: dict[str, Any], model_override: str = "") -> dict[str, Any]:
     env = load_env_files(DEFAULT_ENV_FILES)
-    client, default_model = create_context_client(env)
+    client, default_model = create_deepseek_client(
+        env,
+        purpose="story context generation",
+        model_env_keys=("DEEPSEEK_HIGHLIGHT_CONTEXT_MODEL",),
+    )
     model = model_override or default_model
     response = client.chat.completions.create(
         model=model,

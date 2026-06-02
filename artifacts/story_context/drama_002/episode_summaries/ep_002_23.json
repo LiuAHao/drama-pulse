@@ -1,0 +1,33 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_23",
+  "episodeNo": 23,
+  "episodeTitle": "第23集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "本集围绕一段情感纠葛展开，出现争吵和回忆。角色提及前世逃跑时曾持刀伤人，对方回忆抓捕时对方像小野猫。情绪激烈，关系紧张。",
+  "keyEvents": [
+    "她生气发怒",
+    "回忆起前世逃跑时曾拿刀捅对方",
+    "对方回忆以前抓捕时她像凶狠的小野猫"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "两人有前世纠葛，女主角曾为了逃跑刺伤男主角"
+  ],
+  "openQuestions": [
+    "她为什么生气？",
+    "前世逃跑的原因是什么？",
+    "目前两人的关系状态如何？"
+  ],
+  "episodeEndingState": "冲突仍在持续，双方陷入痛苦回忆，关系未明朗",
+  "focusCharacters": [
+    "她",
+    "我",
+    "他"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 34,
+    "durationMs": 170980
+  }
+}

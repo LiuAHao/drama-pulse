@@ -1,0 +1,132 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep12/episode-12.mp3",
+  "segment_count": 25,
+  "segments": [
+    {
+      "text": "四蛋抓了只兔子",
+      "start_time": 4090,
+      "end_time": 5550
+    },
+    {
+      "text": "今天晚上咱吃兔肉",
+      "start_time": 5550,
+      "end_time": 7170
+    },
+    {
+      "text": "啊！太好了",
+      "start_time": 7600,
+      "end_time": 8720
+    },
+    {
+      "text": "咱们家一年都没有吃过肉了",
+      "start_time": 8720,
+      "end_time": 10840
+    },
+    {
+      "text": "虽然肯定没有我的份",
+      "start_time": 10840,
+      "end_time": 12540
+    },
+    {
+      "text": "不过只要能闻着兔肉香味",
+      "start_time": 12540,
+      "end_time": 14320
+    },
+    {
+      "text": "吃野菜糊糊",
+      "start_time": 14320,
+      "end_time": 15240
+    },
+    {
+      "text": "那也是好的",
+      "start_time": 15240,
+      "end_time": 16280
+    },
+    {
+      "text": "娘，我会剥兔子皮",
+      "start_time": 16800,
+      "end_time": 18520
+    },
+    {
+      "text": "完整的皮毛剥下来",
+      "start_time": 18720,
+      "end_time": 20100
+    },
+    {
+      "text": "可以给娘做一个围脖",
+      "start_time": 20100,
+      "end_time": 21320
+    },
+    {
+      "text": "啊哈啊哈哈",
+      "start_time": 21320,
+      "end_time": 24810
+    },
+    {
+      "text": "这是咋了",
+      "start_time": 24810,
+      "end_time": 25950
+    },
+    {
+      "text": "娘喜欢吃兔肉",
+      "start_time": 25950,
+      "end_time": 27470
+    },
+    {
+      "text": "还要用兔子毛做围脖",
+      "start_time": 27470,
+      "end_time": 29390
+    },
+    {
+      "text": "我要不同意",
+      "start_time": 29390,
+      "end_time": 30670
+    },
+    {
+      "text": "娘会不会变成从前的样子",
+      "start_time": 30670,
+      "end_time": 33370
+    },
+    {
+      "text": "嘿，四蛋，这兔子是你抓的",
+      "start_time": 35120,
+      "end_time": 37600
+    },
+    {
+      "text": "今天晚上多给你分两块啊哈",
+      "start_time": 37600,
+      "end_time": 41000
+    },
+    {
+      "text": "唉，算了算了",
+      "start_time": 41330,
+      "end_time": 42570
+    },
+    {
+      "text": "那群畜生竟然在他头上撒尿",
+      "start_time": 42570,
+      "end_time": 44530
+    },
+    {
+      "text": "先回家给这小子洗个澡吧",
+      "start_time": 44530,
+      "end_time": 46610
+    },
+    {
+      "text": "哎呀，好啦，走回家",
+      "start_time": 46980,
+      "end_time": 49100
+    },
+    {
+      "text": "我没有猜错",
+      "start_time": 54660,
+      "end_time": 56100
+    },
+    {
+      "text": "娘果然是来盯着我们干活的",
+      "start_time": 56340,
+      "end_time": 58860
+    }
+  ]
+}

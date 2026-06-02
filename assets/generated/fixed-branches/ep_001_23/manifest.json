@@ -1,0 +1,17 @@
+{
+  "episodeId": "ep_001_23",
+  "publishedAt": "2026-06-01T17:43:39.255Z",
+  "contentVersion": 2,
+  "optionIds": [
+    "bo_001_01",
+    "bo_001_02"
+  ],
+  "optionUpdatedAtSnapshots": {
+    "bo_001_01": "2026-06-01T17:43:39.255Z",
+    "bo_001_02": "2026-06-01T17:43:39.256Z"
+  },
+  "artifactSignatures": {
+    "bo_001_01": "dc78026092990d51814fa6748064aabde7d94020",
+    "bo_001_02": "cfc8d678d3b3707915a45539101dc7c5c725aec8"
+  }
+}

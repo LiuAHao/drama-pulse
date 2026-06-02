@@ -58,6 +58,7 @@ fun AppNavHost(
             contentRepository = appContainer.contentRepository,
             progressRepository = appContainer.progressRepository,
             interactionRepository = appContainer.interactionRepository,
+            branchRepository = appContainer.branchRepository,
             playerUiRepository = appContainer.playerUiRepository,
             playerController = appContainer.playerController
         )
@@ -184,8 +185,8 @@ fun AppNavHost(
                     viewModel = playerViewModel,
                     playerController = appContainer.playerController,
                     onBack = { navController.popBackStack() },
-                    onNavigateToBranch = { epId ->
-                        navController.navigate(AppRoutes.branchResultRoute(epId))
+                    onNavigateToBranch = { epId, mode, optionId ->
+                        navController.navigate(AppRoutes.branchResultRoute(epId, mode, optionId))
                     },
                     forceReloadOnEnter = false
                 )
@@ -194,15 +195,28 @@ fun AppNavHost(
             composable(
                 route = AppRoutes.BRANCH_RESULT,
                 arguments = listOf(
-                    navArgument("episodeId") { type = NavType.StringType }
+                    navArgument("episodeId") { type = NavType.StringType },
+                    navArgument("mode") {
+                        type = NavType.StringType
+                        defaultValue = "options"
+                    },
+                    navArgument("optionId") {
+                        type = NavType.StringType
+                        nullable = true
+                        defaultValue = null
+                    }
                 )
             ) { backStackEntry ->
                 val episodeId = backStackEntry.arguments?.getString("episodeId") ?: ""
+                val mode = backStackEntry.arguments?.getString("mode") ?: "options"
+                val optionId = backStackEntry.arguments?.getString("optionId")
                 val branchViewModel = remember(episodeId) {
                     BranchViewModel(appContainer.branchRepository)
                 }
                 BranchResultScreen(
                     episodeId = episodeId,
+                    entryMode = mode,
+                    optionId = optionId,
                     viewModel = branchViewModel,
                     onBack = { navController.popBackStack() }
                 )
@@ -269,8 +283,8 @@ fun AppNavHost(
                     viewModel = playerViewModel,
                     playerController = appContainer.playerController,
                     onBack = { navController.popBackStack() },
-                    onNavigateToBranch = { epId ->
-                        navController.navigate(AppRoutes.branchResultRoute(epId))
+                    onNavigateToBranch = { epId, mode, optionId ->
+                        navController.navigate(AppRoutes.branchResultRoute(epId, mode, optionId))
                     },
                     forceReloadOnEnter = true
                 )

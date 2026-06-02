@@ -1,0 +1,132 @@
+{
+  "dramaId": "drama_001",
+  "createdAt": "2026-05-31T14:29:04.236982+00:00",
+  "updatedAt": "2026-05-31T14:32:36.921736+00:00",
+  "status": "completed",
+  "stages": {
+    "transcript": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:31:39.457474+00:00"
+    },
+    "episode_summary": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:31:47.782903+00:00"
+    },
+    "event_timeline": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:31:48.170960+00:00"
+    },
+    "series_overview": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:32:13.882039+00:00"
+    },
+    "tail_snapshot": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:32:36.526361+00:00"
+    },
+    "story_context_package": {
+      "status": "completed",
+      "updatedAt": "2026-05-31T14:32:36.921736+00:00"
+    }
+  },
+  "episodes": {
+    "ep_001_01": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_01.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_01.json"
+    },
+    "ep_001_02": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_02.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_02.json"
+    },
+    "ep_001_03": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_03.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_03.json"
+    },
+    "ep_001_04": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_04.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_04.json"
+    },
+    "ep_001_05": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_05.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_05.json"
+    },
+    "ep_001_06": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_06.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_06.json"
+    },
+    "ep_001_07": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_07.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_07.json"
+    },
+    "ep_001_08": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_08.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_08.json"
+    },
+    "ep_001_09": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_09.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_09.json"
+    },
+    "ep_001_10": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_10.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_10.json"
+    },
+    "ep_001_11": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_11.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_11.json"
+    },
+    "ep_001_12": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_12.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_12.json"
+    },
+    "ep_001_13": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_13.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_13.json"
+    },
+    "ep_001_14": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_14.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_14.json"
+    },
+    "ep_001_15": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_15.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_15.json"
+    },
+    "ep_001_16": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_16.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_16.json"
+    },
+    "ep_001_17": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_17.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_17.json"
+    },
+    "ep_001_18": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_18.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_18.json"
+    },
+    "ep_001_19": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_19.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_19.json"
+    },
+    "ep_001_20": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_20.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_20.json"
+    },
+    "ep_001_21": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_21.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_21.json"
+    },
+    "ep_001_22": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_22.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_22.json"
+    },
+    "ep_001_23": {
+      "transcriptPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/transcripts/ep_001_23.json",
+      "episodeSummaryPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/episode_summaries/ep_001_23.json"
+    }
+  },
+  "artifacts": {
+    "eventTimelinePath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/timeline/event_timeline.json",
+    "seriesOverviewPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/series/series_overview.json",
+    "tailStateSnapshotPath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/tail/tail_state_snapshot.json",
+    "storyContextPackagePath": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context/drama_001/package/story_context_package.json"
+  }
+}

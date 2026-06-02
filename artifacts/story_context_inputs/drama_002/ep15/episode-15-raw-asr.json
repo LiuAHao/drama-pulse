@@ -1,0 +1,132 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep15/episode-15.mp3",
+  "segment_count": 25,
+  "segments": [
+    {
+      "text": "怎么样？医生",
+      "start_time": 499,
+      "end_time": 1580
+    },
+    {
+      "text": "他会不会有事",
+      "start_time": 1860,
+      "end_time": 3020
+    },
+    {
+      "text": "还好送回来的及时",
+      "start_time": 3020,
+      "end_time": 4580
+    },
+    {
+      "text": "啊",
+      "start_time": 8840,
+      "end_time": 9600
+    },
+    {
+      "text": "为什么要救我",
+      "start_time": 10160,
+      "end_time": 11600
+    },
+    {
+      "text": "我死了不是正和你意吗",
+      "start_time": 12250,
+      "end_time": 14250
+    },
+    {
+      "text": "我什么时候说过这样的话",
+      "start_time": 14930,
+      "end_time": 17010
+    },
+    {
+      "text": "你要是再胡说",
+      "start_time": 17330,
+      "end_time": 18730
+    },
+    {
+      "text": "我真的就不理你了",
+      "start_time": 18930,
+      "end_time": 20530
+    },
+    {
+      "text": "主持",
+      "start_time": 25960,
+      "end_time": 26760
+    },
+    {
+      "text": "等你醒过来",
+      "start_time": 28780,
+      "end_time": 30060
+    },
+    {
+      "text": "我跟你说点事",
+      "start_time": 31500,
+      "end_time": 33100
+    },
+    {
+      "text": "你醒啦",
+      "start_time": 65820,
+      "end_time": 66860
+    },
+    {
+      "text": "想摸就摸嘛",
+      "start_time": 68780,
+      "end_time": 70180
+    },
+    {
+      "text": "那么扭扭捏捏的干什么",
+      "start_time": 70900,
+      "end_time": 72700
+    },
+    {
+      "text": "还想摸哪儿啊",
+      "start_time": 72740,
+      "end_time": 74060
+    },
+    {
+      "text": "我头给你摸啊",
+      "start_time": 74740,
+      "end_time": 76060
+    },
+    {
+      "text": "伤口不疼了",
+      "start_time": 80780,
+      "end_time": 81740
+    },
+    {
+      "text": "是不是",
+      "start_time": 81740,
+      "end_time": 82620
+    },
+    {
+      "text": "等你醒过来",
+      "start_time": 83820,
+      "end_time": 85120
+    },
+    {
+      "text": "我跟你说件事",
+      "start_time": 85120,
+      "end_time": 86740
+    },
+    {
+      "text": "唱中高低绿出品公",
+      "start_time": 87280,
+      "end_time": 91840
+    },
+    {
+      "text": "你想跟我说什么",
+      "start_time": 93330,
+      "end_time": 94850
+    },
+    {
+      "text": "我想说",
+      "start_time": 97130,
+      "end_time": 98850
+    },
+    {
+      "text": "你要是我的，我就把你关起来给关在里",
+      "start_time": 100460,
+      "end_time": 106260
+    }
+  ]
+}

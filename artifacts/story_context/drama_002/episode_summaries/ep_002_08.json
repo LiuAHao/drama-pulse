@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_08",
+  "episodeNo": 8,
+  "episodeTitle": "第8集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "某角色因担心江青纸与楚城安在一起导致古风要不回，决定设局骗出江青纸并下毒，但江青纸察觉危险，保持警惕。",
+  "keyEvents": [
+    "某角色抱怨江青纸假装清纯，担心他与楚城安在一起。",
+    "某角色决定一不做二不休，计划骗江青纸出来。",
+    "某角色给江青纸咖啡，并称记得他的喜好。",
+    "某角色威胁要把咖啡液注射到江青纸血管里。",
+    "江青纸怀疑咖啡有毒，表示小心为上。"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "某角色对江青纸有强烈敌意，甚至想置他于死地。",
+    "两人之间存在旧怨（冰冻三尺非一日之寒）。"
+  ],
+  "openQuestions": [
+    "江青纸能否识破并逃脱陷阱？",
+    "咖啡中是否真的有毒？",
+    "楚城安与这件事是否有关？"
+  ],
+  "episodeEndingState": "江青纸面对威胁，保持警惕但危险未解除。",
+  "focusCharacters": [
+    "江青纸"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 31,
+    "durationMs": 156841
+  }
+}

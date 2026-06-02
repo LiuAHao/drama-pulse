@@ -1,6 +1,7 @@
 package com.dramapulse.app.feature.branch
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
+import coil.compose.AsyncImage
 import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.model.BranchTaskModel
 import com.dramapulse.app.ui.component.EmptyPanel
@@ -34,12 +36,14 @@ import com.dramapulse.app.ui.theme.TextSecondary
 @Composable
 fun BranchResultScreen(
     episodeId: String,
+    entryMode: String,
+    optionId: String?,
     viewModel: BranchViewModel,
     onBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(episodeId) {
-        viewModel.onEvent(BranchEvent.LoadOptions(episodeId))
+    LaunchedEffect(episodeId, entryMode, optionId) {
+        viewModel.onEvent(BranchEvent.LoadEntry(episodeId, entryMode, optionId))
     }
 
     val uiState by viewModel.uiState.collectAsState()
@@ -120,7 +124,7 @@ private fun BranchOptionsContent(
             Text(
                 text = "固定分支",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.White
+                color = TextPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -157,7 +161,7 @@ private fun BranchOptionsContent(
             Text(
                 text = "自定义分支",
                 style = MaterialTheme.typography.headlineMedium,
-                color = Color.White
+                color = TextPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
             OutlinedTextField(
@@ -247,6 +251,7 @@ private fun BranchTaskResult(
                     )
                 }
                 items(task.storyboard) { scene ->
+                    val image = task.storyboardImages.find { it.scene == scene.scene }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -254,11 +259,24 @@ private fun BranchTaskResult(
                             .background(MaterialTheme.colorScheme.surface)
                             .padding(12.dp)
                     ) {
-                        Text(
-                            text = "场景 ${scene.scene}：${scene.description}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                text = "场景 ${scene.scene}：${scene.description}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                            if (image != null) {
+                                AsyncImage(
+                                    model = image.imageUrl,
+                                    contentDescription = "分镜场景 ${scene.scene}",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(180.dp)
+                                        .clip(RoundedCornerShape(8.dp)),
+                                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -356,6 +374,12 @@ private fun FixedBranchResult(
     option: BranchOptionModel
 ) {
     val context = LocalContext.current
+    val storyParagraphs = remember(option.resultStory) {
+        option.resultStory
+            .split(Regex("\\n\\s*\\n"))
+            .map { it.trim() }
+            .filter { it.isNotBlank() }
+    }
     val player = remember(option.resultContentUrl) {
         ExoPlayer.Builder(context).build().apply {
             if (option.resultContentUrl.isNotBlank()) {
@@ -372,7 +396,7 @@ private fun FixedBranchResult(
         }
     }
 
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(
             text = option.title,
             style = MaterialTheme.typography.headlineLarge,
@@ -396,10 +420,100 @@ private fun FixedBranchResult(
             )
         }
         if (option.description.isNotBlank()) {
+            ResultSectionCard(
+                title = "分支概述",
+                body = option.description
+            )
+        }
+        if (option.resultHook.isNotBlank()) {
+            ResultSectionCard(
+                title = "钩子",
+                body = option.resultHook,
+                emphasize = true
+            )
+        }
+        if (storyParagraphs.isNotEmpty()) {
+            Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Text(
+                    text = "剧情正文",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                storyParagraphs.forEach { paragraph ->
+                    ResultSectionCard(
+                        title = null,
+                        body = paragraph
+                    )
+                }
+            }
+        }
+        if (option.storyboard.isNotEmpty()) {
             Text(
-                text = option.description,
-                style = MaterialTheme.typography.bodyLarge,
+                text = "分镜",
+                style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
+            )
+            option.storyboard.forEach { scene ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(MaterialTheme.colorScheme.surface)
+                        .border(
+                            width = 1.dp,
+                            color = Divider.copy(alpha = 0.6f),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(12.dp)
+                ) {
+                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                        Text(
+                            text = "场景 ${scene.scene}",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Accent
+                        )
+                        Text(
+                            text = scene.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ResultSectionCard(
+    title: String?,
+    body: String,
+    emphasize: Boolean = false
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 1.dp,
+                color = if (emphasize) Accent.copy(alpha = 0.35f) else Divider.copy(alpha = 0.6f),
+                shape = RoundedCornerShape(12.dp)
+            )
+            .padding(14.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (!title.isNullOrBlank()) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (emphasize) Accent else MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Text(
+                text = body,
+                style = MaterialTheme.typography.bodyMedium,
+                color = if (emphasize) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

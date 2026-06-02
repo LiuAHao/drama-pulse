@@ -17,4 +17,15 @@ class FakeInteractionRepository : InteractionRepository {
             topOption = optionText
         )
     }
+
+    override suspend fun reportDanmakuHeat(
+        episodeId: String,
+        triggerPositionMs: Long,
+        sampleContents: List<String>
+    ): HighlightHeatReportResult {
+        return HighlightHeatReportResult(
+            reportId = "fake_heat_${episodeId}_$triggerPositionMs",
+            status = "pending"
+        )
+    }
 }

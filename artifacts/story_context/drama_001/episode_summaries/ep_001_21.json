@@ -1,0 +1,36 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_21",
+  "episodeNo": 21,
+  "episodeTitle": "第21集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "主角向陈家讨要十八两银子，遭老太太辱骂威胁，主角决定公堂对簿，态度强硬。",
+  "keyEvents": [
+    "老太太辱骂主角是赔钱货并威胁要打人",
+    "主角坚持讨要十八两银子，表示不在意大哥认不认",
+    "主角回应老太太的辱骂，决定公堂见",
+    "老太太试图用大哥（秀才）施压，但主角不为所动"
+  ],
+  "characterChanges": [
+    "主角从原本巴结程家转变为强硬对抗"
+  ],
+  "newReveals": [
+    "原主因有秀才大哥而巴结程家，但被轻视",
+    "主角与陈家之间存在十八两银子的债务纠纷"
+  ],
+  "openQuestions": [
+    "十八两银子的债务具体因何而起？",
+    "老太太与主角的真实亲属关系是什么？",
+    "秀才大哥会介入此事吗？"
+  ],
+  "episodeEndingState": "主角与老太太撕破脸皮，准备对簿公堂",
+  "focusCharacters": [
+    "主角",
+    "老太太（大二姑）"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 38,
+    "durationMs": 91660
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_14",
+  "episodeNo": 14,
+  "episodeTitle": "第14集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "阿志受伤，大哥紧急叫医生到家；丫头和小妈在山里冻了一天，三哥因办事不力被责备。",
+  "keyEvents": [
+    "阿志受伤，众人呼救并送医",
+    "大哥已让医生在家等候",
+    "丫头和小妈在山里冻了一天",
+    "三哥因成事不足败事有余被指责"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "阿志可能因三哥的失误受伤",
+    "丫头和小妈一同被困山中"
+  ],
+  "openQuestions": [
+    "阿志伤势如何？",
+    "丫头和小妈为何会在山里冻一天？",
+    "三哥具体做了哪些事导致失败？"
+  ],
+  "episodeEndingState": "阿志仍处于痛苦中，被人呼叫，局势未明",
+  "focusCharacters": [
+    "阿志",
+    "丫头",
+    "小妈",
+    "三哥",
+    "大哥"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 17,
+    "durationMs": 82420
+  }
+}

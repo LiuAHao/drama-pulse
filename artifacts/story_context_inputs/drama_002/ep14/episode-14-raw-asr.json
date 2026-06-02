@@ -1,0 +1,92 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep14/episode-14.mp3",
+  "segment_count": 17,
+  "segments": [
+    {
+      "text": "快停止",
+      "start_time": 360,
+      "end_time": 1400
+    },
+    {
+      "text": "我们先去医院",
+      "start_time": 9400,
+      "end_time": 11960
+    },
+    {
+      "text": "我们先去医院",
+      "start_time": 11960,
+      "end_time": 13480
+    },
+    {
+      "text": "大哥医生已经在家里了",
+      "start_time": 15300,
+      "end_time": 20460
+    },
+    {
+      "text": "阿志",
+      "start_time": 26180,
+      "end_time": 26940
+    },
+    {
+      "text": "我在你再坚持一会",
+      "start_time": 27980,
+      "end_time": 30020
+    },
+    {
+      "text": "我好马上到家了",
+      "start_time": 30020,
+      "end_time": 31860
+    },
+    {
+      "text": "喂",
+      "start_time": 48700,
+      "end_time": 49340
+    },
+    {
+      "text": "你丫头，你跑哪个山头去了",
+      "start_time": 50780,
+      "end_time": 53140
+    },
+    {
+      "text": "我跟小妈在这山里冻了整整一天了",
+      "start_time": 53220,
+      "end_time": 55740
+    },
+    {
+      "text": "实在不好意思",
+      "start_time": 56430,
+      "end_time": 57790
+    },
+    {
+      "text": "三哥成事不足，败事有余",
+      "start_time": 58030,
+      "end_time": 60510
+    },
+    {
+      "text": "你见不得人以后怎么管理狗头啊",
+      "start_time": 60630,
+      "end_time": 62730
+    },
+    {
+      "text": "就算把骨头给你",
+      "start_time": 62730,
+      "end_time": 63950
+    },
+    {
+      "text": "也算拍下给我回家",
+      "start_time": 63950,
+      "end_time": 65910
+    },
+    {
+      "text": "现在还痛吗",
+      "start_time": 77380,
+      "end_time": 78980
+    },
+    {
+      "text": "呼叫",
+      "start_time": 82180,
+      "end_time": 82780
+    }
+  ]
+}

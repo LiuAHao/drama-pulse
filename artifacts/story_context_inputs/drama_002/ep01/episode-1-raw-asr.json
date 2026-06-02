@@ -1,0 +1,427 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep01/episode-1.mp3",
+  "segment_count": 84,
+  "segments": [
+    {
+      "text": "嗯哼哼",
+      "start_time": 700,
+      "end_time": 2300
+    },
+    {
+      "text": "节哀，您也保重",
+      "start_time": 7120,
+      "end_time": 9200
+    },
+    {
+      "text": "您说这孩子好好的",
+      "start_time": 9440,
+      "end_time": 11790
+    },
+    {
+      "text": "怎么就自杀了呢",
+      "start_time": 11790,
+      "end_time": 14550
+    },
+    {
+      "text": "妈",
+      "start_time": 15590,
+      "end_time": 16190
+    },
+    {
+      "text": "薇薇肯定不是故意要丢下我们的孩子",
+      "start_time": 16630,
+      "end_time": 19910
+    },
+    {
+      "text": "真能演啊",
+      "start_time": 20140,
+      "end_time": 21620
+    },
+    {
+      "text": "分明就是你们四个将我活活勒死",
+      "start_time": 22020,
+      "end_time": 25620
+    },
+    {
+      "text": "爸，你为了得到妈妈留给我的",
+      "start_time": 26200,
+      "end_time": 29240
+    },
+    {
+      "text": "不惜对我下毒手",
+      "start_time": 29560,
+      "end_time": 31680
+    },
+    {
+      "text": "还有我的卫衣",
+      "start_time": 32119,
+      "end_time": 33760
+    },
+    {
+      "text": "贾谊和偶像其实早就和他们串通一气",
+      "start_time": 34230,
+      "end_time": 38190
+    },
+    {
+      "text": "还和江晴雪偷情",
+      "start_time": 38190,
+      "end_time": 39670
+    },
+    {
+      "text": "为的也是强击某种功夫",
+      "start_time": 39950,
+      "end_time": 42150
+    },
+    {
+      "text": "哎，可算是哭完了",
+      "start_time": 42200,
+      "end_time": 44560
+    },
+    {
+      "text": "累死我",
+      "start_time": 44640,
+      "end_time": 45920
+    },
+    {
+      "text": "辛苦了",
+      "start_time": 46600,
+      "end_time": 47320
+    },
+    {
+      "text": "宝贝，回去可以敷眼睛啊",
+      "start_time": 47320,
+      "end_time": 50100
+    },
+    {
+      "text": "嗯",
+      "start_time": 50100,
+      "end_time": 50720
+    },
+    {
+      "text": "静止",
+      "start_time": 52590,
+      "end_time": 53430
+    },
+    {
+      "text": "别怪你爸心狠",
+      "start_time": 54110,
+      "end_time": 55830
+    },
+    {
+      "text": "当初我以为我弄死了你妈",
+      "start_time": 56070,
+      "end_time": 58790
+    },
+    {
+      "text": "公司就全都是我的了",
+      "start_time": 58830,
+      "end_time": 60810
+    },
+    {
+      "text": "结果没有想到他早就立了李书",
+      "start_time": 60810,
+      "end_time": 63830
+    },
+    {
+      "text": "还把股份给了你",
+      "start_time": 63830,
+      "end_time": 66530
+    },
+    {
+      "text": "哎，妈妈不是车祸死的来了",
+      "start_time": 67510,
+      "end_time": 71940
+    },
+    {
+      "text": "该死的都死了",
+      "start_time": 72660,
+      "end_time": 75140
+    },
+    {
+      "text": "哼",
+      "start_time": 75140,
+      "end_time": 75780
+    },
+    {
+      "text": "曾大明",
+      "start_time": 76400,
+      "end_time": 77360
+    },
+    {
+      "text": "以后你可得对我们母女俩好一点",
+      "start_time": 77520,
+      "end_time": 80920
+    },
+    {
+      "text": "晴雪可是你的亲生女儿",
+      "start_time": 81140,
+      "end_time": 83820
+    },
+    {
+      "text": "放心，以后呢",
+      "start_time": 84020,
+      "end_time": 86260
+    },
+    {
+      "text": "你就是我唯一的老婆",
+      "start_time": 87080,
+      "end_time": 89200
+    },
+    {
+      "text": "你就是我唯一的女儿",
+      "start_time": 89200,
+      "end_time": 91340
+    },
+    {
+      "text": "哈哈哈哈哈哈哈哈哈",
+      "start_time": 91340,
+      "end_time": 94320
+    },
+    {
+      "text": "原来你长得跟爸爸在一起",
+      "start_time": 94750,
+      "end_time": 97160
+    },
+    {
+      "text": "根本不是后来加入你的亲戚",
+      "start_time": 97160,
+      "end_time": 99960
+    },
+    {
+      "text": "你们不光害死了我",
+      "start_time": 100040,
+      "end_time": 102560
+    },
+    {
+      "text": "还害死了我妈",
+      "start_time": 102560,
+      "end_time": 104520
+    },
+    {
+      "text": "杀了你，我要杀了你们啊",
+      "start_time": 105420,
+      "end_time": 109940
+    },
+    {
+      "text": "哈哈哈哈哈哈哈哈",
+      "start_time": 110420,
+      "end_time": 115060
+    },
+    {
+      "text": "张星驰",
+      "start_time": 115100,
+      "end_time": 116100
+    },
+    {
+      "text": "楚城安这个恶魔来干什么",
+      "start_time": 126680,
+      "end_time": 129880
+    },
+    {
+      "text": "我都死了，他还不肯放过我",
+      "start_time": 130600,
+      "end_time": 133040
+    },
+    {
+      "text": "活着的时候霸占我的人死了还要霸占我的",
+      "start_time": 133440,
+      "end_time": 137280
+    },
+    {
+      "text": "啊啊啊啊啊啊",
+      "start_time": 149020,
+      "end_time": 152040
+    },
+    {
+      "text": "淳淳阿姨在为我报仇",
+      "start_time": 152040,
+      "end_time": 154860
+    },
+    {
+      "text": "不都是他们逼我的",
+      "start_time": 154940,
+      "end_time": 156760
+    },
+    {
+      "text": "都是他们逼我的",
+      "start_time": 156760,
+      "end_time": 158100
+    },
+    {
+      "text": "啊啊啊啊啊啊啊啊啊啊啊",
+      "start_time": 158340,
+      "end_time": 164060
+    },
+    {
+      "text": "请你",
+      "start_time": 164220,
+      "end_time": 165420
+    },
+    {
+      "text": "Are you oh oh",
+      "start_time": 165540,
+      "end_time": 169860
+    },
+    {
+      "text": "as i was spoken without your love ",
+      "start_time": 170510,
+      "end_time": 173710
+    },
+    {
+      "text": "and nobody else i call my name again ",
+      "start_time": 173910,
+      "end_time": 177910
+    },
+    {
+      "text": "不管生死的重爱啊",
+      "start_time": 178330,
+      "end_time": 182870
+    },
+    {
+      "text": "你都是我的",
+      "start_time": 182870,
+      "end_time": 184030
+    },
+    {
+      "text": "we good good ！ i don't like rivers 尘埃",
+      "start_time": 184190,
+      "end_time": 188950
+    },
+    {
+      "text": "你说什么陪我",
+      "start_time": 188950,
+      "end_time": 192110
+    },
+    {
+      "text": "you just wanna get the ali ",
+      "start_time": 192190,
+      "end_time": 195310
+    },
+    {
+      "text": "住手安哦，阿哲",
+      "start_time": 197760,
+      "end_time": 200520
+    },
+    {
+      "text": "你为什么就不听话呢",
+      "start_time": 202770,
+      "end_time": 205770
+    },
+    {
+      "text": "你为什么就不能乖乖陪在我身边",
+      "start_time": 207210,
+      "end_time": 209710
+    },
+    {
+      "text": "good bye ",
+      "start_time": 209710,
+      "end_time": 210890
+    },
+    {
+      "text": "first ",
+      "start_time": 211520,
+      "end_time": 212160
+    },
+    {
+      "text": "all the time ",
+      "start_time": 212720,
+      "end_time": 214120
+    },
+    {
+      "text": "when you feel ",
+      "start_time": 215400,
+      "end_time": 217400
+    },
+    {
+      "text": "ask me why ",
+      "start_time": 219560,
+      "end_time": 220920
+    },
+    {
+      "text": "而 should f ",
+      "start_time": 223000,
+      "end_time": 224480
+    },
+    {
+      "text": "for reason ",
+      "start_time": 226450,
+      "end_time": 228290
+    },
+    {
+      "text": "我喝了毒药会多看我一眼",
+      "start_time": 228450,
+      "end_time": 234890
+    },
+    {
+      "text": "你为什么要这么做",
+      "start_time": 235500,
+      "end_time": 237100
+    },
+    {
+      "text": "我不看我一眼",
+      "start_time": 237100,
+      "end_time": 238940
+    },
+    {
+      "text": "明明你只是把我当成你的玩物啊",
+      "start_time": 239260,
+      "end_time": 243000
+    },
+    {
+      "text": "永身不能同言",
+      "start_time": 243000,
+      "end_time": 244380
+    },
+    {
+      "text": "爱",
+      "start_time": 244380,
+      "end_time": 245200
+    },
+    {
+      "text": "你那就死",
+      "start_time": 247000,
+      "end_time": 248080
+    },
+    {
+      "text": "同穴",
+      "start_time": 248080,
+      "end_time": 248760
+    },
+    {
+      "text": "啊，原来这个世界最愚蠢的人是我自己",
+      "start_time": 261800,
+      "end_time": 266320
+    },
+    {
+      "text": "抱着真心爱我的人",
+      "start_time": 267210,
+      "end_time": 268970
+    },
+    {
+      "text": "不要为了渣男没",
+      "start_time": 268970,
+      "end_time": 273690
+    },
+    {
+      "text": "still up your mind 褚承恩",
+      "start_time": 276180,
+      "end_time": 281270
+    },
+    {
+      "text": "如果有来世",
+      "start_time": 282910,
+      "end_time": 284150
+    },
+    {
+      "text": "就算你是病娇恶魔",
+      "start_time": 285390,
+      "end_time": 287710
+    },
+    {
+      "text": "我也一定非你不嫁",
+      "start_time": 290120,
+      "end_time": 291840
+    }
+  ]
+}

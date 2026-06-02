@@ -1,0 +1,257 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep03/episode-3.mp3",
+  "segment_count": 50,
+  "segments": [
+    {
+      "text": "天然无污染野蕨菜",
+      "start_time": 0,
+      "end_time": 1800
+    },
+    {
+      "text": "一斤价值十文钱",
+      "start_time": 1800,
+      "end_time": 3660
+    },
+    {
+      "text": "是否售卖",
+      "start_time": 3660,
+      "end_time": 4840
+    },
+    {
+      "text": "呵，这是系统",
+      "start_time": 4840,
+      "end_time": 6960
+    },
+    {
+      "text": "娘，您在灶台干什么",
+      "start_time": 11380,
+      "end_time": 13860
+    },
+    {
+      "text": "这个面板只有我能看见",
+      "start_time": 13860,
+      "end_time": 15900
+    },
+    {
+      "text": "我得找个地方试验一下系统的功能啊",
+      "start_time": 15930,
+      "end_time": 19450
+    },
+    {
+      "text": "这野菜坏了",
+      "start_time": 19450,
+      "end_time": 20410
+    },
+    {
+      "text": "我拿出去扔了",
+      "start_time": 20410,
+      "end_time": 21390
+    },
+    {
+      "text": "娘，你是不是又要去大舅家",
+      "start_time": 21390,
+      "end_time": 24200
+    },
+    {
+      "text": "这些野菜是我跟弟弟们挖了一天才挖来的",
+      "start_time": 24440,
+      "end_time": 27740
+    },
+    {
+      "text": "这已经是家里最后一点吃的了",
+      "start_time": 27740,
+      "end_time": 29780
+    },
+    {
+      "text": "再把这些送走",
+      "start_time": 29780,
+      "end_time": 30920
+    },
+    {
+      "text": "我们我们真的会饿死的",
+      "start_time": 30960,
+      "end_time": 33560
+    },
+    {
+      "text": "宁王宁王",
+      "start_time": 34060,
+      "end_time": 35360
+    },
+    {
+      "text": "这程弯弯的人设未免也太深入人心了",
+      "start_time": 35360,
+      "end_time": 39780
+    },
+    {
+      "text": "哎呀，不是",
+      "start_time": 40130,
+      "end_time": 41450
+    },
+    {
+      "text": "我就是拿出去看一看",
+      "start_time": 41450,
+      "end_time": 42910
+    },
+    {
+      "text": "不是送给程家的啊",
+      "start_time": 42910,
+      "end_time": 44850
+    },
+    {
+      "text": "诶，娘娘，你每次都这么说",
+      "start_time": 45300,
+      "end_time": 48620
+    },
+    {
+      "text": "可你每次都送给他们",
+      "start_time": 48970,
+      "end_time": 50470
+    },
+    {
+      "text": "娘，求你了",
+      "start_time": 50470,
+      "end_time": 51690
+    },
+    {
+      "text": "你还不明白吗",
+      "start_time": 51690,
+      "end_time": 53090
+    },
+    {
+      "text": "大舅他打破了你的脑袋",
+      "start_time": 53290,
+      "end_time": 55250
+    },
+    {
+      "text": "他就是个白眼狼",
+      "start_time": 55250,
+      "end_time": 56590
+    },
+    {
+      "text": "喂不熟的",
+      "start_time": 56590,
+      "end_time": 57730
+    },
+    {
+      "text": "咋的还教训到娘头上了",
+      "start_time": 58710,
+      "end_time": 61270
+    },
+    {
+      "text": "一群小兔崽子",
+      "start_time": 61590,
+      "end_time": 63150
+    },
+    {
+      "text": "是不是还想挨打",
+      "start_time": 63150,
+      "end_time": 64470
+    },
+    {
+      "text": "放手",
+      "start_time": 64750,
+      "end_time": 65710
+    },
+    {
+      "text": "哼，还是原身人设好使",
+      "start_time": 67000,
+      "end_time": 69720
+    },
+    {
+      "text": "大哥，这下家里彻底没吃的了",
+      "start_time": 75600,
+      "end_time": 78040
+    },
+    {
+      "text": "这可怎么办啊",
+      "start_time": 78040,
+      "end_time": 79320
+    },
+    {
+      "text": "趁着太阳还没下山",
+      "start_time": 86600,
+      "end_time": 88120
+    },
+    {
+      "text": "只能再上山挖点野菜了",
+      "start_time": 89020,
+      "end_time": 90940
+    },
+    {
+      "text": "二弟、三弟",
+      "start_time": 91340,
+      "end_time": 92300
+    },
+    {
+      "text": "你们带上篓子",
+      "start_time": 92300,
+      "end_time": 93420
+    },
+    {
+      "text": "四弟，你和慧娘在家",
+      "start_time": 94020,
+      "end_time": 96300
+    },
+    {
+      "text": "娘伤势还没好",
+      "start_time": 96630,
+      "end_time": 97990
+    },
+    {
+      "text": "等他回来照顾好她",
+      "start_time": 98190,
+      "end_time": 99750
+    },
+    {
+      "text": "哦，好的，大哥都被打破头了",
+      "start_time": 99870,
+      "end_time": 102910
+    },
+    {
+      "text": "还想着成家",
+      "start_time": 102910,
+      "end_time": 104150
+    },
+    {
+      "text": "他根本就没有把我们当回事",
+      "start_time": 104390,
+      "end_time": 106630
+    },
+    {
+      "text": "我肚子里还有孩子呢",
+      "start_time": 106790,
+      "end_time": 109030
+    },
+    {
+      "text": "我怎么命这么苦",
+      "start_time": 109400,
+      "end_time": 111480
+    },
+    {
+      "text": "我要碰上这样的婆婆",
+      "start_time": 111720,
+      "end_time": 114160
+    },
+    {
+      "text": "不许这么说",
+      "start_time": 114690,
+      "end_time": 115970
+    },
+    {
+      "text": "娘，他能这么做还不让说吗",
+      "start_time": 115970,
+      "end_time": 118010
+    },
+    {
+      "text": "我刚才就觉得他把野菜糊给我们吃不对劲",
+      "start_time": 118010,
+      "end_time": 120790
+    },
+    {
+      "text": "果然是没人好心",
+      "start_time": 120790,
+      "end_time": 122410
+    }
+  ]
+}

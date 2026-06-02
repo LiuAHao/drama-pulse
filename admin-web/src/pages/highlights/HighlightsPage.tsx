@@ -14,16 +14,16 @@ import type { Highlight, PaginatedData } from '../../shared/types';
 
 const TYPE_OPTIONS = [
   { value: 'feel_good', label: 'feel_good' },
+  { value: 'funny', label: 'funny' },
   { value: 'reversal', label: 'reversal' },
   { value: 'conflict', label: 'conflict' },
   { value: 'sweet', label: 'sweet' },
-  { value: 'suspense', label: 'suspense' },
 ];
 
 const TEMPLATE_OPTIONS = [
   { value: 'emotion_button', label: 'emotion_button' },
   { value: 'vote_side', label: 'vote_side' },
-  { value: 'suspense_lock', label: 'suspense_lock' },
+  { value: 'boost_action', label: 'boost_action' },
 ];
 
 const STATUS_OPTIONS = [
@@ -116,6 +116,66 @@ export function HighlightsPage() {
     onError: () => toast('禁用失败', 'error'),
   });
 
+  const aiReviewMutation = useMutation({
+    mutationFn: (id: string) =>
+      apiRequest<{
+        id: string;
+        status: string;
+        source: string;
+        aiReview: {
+          approved: boolean;
+          reviewDecision: string;
+          reviewReason: string;
+        };
+      }>(`/admin/highlights/${id}/ai-review`, { method: 'POST' }),
+    onSuccess: (result) => {
+      if (result.aiReview.approved) {
+        toast('AI审核完成，已放入已确认列表');
+      } else {
+        toast(
+          `AI审核未通过：${result.aiReview.reviewDecision || '未确认'}${result.aiReview.reviewReason ? ` - ${result.aiReview.reviewReason}` : ''}`,
+          'error',
+        );
+      }
+      queryClient.invalidateQueries({ queryKey: ['admin', 'highlights'] });
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : 'AI审核失败';
+      toast(message, 'error');
+    },
+  });
+
+  const batchAiReviewMutation = useMutation({
+    mutationFn: () => {
+      const params = new URLSearchParams();
+      params.set('page', '1');
+      params.set('pageSize', '1000');
+      if (statusFilter !== 'all') params.set('status', statusFilter);
+      if (episodeIdFilter.trim()) params.set('episodeId', episodeIdFilter.trim());
+      return apiRequest<{
+        total: number;
+        approvedCount: number;
+        failedCount: number;
+        results: Array<{
+          id: string;
+          title: string;
+          approved: boolean;
+          reviewDecision: string;
+          reviewReason: string;
+          error?: string;
+        }>;
+      }>(`/admin/highlights/ai-review-batch?${params.toString()}`, { method: 'POST' });
+    },
+    onSuccess: (result) => {
+      toast(`一键AI审核完成：通过 ${result.approvedCount} 条，未通过/失败 ${result.failedCount} 条`);
+      queryClient.invalidateQueries({ queryKey: ['admin', 'highlights'] });
+    },
+    onError: (error) => {
+      const message = error instanceof Error ? error.message : '一键AI审核失败';
+      toast(message, 'error');
+    },
+  });
+
   // Edit dialog helpers
   function openEdit(h: Highlight) {
     setEditingId(h.id);
@@ -174,6 +234,13 @@ export function HighlightsPage() {
           onChange={(e) => { setEpisodeIdFilter(e.target.value); setPage(1); }}
           className="px-3 py-1.5 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-48"
         />
+        <button
+          onClick={() => batchAiReviewMutation.mutate()}
+          disabled={batchAiReviewMutation.isPending || statusFilter === 'confirmed' || statusFilter === 'disabled'}
+          className="px-3 py-1.5 text-sm rounded-md bg-violet-600 text-white hover:bg-violet-700 disabled:opacity-50 cursor-pointer"
+        >
+          {batchAiReviewMutation.isPending ? '一键AI审核中...' : '一键AI审核'}
+        </button>
       </div>
 
       {/* Table */}
@@ -231,6 +298,15 @@ export function HighlightsPage() {
                         >
                           复核
                         </button>
+                        {h.status === 'candidate' && (
+                          <button
+                            onClick={() => aiReviewMutation.mutate(h.id)}
+                            disabled={aiReviewMutation.isPending}
+                            className="px-2 py-1 text-xs rounded bg-violet-50 text-violet-700 border border-violet-200 hover:bg-violet-100 disabled:opacity-50 cursor-pointer"
+                          >
+                            {aiReviewMutation.isPending ? 'AI审核中...' : 'AI审核'}
+                          </button>
+                        )}
                         <button
                           onClick={() => openEdit(h)}
                           className="px-2 py-1 text-xs rounded border border-gray-300 hover:bg-gray-50 cursor-pointer"

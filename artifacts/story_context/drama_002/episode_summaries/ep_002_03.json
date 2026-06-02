@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_03",
+  "episodeNo": 3,
+  "episodeTitle": "第3集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "病娇囚禁女主角，威胁要挖其眼睛使其只属于自己；女主角决心反抗并调教病娇，但对方已察觉其逃跑意图。",
+  "keyEvents": [
+    "病娇囚禁女主角并威胁挖眼泡酒",
+    "女主角内心决定反抗，不能以受辱方式重活",
+    "女主角试图逃跑被病娇识破"
+  ],
+  "characterChanges": [
+    "女主角从容忍转向主动调教病娇"
+  ],
+  "newReveals": [
+    "病娇有极端占有欲，不惜用暴力控制",
+    "女主角重生后仍面临被囚禁的困境"
+  ],
+  "openQuestions": [
+    "女主角能否成功调教病娇？",
+    "病娇是否会真的伤害女主角？"
+  ],
+  "episodeEndingState": "女主角逃跑意图暴露，危机升级",
+  "focusCharacters": [
+    "楚尘",
+    "病娇（未具名）"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 34,
+    "durationMs": 123359
+  }
+}

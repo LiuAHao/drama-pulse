@@ -1,0 +1,272 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep07/episode-7.mp3",
+  "segment_count": 53,
+  "segments": [
+    {
+      "text": "慢着，谁让你坐了，跪下",
+      "start_time": 5300,
+      "end_time": 8260
+    },
+    {
+      "text": "别以为你现在怀孕了",
+      "start_time": 10940,
+      "end_time": 12880
+    },
+    {
+      "text": "翅膀就硬了",
+      "start_time": 12880,
+      "end_time": 14040
+    },
+    {
+      "text": "我告诉你",
+      "start_time": 14040,
+      "end_time": 15160
+    },
+    {
+      "text": "在这个家",
+      "start_time": 15160,
+      "end_time": 16379
+    },
+    {
+      "text": "你是地位最低",
+      "start_time": 18260,
+      "end_time": 20900
+    },
+    {
+      "text": "你根本就不配上桌吃饭",
+      "start_time": 20940,
+      "end_time": 22900
+    },
+    {
+      "text": "只能吃最难吃最脏的东西",
+      "start_time": 23100,
+      "end_time": 25340
+    },
+    {
+      "text": "不然就给我饿着",
+      "start_time": 25580,
+      "end_time": 27120
+    },
+    {
+      "text": "儿子知道了",
+      "start_time": 27120,
+      "end_time": 28340
+    },
+    {
+      "text": "元神真是造孽",
+      "start_time": 28340,
+      "end_time": 29940
+    },
+    {
+      "text": "同样是女人",
+      "start_time": 29960,
+      "end_time": 31020
+    },
+    {
+      "text": "何苦为难女人",
+      "start_time": 31020,
+      "end_time": 32560
+    },
+    {
+      "text": "嗯，让你做就做",
+      "start_time": 32820,
+      "end_time": 34620
+    },
+    {
+      "text": "让你吃就吃",
+      "start_time": 34620,
+      "end_time": 35680
+    },
+    {
+      "text": "哪那么多废话",
+      "start_time": 35680,
+      "end_time": 36760
+    },
+    {
+      "text": "怎么着让我递到你手里啊",
+      "start_time": 36760,
+      "end_time": 38280
+    },
+    {
+      "text": "儿媳不敢",
+      "start_time": 38280,
+      "end_time": 39180
+    },
+    {
+      "text": "我服，咋突然变得这么陌生呢",
+      "start_time": 41620,
+      "end_time": 44300
+    },
+    {
+      "text": "啊，你掐我干啥",
+      "start_time": 47160,
+      "end_time": 49600
+    },
+    {
+      "text": "我看是不是做梦",
+      "start_time": 50110,
+      "end_time": 51590
+    },
+    {
+      "text": "可那不是在做梦",
+      "start_time": 51990,
+      "end_time": 53470
+    },
+    {
+      "text": "是真的",
+      "start_time": 53590,
+      "end_time": 54710
+    },
+    {
+      "text": "快点吃",
+      "start_time": 55150,
+      "end_time": 56030
+    },
+    {
+      "text": "哦哦嗯额娘",
+      "start_time": 56390,
+      "end_time": 59800
+    },
+    {
+      "text": "我我吃这一小块就行",
+      "start_time": 59800,
+      "end_time": 61320
+    },
+    {
+      "text": "那剩下一半干什么呀",
+      "start_time": 61320,
+      "end_time": 62460
+    },
+    {
+      "text": "送给程家吃啊",
+      "start_time": 62460,
+      "end_time": 63800
+    },
+    {
+      "text": "喏，我吃我吃",
+      "start_time": 63800,
+      "end_time": 65440
+    },
+    {
+      "text": "这死丫的",
+      "start_time": 65680,
+      "end_time": 66900
+    },
+    {
+      "text": "我吃的都不吃",
+      "start_time": 66900,
+      "end_time": 68400
+    },
+    {
+      "text": "就这么愿意当受气的小媳妇",
+      "start_time": 68560,
+      "end_time": 70840
+    },
+    {
+      "text": "这大米饭又香又甜",
+      "start_time": 82980,
+      "end_time": 85020
+    },
+    {
+      "text": "真是太好吃了",
+      "start_time": 85460,
+      "end_time": 87180
+    },
+    {
+      "text": "我们现在是不是该去程家了",
+      "start_time": 88050,
+      "end_time": 90050
+    },
+    {
+      "text": "去程家干啥",
+      "start_time": 90210,
+      "end_time": 91490
+    },
+    {
+      "text": "讨债",
+      "start_time": 91530,
+      "end_time": 92450
+    },
+    {
+      "text": "阿奶说大舅拿走了爹的抚恤银",
+      "start_time": 92840,
+      "end_time": 96940
+    },
+    {
+      "text": "一共22",
+      "start_time": 96940,
+      "end_time": 98200
+    },
+    {
+      "text": "就要把这笔账讨回来",
+      "start_time": 98200,
+      "end_time": 100720
+    },
+    {
+      "text": "没错，大舅还打伤了娘的脑袋",
+      "start_time": 100940,
+      "end_time": 103340
+    },
+    {
+      "text": "我们要去讨个说法",
+      "start_time": 103340,
+      "end_time": 104700
+    },
+    {
+      "text": "程家现在哪能拿出20元",
+      "start_time": 104780,
+      "end_time": 106980
+    },
+    {
+      "text": "还不是算账的时哦",
+      "start_time": 107100,
+      "end_time": 110820
+    },
+    {
+      "text": "坐下",
+      "start_time": 112940,
+      "end_time": 113780
+    },
+    {
+      "text": "果然",
+      "start_time": 121160,
+      "end_time": 121960
+    },
+    {
+      "text": "娘根本就没有想让我们去逞强",
+      "start_time": 122640,
+      "end_time": 124920
+    },
+    {
+      "text": "没错，娘一心想着",
+      "start_time": 125550,
+      "end_time": 127310
+    },
+    {
+      "text": "大舅家怎么可能死心",
+      "start_time": 127310,
+      "end_time": 129470
+    },
+    {
+      "text": "这会儿生气劲头过了",
+      "start_time": 129630,
+      "end_time": 131370
+    },
+    {
+      "text": "她还是会回到之前的样子",
+      "start_time": 131370,
+      "end_time": 133470
+    },
+    {
+      "text": "三弟",
+      "start_time": 134040,
+      "end_time": 134800
+    },
+    {
+      "text": "明天我们这样",
+      "start_time": 135360,
+      "end_time": 136440
+    }
+  ]
+}

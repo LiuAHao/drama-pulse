@@ -1,0 +1,35 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_10",
+  "episodeNo": 10,
+  "episodeTitle": "第10集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "四代因抢兔子被丑弯弯要求跪下并从脚下穿过，承诺不告诉母亲，但对方食言，要求丑弯弯收拾四代，冲突升级。",
+  "keyEvents": [
+    "四代跪地喊娘并道歉",
+    "丑弯弯被要求收拾四代",
+    "四代指责对方说话不算数",
+    "对方承认说话不算数并挑衅",
+    "丑弯弯被催促动手"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "四代因抢兔子可能被母亲惩罚，下跪求饶",
+    "丑弯弯与四代存在冲突关系"
+  ],
+  "openQuestions": [
+    "丑弯弯会如何收拾四代？",
+    "四代抢兔子的原因是什么？",
+    "四代的母亲是否会知道这件事？"
+  ],
+  "episodeEndingState": "四代面临被丑弯弯惩罚的威胁，冲突白热化。",
+  "focusCharacters": [
+    "四代",
+    "丑弯弯"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 46,
+    "durationMs": 118860
+  }
+}

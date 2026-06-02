@@ -1,0 +1,222 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep09/episode-9.mp3",
+  "segment_count": 43,
+  "segments": [
+    {
+      "text": "什么",
+      "start_time": 0,
+      "end_time": 640
+    },
+    {
+      "text": "晕倒了",
+      "start_time": 880,
+      "end_time": 1880
+    },
+    {
+      "text": "在哪儿啊",
+      "start_time": 1880,
+      "end_time": 2760
+    },
+    {
+      "text": "就在就在城外的袁茂山",
+      "start_time": 2760,
+      "end_time": 4660
+    },
+    {
+      "text": "你赶紧过来啊",
+      "start_time": 4660,
+      "end_time": 5760
+    },
+    {
+      "text": "袁茂山",
+      "start_time": 6160,
+      "end_time": 7880
+    },
+    {
+      "text": "前世他们把我勒死死了",
+      "start_time": 8930,
+      "end_time": 11050
+    },
+    {
+      "text": "看来这一世",
+      "start_time": 11410,
+      "end_time": 12810
+    },
+    {
+      "text": "他们的计划提起他们跑学校",
+      "start_time": 13130,
+      "end_time": 16090
+    },
+    {
+      "text": "茂山：干嘛呀",
+      "start_time": 16090,
+      "end_time": 17130
+    },
+    {
+      "text": "来这当然是爬山了",
+      "start_time": 17540,
+      "end_time": 19240
+    },
+    {
+      "text": "你怎么那么多废话",
+      "start_time": 19240,
+      "end_time": 20520
+    },
+    {
+      "text": "赶紧过来",
+      "start_time": 20520,
+      "end_time": 21620
+    },
+    {
+      "text": "好好好",
+      "start_time": 21900,
+      "end_time": 22840
+    },
+    {
+      "text": "那你们一定要等我",
+      "start_time": 22840,
+      "end_time": 24420
+    },
+    {
+      "text": "搞定",
+      "start_time": 25620,
+      "end_time": 26500
+    },
+    {
+      "text": "江青只说他马上就会过来",
+      "start_time": 26540,
+      "end_time": 29460
+    },
+    {
+      "text": "焦小姐",
+      "start_time": 36260,
+      "end_time": 37220
+    },
+    {
+      "text": "你要出去",
+      "start_time": 37550,
+      "end_time": 38590
+    },
+    {
+      "text": "嗯，我去买菜",
+      "start_time": 38870,
+      "end_time": 40510
+    },
+    {
+      "text": "我给程圆做点饭吃",
+      "start_time": 40510,
+      "end_time": 42110
+    },
+    {
+      "text": "你说你要给楚爷做饭哦",
+      "start_time": 42110,
+      "end_time": 45630
+    },
+    {
+      "text": "她知道我给别的男人做过饭",
+      "start_time": 46130,
+      "end_time": 48690
+    },
+    {
+      "text": "有点不开心",
+      "start_time": 48690,
+      "end_time": 49690
+    },
+    {
+      "text": "所以我哄哄她",
+      "start_time": 50010,
+      "end_time": 51290
+    },
+    {
+      "text": "你放心，我不会再逃跑了",
+      "start_time": 53040,
+      "end_time": 55560
+    },
+    {
+      "text": "江小姐还真是让人捉摸不透",
+      "start_time": 56020,
+      "end_time": 58200
+    },
+    {
+      "text": "上次你被楚爷抓回来",
+      "start_time": 58200,
+      "end_time": 60040
+    },
+    {
+      "text": "为了逃跑",
+      "start_time": 60040,
+      "end_time": 60980
+    },
+    {
+      "text": "可连烧了地库十辆车呢",
+      "start_time": 60980,
+      "end_time": 63020
+    },
+    {
+      "text": "怎么了？怎么了",
+      "start_time": 74240,
+      "end_time": 76380
+    },
+    {
+      "text": "江青纸",
+      "start_time": 76380,
+      "end_time": 77260
+    },
+    {
+      "text": "你怎么还没有过来哦",
+      "start_time": 77260,
+      "end_time": 78980
+    },
+    {
+      "text": "我路上有点堵车",
+      "start_time": 78980,
+      "end_time": 80440
+    },
+    {
+      "text": "马上就到了",
+      "start_time": 80600,
+      "end_time": 81640
+    },
+    {
+      "text": "你让爸妈一定坚持住啊",
+      "start_time": 81640,
+      "end_time": 83190
+    },
+    {
+      "text": "行吧，那你快点",
+      "start_time": 83190,
+      "end_time": 84950
+    },
+    {
+      "text": "我知道了我知道了",
+      "start_time": 84990,
+      "end_time": 86230
+    },
+    {
+      "text": "你们一定要等我啊",
+      "start_time": 86230,
+      "end_time": 87510
+    },
+    {
+      "text": "这一世的游戏才刚刚开始",
+      "start_time": 89640,
+      "end_time": 93080
+    },
+    {
+      "text": "你们害死我妈害死我",
+      "start_time": 93480,
+      "end_time": 95800
+    },
+    {
+      "text": "这笔账我好好跟你讲",
+      "start_time": 96040,
+      "end_time": 100090
+    },
+    {
+      "text": "现在我的手上已经有了一把最锋利剑",
+      "start_time": 100990,
+      "end_time": 105270
+    }
+  ]
+}

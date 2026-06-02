@@ -1,0 +1,38 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_23",
+  "episodeNo": 23,
+  "episodeTitle": "第23集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "二弟三弟从程家带回鸡汤和大量物品，娘与程家闹掰并抢夺了东西，众人感叹娘转性，准备吃饭时邻居闻到肉香。",
+  "keyEvents": [
+    "二弟三弟从程家拿回一大锅鸡汤和一大堆东西",
+    "娘与程家闹掰并抢了东西",
+    "有人感叹娘太厉害",
+    "娘让众人洗手吃饭",
+    "邻居闻到肉香味"
+  ],
+  "characterChanges": [
+    "娘似乎转性，变得强势"
+  ],
+  "newReveals": [
+    "娘和程家关系破裂并发生冲突"
+  ],
+  "openQuestions": [
+    "娘为何突然与程家闹掰？",
+    "程家是否会报复？",
+    "娘转性是否真实？"
+  ],
+  "episodeEndingState": "一家人准备吃饭，邻居闻到肉香味，气氛暂时平和但暗藏后续冲突",
+  "focusCharacters": [
+    "娘",
+    "二弟",
+    "三弟",
+    "大嫂"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 49,
+    "durationMs": 130380
+  }
+}

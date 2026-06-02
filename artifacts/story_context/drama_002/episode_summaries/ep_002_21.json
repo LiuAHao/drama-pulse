@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_002",
+  "episodeId": "ep_002_21",
+  "episodeNo": 21,
+  "episodeTitle": "第21集",
+  "mainGenre": "情感",
+  "generator": "llm",
+  "summary": "一场冲突中，某人辩解是对方拿自己的手打自己，随后发生拖拽和辱骂，最终有人被认出是楚正安，并提到江北所有人都敬重他。",
+  "keyEvents": [
+    "某人辩解对方拿自己的手打自己，声称是被迫的",
+    "双方发生拖拽和言语辱骂，涉及大叔、江叔、强雪等人",
+    "有人认出冲突一方是楚正安，并提及江北所有人都敬重他"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "楚正安的身份在冲突中被揭露"
+  ],
+  "openQuestions": [
+    "冲突的起因是什么？",
+    "楚正安与在场其他人的具体关系是什么？",
+    "后续冲突将如何发展？"
+  ],
+  "episodeEndingState": "冲突中认出楚正安，气氛紧张",
+  "focusCharacters": [
+    "楚正安",
+    "大叔",
+    "江叔",
+    "强雪"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 27,
+    "durationMs": 94460
+  }
+}

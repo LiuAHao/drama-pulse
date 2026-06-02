@@ -1,0 +1,162 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_002/ep10/episode-10.mp3",
+  "segment_count": 31,
+  "segments": [
+    {
+      "text": "紫烟，你回来了",
+      "start_time": 5979,
+      "end_time": 7200
+    },
+    {
+      "text": "阿哲今天在家都干什么饭呀",
+      "start_time": 7200,
+      "end_time": 8900
+    },
+    {
+      "text": "他中午就出去了",
+      "start_time": 9220,
+      "end_time": 10380
+    },
+    {
+      "text": "现在还没回来",
+      "start_time": 10380,
+      "end_time": 11580
+    },
+    {
+      "text": "他又去找你爹去买了",
+      "start_time": 13480,
+      "end_time": 16520
+    },
+    {
+      "text": "他说出去给你买菜",
+      "start_time": 17160,
+      "end_time": 18680
+    },
+    {
+      "text": "晚上回来给你做饭吃",
+      "start_time": 18840,
+      "end_time": 20640
+    },
+    {
+      "text": "买菜这种鬼话你也信的",
+      "start_time": 21440,
+      "end_time": 23320
+    },
+    {
+      "text": "朱爷，朱爷都别跟着我",
+      "start_time": 24080,
+      "end_time": 26200
+    },
+    {
+      "text": "哎，福波",
+      "start_time": 34760,
+      "end_time": 35800
+    },
+    {
+      "text": "你站门口干吗呀",
+      "start_time": 36040,
+      "end_time": 37440
+    },
+    {
+      "text": "江小姐，你总算是回来了",
+      "start_time": 37520,
+      "end_time": 39660
+    },
+    {
+      "text": "楚爷以为你去找别的男人了",
+      "start_time": 39660,
+      "end_time": 41480
+    },
+    {
+      "text": "急着开车出去了啊",
+      "start_time": 41480,
+      "end_time": 43400
+    },
+    {
+      "text": "我，我这刚买完菜回了趟学校",
+      "start_time": 44300,
+      "end_time": 47340
+    },
+    {
+      "text": "唉",
+      "start_time": 49260,
+      "end_time": 50260
+    },
+    {
+      "text": "服务今天几号",
+      "start_time": 52280,
+      "end_time": 53520
+    },
+    {
+      "text": "3月16怎么了",
+      "start_time": 53840,
+      "end_time": 55600
+    },
+    {
+      "text": "3月16",
+      "start_time": 55760,
+      "end_time": 57120
+    },
+    {
+      "text": "去年的今天",
+      "start_time": 57410,
+      "end_time": 58330
+    },
+    {
+      "text": "楚城安被仇家暗算受了重伤",
+      "start_time": 58330,
+      "end_time": 60530
+    },
+    {
+      "text": "所以我才找到机会要逃出去",
+      "start_time": 60610,
+      "end_time": 62490
+    },
+    {
+      "text": "他走了",
+      "start_time": 62490,
+      "end_time": 63290
+    },
+    {
+      "text": "不去找她",
+      "start_time": 63690,
+      "end_time": 64670
+    },
+    {
+      "text": "诶诶，焦小姐",
+      "start_time": 64670,
+      "end_time": 66370
+    },
+    {
+      "text": "这两个人今天怎么回事",
+      "start_time": 66530,
+      "end_time": 68530
+    },
+    {
+      "text": "阿兄赶紧派人去找楚爷",
+      "start_time": 68720,
+      "end_time": 70840
+    },
+    {
+      "text": "最近抢了龙氏集团的大鱼",
+      "start_time": 70840,
+      "end_time": 72460
+    },
+    {
+      "text": "对方正找机会报复",
+      "start_time": 72460,
+      "end_time": 73980
+    },
+    {
+      "text": "别真出了什么事",
+      "start_time": 73980,
+      "end_time": 75120
+    },
+    {
+      "text": "好早上车",
+      "start_time": 75120,
+      "end_time": 76630
+    }
+  ]
+}

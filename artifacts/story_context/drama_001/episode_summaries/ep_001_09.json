@@ -1,0 +1,34 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_09",
+  "episodeNo": 9,
+  "episodeTitle": "第9集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "主角卖黑牛肝菌赚158文，共211文，购100斤大米。表哥抢夺主角的兔子，双方发生冲突。",
+  "keyEvents": [
+    "主角售卖天然野生黑牛肝菌得158文钱，总钱数达211文。",
+    "主角用211文钱购买100斤大米，够家人吃两个月。",
+    "表哥强行抢夺主角的兔子，并威胁‘不给裤子是我老大’。"
+  ],
+  "characterChanges": [
+    "主角与表哥因兔子抢夺发生直接冲突，关系恶化。"
+  ],
+  "newReveals": [
+    "主角通过采集野生菌获得收入，具备生存能力。",
+    "表哥蛮横霸道，抢夺他人财物。"
+  ],
+  "openQuestions": [
+    "表哥为何抢夺主角的兔子？",
+    "主角能否保住兔子或其他资源？"
+  ],
+  "episodeEndingState": "主角与表哥因兔子争执不休，局势紧张。",
+  "focusCharacters": [
+    "主角（四蛋？）",
+    "表哥"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 41,
+    "durationMs": 97380
+  }
+}

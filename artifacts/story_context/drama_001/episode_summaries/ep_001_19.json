@@ -1,0 +1,38 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_19",
+  "episodeNo": 19,
+  "episodeTitle": "第19集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "阿奶因撞了陈弯弯、抢其肚子并打人，还与三哥三娘等人发生激烈冲突。三哥带来黛玉娘试图调解，但黛玉娘声称不会打死他们，冲突持续。",
+  "keyEvents": [
+    "阿奶撞了陈弯弯并动手打人",
+    "阿奶抢夺陈弯弯的肚子并打骂宝贝孙子",
+    "阿奶指使儿子去偷鸡",
+    "三哥将黛玉娘带到现场试图调解",
+    "黛玉娘表示不会打死三哥三娘等人"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "阿奶的暴力行为包括撞人、抢肚子、打孙子",
+    "黛玉娘作为调解人出现"
+  ],
+  "openQuestions": [
+    "黛玉娘能否平息冲突？",
+    "大山鸟的出现意味着什么？"
+  ],
+  "episodeEndingState": "冲突在黛玉娘介入后仍在持续，气氛紧张",
+  "focusCharacters": [
+    "阿奶",
+    "陈弯弯",
+    "三哥",
+    "三娘",
+    "黛玉娘",
+    "大山鸟"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 47,
+    "durationMs": 130280
+  }
+}

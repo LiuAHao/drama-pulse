@@ -76,11 +76,11 @@ import com.dramapulse.app.ui.theme.ReversalPrimary
 import com.dramapulse.app.ui.theme.SweetPrimary
 
 // Reversal 组件的手调参数集中放这里，方便直接在 Android Studio 里反复改。
-private val REVERSAL_CORE_SIZE = 128.dp
-private val REVERSAL_BUTTON_SIZE = 200.dp
+private val REVERSAL_CORE_SIZE = 212.dp
+private val REVERSAL_BUTTON_SIZE = 100.dp
 private val REVERSAL_BUTTON_HORIZONTAL_PADDING = 40.dp
-private val REVERSAL_BUTTON_VERTICAL_PADDING = 40.dp
-private val REVERSAL_HERO_BOTTOM_PADDING = 118.dp
+private val REVERSAL_BUTTON_VERTICAL_PADDING = 10.dp
+private val REVERSAL_HERO_BOTTOM_PADDING = 72.dp
 private const val REVERSAL_BURST_LIMIT = 24
 private const val REVERSAL_BURST_MIN_ROTATION = -24
 private const val REVERSAL_BURST_MAX_ROTATION = 24
@@ -145,6 +145,7 @@ fun HighlightOverlay(
     interactionEnabled: Boolean,
     interactionClickCount: Int,
     onInteractionClick: (String, String) -> Unit,
+    quickPromptConsumedOption: String? = null,
     modifier: Modifier = Modifier
 ) {
     val soundPlayer = rememberHighlightSoundPlayer()
@@ -171,6 +172,7 @@ fun HighlightOverlay(
                 QuickSendPrompt(
                     highlight = highlight,
                     interactionEnabled = interactionEnabled,
+                    consumedOptionText = quickPromptConsumedOption,
                     onClick = { option ->
                         if (soundPlayer.playIfIdle(highlight.type)) {
                             onInteractionClick(highlight.id, option)
@@ -275,6 +277,7 @@ private fun rememberHighlightSoundPlayer(): HighlightSoundPlayer {
 private fun QuickSendPrompt(
     highlight: HighlightModel,
     interactionEnabled: Boolean,
+    consumedOptionText: String?,
     onClick: (String) -> Unit
 ) {
     val options = remember(highlight.id, highlight.interactionOptions) {
@@ -299,6 +302,7 @@ private fun QuickSendPrompt(
                     row.forEach { option ->
                         QuickPromptBubble(
                             text = option.text,
+                            consumed = consumedOptionText == option.text,
                             enabled = interactionEnabled,
                             onClick = { onClick(option.text) }
                         )
@@ -312,6 +316,7 @@ private fun QuickSendPrompt(
 @Composable
 private fun QuickPromptBubble(
     text: String,
+    consumed: Boolean,
     enabled: Boolean,
     onClick: () -> Unit
 ) {
@@ -328,6 +333,7 @@ private fun QuickPromptBubble(
 
     Box(
         modifier = Modifier
+            .alpha(if (consumed) 0f else 1f)
             .widthIn(min = quickPromptBubbleMinWidth(text), max = quickPromptBubbleMaxWidth(text))
             .height(60.dp)
             .graphicsLayer {
@@ -335,7 +341,7 @@ private fun QuickPromptBubble(
                 scaleX = scale
                 scaleY = scale
             }
-            .clickable(enabled = enabled, onClick = onClick),
+            .clickable(enabled = enabled && !consumed, onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Image(

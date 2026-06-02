@@ -1,0 +1,32 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_04",
+  "episodeNo": 4,
+  "episodeTitle": "第4集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "主角发现商城系统，通过挖野菜换铜钱购买物品，确保不会饿死。随后发现邻居赵大嫂子偷自家稻子，当众揭发其偷粮食补贴娘家的行为。",
+  "keyEvents": [
+    "主角发现商城系统，可通过挖野菜换铜钱购物",
+    "主角开始挖野菜以换取铜钱",
+    "主角发现赵大嫂子偷自家稻子",
+    "主角当众揭发赵大嫂子偷粮食补贴娘家"
+  ],
+  "characterChanges": [
+    "主角开始积极利用系统挖野菜求生",
+    "主角与赵大嫂子产生直接冲突"
+  ],
+  "newReveals": [
+    "主角获得商城系统，可以交换物资"
+  ],
+  "openQuestions": [],
+  "episodeEndingState": "主角正在与赵大嫂子对峙，揭发其偷窃行为",
+  "focusCharacters": [
+    "主角",
+    "赵大嫂子"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 39,
+    "durationMs": 98390
+  }
+}

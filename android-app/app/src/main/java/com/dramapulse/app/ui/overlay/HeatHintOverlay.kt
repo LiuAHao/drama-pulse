@@ -14,13 +14,18 @@ import androidx.compose.ui.unit.dp
 import com.dramapulse.app.core.model.HighlightModel
 import com.dramapulse.app.ui.theme.Accent
 
+private const val MIN_HEAT_HINT_TOTAL_COUNT = 6
+
 @Composable
 fun HeatHintOverlay(
     highlight: HighlightModel?,
     modifier: Modifier = Modifier
 ) {
     val stats = highlight?.stats
-    val showHeat = stats != null && stats.heatLevel > 0
+    val showHeat = highlight?.isQuickPrompt != true &&
+        stats != null &&
+        stats.heatLevel > 0 &&
+        stats.totalCount >= MIN_HEAT_HINT_TOTAL_COUNT
 
     if (showHeat) {
         val currentStats = stats ?: return
@@ -28,7 +33,7 @@ fun HeatHintOverlay(
             modifier = modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            contentAlignment = Alignment.TopEnd
+            contentAlignment = Alignment.TopCenter
         ) {
             Row(
                 modifier = Modifier
@@ -47,12 +52,18 @@ fun HeatHintOverlay(
                     style = MaterialTheme.typography.labelMedium,
                     color = Accent
                 )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "累计 ${currentStats.totalCount} 次点击",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = Color.White.copy(alpha = 0.76f)
+                )
                 if (currentStats.topOption.isNotEmpty()) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
                         text = currentStats.topOption,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = Color.White.copy(alpha = 0.7f)
+                        style = MaterialTheme.typography.labelSmall,
+                        color = Color.White.copy(alpha = 0.62f)
                     )
                 }
             }

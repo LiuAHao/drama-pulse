@@ -1,0 +1,212 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep20/episode-20.mp3",
+  "segment_count": 41,
+  "segments": [
+    {
+      "text": "昨天把元身打得头破血流",
+      "start_time": 2119,
+      "end_time": 4420
+    },
+    {
+      "text": "今天抢四蛋的兔子",
+      "start_time": 4420,
+      "end_time": 6120
+    },
+    {
+      "text": "还把二狗和三牛绑起来",
+      "start_time": 6150,
+      "end_time": 8090
+    },
+    {
+      "text": "现在竟然还狮子大开口",
+      "start_time": 8090,
+      "end_time": 9830
+    },
+    {
+      "text": "既然要算账",
+      "start_time": 9830,
+      "end_time": 10890
+    },
+    {
+      "text": "那就好好算算",
+      "start_time": 10890,
+      "end_time": 11950
+    },
+    {
+      "text": "你竟敢放过他们",
+      "start_time": 11950,
+      "end_time": 13430
+    },
+    {
+      "text": "惯子如害子",
+      "start_time": 13560,
+      "end_time": 14960
+    },
+    {
+      "text": "你就这么惯着他们吧",
+      "start_time": 14960,
+      "end_time": 16600
+    },
+    {
+      "text": "迟早这两个小孩都给你闯出大祸来",
+      "start_time": 16880,
+      "end_time": 20690
+    },
+    {
+      "text": "那你觉得应该如何呢",
+      "start_time": 20690,
+      "end_time": 22610
+    },
+    {
+      "text": "哼，照我说",
+      "start_time": 22610,
+      "end_time": 24070
+    },
+    {
+      "text": "就该他们绑在树上",
+      "start_time": 24070,
+      "end_time": 25910
+    },
+    {
+      "text": "饿他们个几天几夜",
+      "start_time": 25960,
+      "end_time": 27740
+    },
+    {
+      "text": "自然就老实了",
+      "start_time": 27740,
+      "end_time": 29040
+    },
+    {
+      "text": "我自己的儿子",
+      "start_time": 29040,
+      "end_time": 30080
+    },
+    {
+      "text": "我自己教育",
+      "start_time": 30080,
+      "end_time": 31220
+    },
+    {
+      "text": "轮不到外人指手画脚",
+      "start_time": 31220,
+      "end_time": 32960
+    },
+    {
+      "text": "这大山娘今天怎么有点不对劲",
+      "start_time": 33320,
+      "end_time": 36620
+    },
+    {
+      "text": "唐二姑娘可是你亲娘能是外人吗",
+      "start_time": 36620,
+      "end_time": 39650
+    },
+    {
+      "text": "你这话说的可真让娘伤心",
+      "start_time": 39650,
+      "end_time": 41660
+    },
+    {
+      "text": "从昨天大哥打破了我脑袋开始",
+      "start_time": 41660,
+      "end_time": 43720
+    },
+    {
+      "text": "我就不是成家人了",
+      "start_time": 43720,
+      "end_time": 45000
+    },
+    {
+      "text": "一只大母鸡而已",
+      "start_time": 45000,
+      "end_time": 46240
+    },
+    {
+      "text": "要我2年级",
+      "start_time": 46240,
+      "end_time": 47240
+    },
+    {
+      "text": "我可没见过哪家人会这么对待外嫁的闺女",
+      "start_time": 47640,
+      "end_time": 51040
+    },
+    {
+      "text": "这只老母鸡是不值二两银子",
+      "start_time": 51820,
+      "end_time": 54100
+    },
+    {
+      "text": "可它能生蛋",
+      "start_time": 54100,
+      "end_time": 55100
+    },
+    {
+      "text": "10年生的蛋咋还卖不了二两银子",
+      "start_time": 55220,
+      "end_time": 58340
+    },
+    {
+      "text": "行",
+      "start_time": 58900,
+      "end_time": 59540
+    },
+    {
+      "text": "那就算他二两",
+      "start_time": 59780,
+      "end_time": 61340
+    },
+    {
+      "text": "陈芝麻烂谷子事我也不想说了",
+      "start_time": 62090,
+      "end_time": 64849
+    },
+    {
+      "text": "就说去年吧",
+      "start_time": 64849,
+      "end_time": 66010
+    },
+    {
+      "text": "大山爹战死的22蓄银全被大哥借走",
+      "start_time": 66010,
+      "end_time": 69450
+    },
+    {
+      "text": "除去今天老母鸡还回来的二两银子",
+      "start_time": 69660,
+      "end_time": 72240
+    },
+    {
+      "text": "还差十八两银子",
+      "start_time": 72240,
+      "end_time": 73700
+    },
+    {
+      "text": "你们程家打算什么时候还给我",
+      "start_time": 73740,
+      "end_time": 76740
+    },
+    {
+      "text": "你欠债还钱天经地义",
+      "start_time": 76740,
+      "end_time": 80280
+    },
+    {
+      "text": "我是不介意去找县令大人去告上一状",
+      "start_time": 81000,
+      "end_time": 84200
+    },
+    {
+      "text": "就是不知道我那秀才大哥",
+      "start_time": 85530,
+      "end_time": 88570
+    },
+    {
+      "text": "会不会因为二两银子就被叫上公堂丢人呢",
+      "start_time": 88650,
+      "end_time": 92250
+    }
+  ]
+}

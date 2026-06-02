@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Seedance initial screening for Drama Pulse highlight candidates.
+DeepSeek stage-1 screening for Drama Pulse highlight candidates.
 
-Reads a transcript JSON, splits into overlapping windows, calls Seedance (ARK-compatible)
+Reads a transcript JSON, splits into overlapping windows, calls DeepSeek
 to identify high-recall highlight candidates.
 
 Usage:
-    python detect_highlights.py transcript.json -o seedance_candidates.json
+    python detect_highlights.py transcript.json -o stage1_candidates.json
     python detect_highlights.py transcript.json -o out.json --window-size 20 --overlap 4
 """
 
@@ -14,7 +14,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from pathlib import Path
@@ -22,12 +21,9 @@ from typing import Any
 
 from openai import OpenAI
 
+from deepseek_client import DEFAULT_ENV_FILES, create_deepseek_client, load_env_files
 from story_context_utils import load_story_context_file, merge_transcript_with_story_context
 from validate_candidates import validate_candidates_payload
-
-
-REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_ENV_FILES = [REPO_ROOT / ".env", REPO_ROOT / "server" / ".env"]
 
 DEFAULT_WINDOW_SIZE = 24
 DEFAULT_OVERLAP = 4
@@ -36,59 +32,14 @@ PREFERRED_MIN_DURATION_MS = 3000
 PREFERRED_MAX_DURATION_MS = 12000
 ABSOLUTE_MAX_DURATION_MS = 22000
 
-HIGHLIGHT_TYPES = ["feel_good", "reversal", "conflict", "sweet", "suspense"]
+HIGHLIGHT_TYPES = ["feel_good", "funny", "reversal", "conflict", "sweet"]
 TEMPLATE_BY_TYPE = {
     "feel_good": "emotion_button",
+    "funny": "emotion_button",
     "reversal": "emotion_button",
     "conflict": "vote_side",
     "sweet": "emotion_button",
-    "suspense": "suspense_lock",
 }
-
-
-def load_env_files(paths: list[Path]) -> dict[str, str]:
-    env: dict[str, str] = {}
-    for path in paths:
-        if not path.exists():
-            continue
-        for raw_line in path.read_text(encoding="utf-8").splitlines():
-            line = raw_line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            key, value = line.split("=", 1)
-            env[key.strip()] = value.strip()
-    return env
-
-
-def create_seedance_client(env: dict[str, str]) -> tuple[OpenAI, str]:
-    api_key = (
-        os.getenv("ARK_API_KEY")
-        or env.get("ARK_API_KEY")
-        or os.getenv("OPENAI_API_KEY")
-        or env.get("OPENAI_API_KEY")
-    )
-    if not api_key:
-        raise RuntimeError("Missing ARK_API_KEY / OPENAI_API_KEY for Seedance")
-
-    base_url = (
-        os.getenv("ARK_BASE_URL")
-        or env.get("ARK_BASE_URL")
-        or os.getenv("OPENAI_BASE_URL")
-        or env.get("OPENAI_BASE_URL")
-        or "https://ark.cn-beijing.volces.com/api/v3"
-    )
-    model = (
-        os.getenv("ARK_ENDPOINT")
-        or env.get("ARK_ENDPOINT")
-        or os.getenv("ARK_MODEL")
-        or env.get("ARK_MODEL")
-    )
-    if not model:
-        raise RuntimeError("Missing ARK_ENDPOINT / ARK_MODEL for Seedance")
-
-    return OpenAI(api_key=api_key, base_url=base_url), model
-
-
 def chunk_segments(
     segments: list[dict[str, Any]], window_size: int, overlap: int
 ) -> list[tuple[int, int]]:
@@ -114,7 +65,7 @@ def format_segments(segments: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
-def build_seedance_system_prompt() -> str:
+def build_detection_system_prompt() -> str:
     types_str = ", ".join(HIGHLIGHT_TYPES)
     mapping_str = json.dumps(TEMPLATE_BY_TYPE, ensure_ascii=False)
     return f"""你是 Drama Pulse 的短剧高光识别助手。
@@ -131,18 +82,34 @@ def build_seedance_system_prompt() -> str:
 1. 优先识别情绪峰值，不要识别背景铺垫。
 2. 单条高光尽量控制在 3 到 12 秒。
 3. 优先使用 1 到 3 个连续 segment 组成高光。
-4. 同一窗口中最多输出 1 到 2 条最有价值的候选。
+4. 同一窗口通常输出 1 到 2 条；如果存在时间上明显分离、且类型不同或情绪功能不同的第二峰值，可放宽到 3 条。
 5. conflict 类型优先抓争吵、翻脸、打骂、拒绝、站队。
 6. feel_good 类型优先抓转机、反杀、发现希望、承诺落点。
-7. 不要输出与定义无关的类型。
-8. startTimeMs / endTimeMs 必须来自给定 segment 的真实时间范围。
-9. 如果没有明显高光，返回空数组 []。
-10. supportingSegmentIds 请尽量填写，只列出真正支撑该高光的 segmentId。
-11. 如果真正的高光只发生在大段中的后半句或某一句，只截取那几句。
-12. 如果同一窗口中既有铺垫又有爆发，优先标爆发点，不要标铺垫段。
-13. 请结合 episodeSummary、角色关系摘要和 mainGenre 理解人物立场，不要只根据单句台词机械判断。
-14. interactionOptions 要像观众会点的一键弹幕，优先短、直接、有共鸣，避免书面化或过度理性表达。
-15. 低强度高光（1-2）优先生成轻量吐槽/共鸣式选项；高强度高光（4-5）优先生成带站队、爆发、情绪宣泄感的选项。
+7. funny 类型优先抓荒诞反差、嘴硬翻车、过度震惊、人物吐槽、自带弹幕感的好笑反应。
+8. reversal 类型优先抓身份突变、信息反转、前后认知骤变、观众会本能喊“啊？”“卧槽”的转折瞬间。
+9. sweet 类型优先抓保护、靠近、被暖到、关系软化、牺牲与照顾带来的温情落点。
+10. 高光片段必须语义完整，不要只截单个称呼、单个感叹词或一个字；至少保留“触发句 + 关键反应”。
+11. 如果窗口后半段出现明确生存转机、关系落点或喜剧爆点，不要只因为前面已经有强冲突就漏掉后面的第二峰值。
+12. 不要输出与定义无关的类型。
+13. startTimeMs / endTimeMs 必须来自给定 segment 的真实时间范围。
+14. 如果没有明显高光，返回空数组 []。
+15. supportingSegmentIds 请尽量填写，只列出真正支撑该高光的 segmentId。
+16. 如果真正的高光只发生在大段中的后半句或某一句，可以压缩，但仍要保证语义完整。
+17. 如果同一窗口中既有铺垫又有爆发，优先标爆发点，不要标铺垫段。
+18. 请结合 episodeSummary、角色关系摘要和 mainGenre 理解人物立场，不要只根据单句台词机械判断。
+19. interactionOptions 要像观众会点的一键弹幕，优先短、直接、有共鸣，避免书面化或过度理性表达。
+20. 低强度高光（1-2）优先生成轻量吐槽/共鸣式选项；高强度高光（4-5）优先生成带站队、爆发、情绪宣泄感的选项。
+21. intensity 必须认真区分，不要默认写 3：
+   - 1 = 轻微共鸣/轻吐槽，不足以承载重组件
+   - 2 = 明确有情绪点，但更像局部小波峰
+   - 3 = 标准高光，适合常规按钮与组件触发
+   - 4 = 强情绪峰值，观众明显想点、想喊、想站队
+   - 5 = 本集最炸裂或最标志性的极强峰值，应非常克制使用
+22. 只有当该片段明显强于一般高光时才给 4-5；轻微温情、短促吐槽、信息不完整的片段不要给高分。
+23. 强度和客户端表现要对应：
+   - intensity < 3：只会走轻量分组弹幕 / 云朵弹幕，不会上中心交互组件
+   - intensity >= 3：才会走正式交互组件
+   因此不要把只适合轻量飘过的片段误标成 3 以上。
 
 输出要求：
 1. 只输出 JSON 数组，不要输出解释文字，不要使用 markdown 代码块。
@@ -155,7 +122,7 @@ def build_seedance_system_prompt() -> str:
 6. intensity 为 1 到 5 整数。"""
 
 
-def build_seedance_user_prompt(
+def build_detection_user_prompt(
     transcript: dict[str, Any],
     main_chunk: list[dict[str, Any]],
     prev_context: list[dict[str, Any]],
@@ -241,8 +208,8 @@ def detect_chunk(
     prev_context = all_segments[prev_start:start_idx]
     next_context = all_segments[end_idx:next_end]
 
-    system = build_seedance_system_prompt()
-    user = build_seedance_user_prompt(transcript, main_chunk, prev_context, next_context)
+    system = build_detection_system_prompt()
+    user = build_detection_user_prompt(transcript, main_chunk, prev_context, next_context)
 
     response = client.chat.completions.create(
         model=model,
@@ -317,7 +284,11 @@ def detect_candidates(
     transcript: dict[str, Any], window_size: int, overlap: int
 ) -> list[dict[str, Any]]:
     env = load_env_files(DEFAULT_ENV_FILES)
-    client, model = create_seedance_client(env)
+    client, model = create_deepseek_client(
+        env,
+        purpose="highlight stage-1 screening",
+        model_env_keys=("DEEPSEEK_HIGHLIGHT_DETECT_MODEL",),
+    )
 
     all_segments = transcript["segments"]
     windows = chunk_segments(all_segments, window_size=window_size, overlap=overlap)
@@ -340,7 +311,7 @@ def detect_candidates(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Seedance initial screening for highlight candidates."
+        description="DeepSeek stage-1 screening for highlight candidates."
     )
     parser.add_argument("input", type=str, help="Path to transcript JSON")
     parser.add_argument("-o", "--output", type=str, default="", help="Output candidates JSON path")
@@ -364,7 +335,10 @@ def main() -> int:
         print("Error: transcript JSON missing 'segments' field", file=sys.stderr)
         return 1
 
-    print(f"Seedance screening: {len(transcript['segments'])} segments, window={args.window_size}, overlap={args.overlap}")
+    print(
+        f"DeepSeek stage-1 screening: {len(transcript['segments'])} segments, "
+        f"window={args.window_size}, overlap={args.overlap}"
+    )
     try:
         candidates = detect_candidates(transcript, window_size=args.window_size, overlap=args.overlap)
     except Exception as exc:
@@ -375,11 +349,11 @@ def main() -> int:
         output_path = Path(args.output)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         output_path.write_text(json.dumps(candidates, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"Saved {len(candidates)} Seedance candidates to: {output_path}")
+        print(f"Saved {len(candidates)} DeepSeek stage-1 candidates to: {output_path}")
     else:
         print(json.dumps(candidates, ensure_ascii=False, indent=2))
 
-    print(f"Seedance screening complete: {len(candidates)} candidates")
+    print(f"DeepSeek stage-1 screening complete: {len(candidates)} candidates")
     return 0
 
 

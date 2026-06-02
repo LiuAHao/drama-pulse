@@ -143,6 +143,11 @@ class RemoteFirstPlayerUiRepositoryTest {
         ): ApiResponse<DanmakuMessageDto> {
             throw IllegalStateException("server rejected danmaku")
         }
+
+        override suspend fun createDanmakuHeatReport(
+            request: com.dramapulse.app.core.model.remote.CreateDanmakuHeatReportRequest
+        ): ApiResponse<com.dramapulse.app.core.model.remote.DanmakuHeatReportDto> =
+            throw UnsupportedOperationException()
     }
 }
 

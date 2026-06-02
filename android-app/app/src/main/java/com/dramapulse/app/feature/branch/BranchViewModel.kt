@@ -34,6 +34,7 @@ enum class BranchScreenState {
 
 sealed class BranchEvent {
     data class LoadOptions(val episodeId: String) : BranchEvent()
+    data class LoadEntry(val episodeId: String, val mode: String, val optionId: String?) : BranchEvent()
     data class SelectOption(val option: BranchOptionModel) : BranchEvent()
     data class CreateCustomTask(val prompt: String) : BranchEvent()
     data class LikeTask(val taskId: String) : BranchEvent()
@@ -51,6 +52,7 @@ class BranchViewModel(
     fun onEvent(event: BranchEvent) {
         when (event) {
             is BranchEvent.LoadOptions -> loadOptions(event.episodeId)
+            is BranchEvent.LoadEntry -> loadEntry(event.episodeId, event.mode, event.optionId)
             is BranchEvent.SelectOption -> selectOption(event.option)
             is BranchEvent.CreateCustomTask -> createCustomTask(event.prompt)
             is BranchEvent.LikeTask -> likeTask(event.taskId)
@@ -77,6 +79,53 @@ class BranchViewModel(
                         isLoadingComments = false,
                         errorMessage = null
                     )
+                }
+            } catch (e: Exception) {
+                _uiState.update {
+                    it.copy(
+                        screenState = BranchScreenState.TASK_FAILED,
+                        errorMessage = e.message ?: "加载失败"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun loadEntry(episodeId: String, mode: String, optionId: String?) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(screenState = BranchScreenState.LOADING_OPTIONS) }
+            try {
+                val options = branchRepository.getBranchOptions(episodeId)
+                val baseState = BranchUiState(
+                    screenState = BranchScreenState.SHOWING_OPTIONS,
+                    activeEpisodeId = episodeId,
+                    branchOptions = options,
+                    selectedFixedOption = null,
+                    branchTask = null,
+                    canInteractWithTask = false,
+                    comments = emptyList(),
+                    commentTotal = 0,
+                    isLoadingComments = false,
+                    errorMessage = null
+                )
+
+                _uiState.value = when (mode) {
+                    "fixed" -> {
+                        val selected = options.firstOrNull { it.id == optionId } ?: options.firstOrNull()
+                        if (selected != null) {
+                            baseState.copy(
+                                screenState = BranchScreenState.TASK_SUCCESS,
+                                selectedFixedOption = selected
+                            )
+                        } else {
+                            baseState.copy(
+                                screenState = BranchScreenState.TASK_FAILED,
+                                errorMessage = "未找到分支内容"
+                            )
+                        }
+                    }
+                    "custom" -> baseState
+                    else -> baseState
                 }
             } catch (e: Exception) {
                 _uiState.update {

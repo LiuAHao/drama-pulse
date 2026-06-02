@@ -2,10 +2,10 @@
 """
 Validate and normalize highlight candidate JSON.
 
-Supports both Seedance initial candidates and DeepSeek-reviewed candidates.
+Supports both DeepSeek stage-1 candidates and DeepSeek-reviewed candidates.
 
 Input:
-- JSON array from detect_highlights.py (Seedance) or review_highlights.py (DeepSeek)
+- JSON array from detect_highlights.py (DeepSeek stage-1) or review_highlights.py (DeepSeek review)
 
 Output:
 - normalized candidate JSON array (rejected candidates filtered out)
@@ -24,20 +24,20 @@ from pathlib import Path
 from typing import Any
 
 
-HIGHLIGHT_TYPES = {"feel_good", "reversal", "conflict", "sweet", "suspense"}
+HIGHLIGHT_TYPES = {"feel_good", "funny", "reversal", "conflict", "sweet"}
 TEMPLATE_BY_TYPE = {
     "feel_good": "emotion_button",
+    "funny": "emotion_button",
     "reversal": "emotion_button",
     "conflict": "vote_side",
     "sweet": "emotion_button",
-    "suspense": "suspense_lock",
 }
 DEFAULT_OPTIONS_BY_TYPE = {
     "feel_good": ["爽了", "继续", "太顶了"],
+    "funny": ["笑死了", "哈哈哈", "太逗了"],
     "reversal": ["啊？", "没想到", "细思极恐"],
     "conflict": ["别忍", "开怼", "站她"],
     "sweet": ["磕到了", "太甜了", "锁死"],
-    "suspense": ["不对劲", "有坑", "继续看"],
 }
 
 VALID_DECISIONS = {"approve", "reject", "merge", "revise"}
@@ -45,6 +45,7 @@ FINAL_PASS_DECISIONS = {"approve", "revise"}
 
 DEFAULT_INTERACTION_APPEAR_OFFSET_MS = 600
 DEFAULT_INTERACTION_END_EXTRA_MS = 1500
+MAX_INTERACTION_START_DELAY_MS = 3000
 MAX_INTERACTION_APPEAR_OFFSET_MS = 3000
 MAX_INTERACTION_END_EXTRA_MS = 3000
 
@@ -55,22 +56,33 @@ def map_visual_effect_type(highlight_type: str, intensity: int) -> str:
     if intensity == 3:
         return {
             "feel_good": "reaction_chip",
+            "funny": "danmaku_float",
             "reversal": "reaction_chip",
             "conflict": "vote_pulse",
             "sweet": "heart_hint",
-            "suspense": "suspense_hint",
         }[highlight_type]
     return {
         "feel_good": "burst_cheer",
+        "funny": "burst_cheer",
         "reversal": "shock_flash",
         "conflict": "impact_vote_wave",
         "sweet": "heart_frame_bloom",
-        "suspense": "countdown_lock",
     }[highlight_type]
 
 
 class CandidateValidationError(ValueError):
     """Raised when candidate payload cannot be normalized safely."""
+
+
+def clamp_interaction_start_ms(
+    start_time_ms: int,
+    end_time_ms: int,
+    interaction_start_ms: int | None,
+) -> int:
+    if interaction_start_ms is None:
+        return start_time_ms
+    max_start_ms = min(end_time_ms, start_time_ms + MAX_INTERACTION_START_DELAY_MS)
+    return max(start_time_ms, min(int(interaction_start_ms), max_start_ms))
 
 
 def clamp_interaction_appear_ms(
@@ -204,7 +216,11 @@ def normalize_candidate(candidate: dict[str, Any], index: int) -> dict[str, Any]
     interaction_appear = candidate.get("interactionAppearMs")
     interaction_end = candidate.get("interactionEndMs")
     if interaction_start is not None and interaction_end is not None:
-        interaction_start_ms = int(interaction_start)
+        interaction_start_ms = clamp_interaction_start_ms(
+            start_time_ms,
+            end_time_ms,
+            int(interaction_start),
+        )
         interaction_end_ms = int(interaction_end)
         result["interactionStartMs"] = interaction_start_ms
         result["interactionAppearMs"] = clamp_interaction_appear_ms(
@@ -281,7 +297,7 @@ def validate_review_fields(candidate: dict[str, Any], index: int) -> None:
     # Interaction window should cover or be adjacent to highlight window
     start_ms = candidate.get("startTimeMs", 0)
     end_ms = candidate.get("endTimeMs", 0)
-    if interaction_start is not None and interaction_start > start_ms + 3000:
+    if interaction_start is not None and interaction_start > start_ms + MAX_INTERACTION_START_DELAY_MS:
         raise CandidateValidationError(
             f"candidate[{index}] interactionStartMs too far from startTimeMs"
         )

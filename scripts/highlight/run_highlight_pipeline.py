@@ -38,7 +38,7 @@ def main() -> int:
     episode_no = args.episode_id.split("_")[-1]
     transcript_path = output_dir / f"episode-{int(episode_no):d}-transcript.json"
     story_context_path = output_dir / f"episode-{int(episode_no):d}-story-context.json"
-    seedance_path = output_dir / f"episode-{int(episode_no):d}-seedance-candidates.json"
+    stage1_path = output_dir / f"episode-{int(episode_no):d}-deepseek-stage1-candidates.json"
     reviewed_path = output_dir / f"episode-{int(episode_no):d}-reviewed-raw.json"
     final_path = output_dir / f"episode-{int(episode_no):d}-final-candidates.json"
 
@@ -61,12 +61,12 @@ def main() -> int:
         str(SCRIPT_DIR / "detect_highlights.py"),
         str(transcript_path),
         "--story-context", str(story_context_path),
-        "-o", str(seedance_path),
+        "-o", str(stage1_path),
     ])
     run_step([
         sys.executable,
         str(SCRIPT_DIR / "review_highlights.py"),
-        str(seedance_path),
+        str(stage1_path),
         "-t", str(transcript_path),
         "--story-context", str(story_context_path),
         "--save-reviewed", str(reviewed_path),
@@ -85,7 +85,7 @@ def main() -> int:
     print(f"Pipeline complete for {args.episode_id}")
     print(f"  transcript: {transcript_path}")
     print(f"  story context: {story_context_path}")
-    print(f"  seedance: {seedance_path}")
+    print(f"  deepseek stage-1: {stage1_path}")
     print(f"  reviewed: {reviewed_path}")
     print(f"  final: {final_path}")
     return 0

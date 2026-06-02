@@ -2,6 +2,8 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { FastifyInstance } from 'fastify';
 import { buildTestApp, TEST_DATABASE_URL } from '../helpers/app.js';
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs/promises';
+import path from 'path';
 
 const prisma = new PrismaClient({
   datasources: {
@@ -29,6 +31,11 @@ describe('GET /episodes/:episodeId/branch-options', () => {
     expect(body.code).toBe(0);
     expect(body.data.length).toBe(2);
     expect(body.data[0].title).toBeDefined();
+    expect(body.data[0].generatedPayloadPath).toBeDefined();
+    expect(body.data[0].resultHook).toBeDefined();
+    expect(body.data[0].resultStory).toBeDefined();
+    expect(body.data[0].storyboardJson).toBeDefined();
+    expect(body.data[0].shotPromptJson).toBeDefined();
   });
 
   it('should return empty array for non-final episode', async () => {
@@ -37,6 +44,69 @@ describe('GET /episodes/:episodeId/branch-options', () => {
 
     const body = res.json();
     expect(body.data.length).toBe(0);
+  });
+
+  it('should ignore stale sidecar artifacts and fall back to database fields', async () => {
+    const refreshRes = await app.inject({
+      method: 'POST',
+      url: '/admin/episodes/ep_002_23/branch-options/refresh',
+      headers: {
+        authorization: 'Bearer test-admin-token',
+        host: '192.168.1.88:8787',
+      },
+    });
+    expect(refreshRes.statusCode).toBe(200);
+
+    const artifactPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_002_23/bo_002_01.json',
+    );
+    const raw = await fs.readFile(artifactPath, 'utf-8');
+    const artifact = JSON.parse(raw);
+    artifact.branchOptionUpdatedAtSnapshot = '1999-01-01T00:00:00.000Z';
+    artifact.resultStory = 'stale-sidecar-should-not-be-used';
+    await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/episodes/ep_002_23/branch-options',
+      headers: { host: '192.168.1.88:8787' },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data[0].resultStory).toBe('');
+    expect(body.data[0].generatedPayloadPath).toBe('');
+  });
+
+  it('should ignore sidecar artifacts that fail signature validation', async () => {
+    const refreshRes = await app.inject({
+      method: 'POST',
+      url: '/admin/episodes/ep_002_23/branch-options/refresh',
+      headers: {
+        authorization: 'Bearer test-admin-token',
+        host: '192.168.1.88:8787',
+      },
+    });
+    expect(refreshRes.statusCode).toBe(200);
+
+    const artifactPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_002_23/bo_002_01.json',
+    );
+    const raw = await fs.readFile(artifactPath, 'utf-8');
+    const artifact = JSON.parse(raw);
+    artifact.candidatePrompt = `${artifact.candidatePrompt} 篡改`;
+    await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
+
+    const res = await app.inject({
+      method: 'GET',
+      url: '/episodes/ep_002_23/branch-options',
+      headers: { host: '192.168.1.88:8787' },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data[0].resultHook).toBe('');
+    expect(body.data[0].generatedPayloadPath).toBe('');
   });
 });
 
@@ -73,8 +143,19 @@ describe('POST /branch-tasks', () => {
     expect(body.code).toBe(0);
     expect(body.data.status).toBe('pending');
     expect(body.data.episodeId).toBe('ep_001_23');
+    expect(body.data.resultSource).toBe('doubao');
     expect(body.data.count.likes).toBe(0);
     expect(body.data.count.comments).toBe(0);
+    expect(body.data.branchType).toBe('');
+    expect(body.data.pipelineStage).toBe('');
+    expect(body.data.promptPackageJson).toBe('{}');
+    expect(body.data.storyExpansionJson).toBe('{}');
+    expect(body.data.shotPromptJson).toBe('[]');
+    expect(body.data.storyboardImagesJson).toBe('[]');
+    expect(body.data.storyboardManifestJson).toBe('{}');
+    expect(body.data.narrationPayloadJson).toBe('{}');
+    expect(body.data.referenceAssetsJson).toBe('{}');
+    expect(body.data.imageTaskStatus).toBe('not_started');
   });
 });
 
@@ -182,6 +263,65 @@ describe('GET /users/:userId/branch-tasks', () => {
     });
 
     expect(res.statusCode).toBe(400);
+  });
+});
+
+describe('GET /branch-tasks/:taskId with pipeline fields', () => {
+  it('should return populated pipeline fields when set', async () => {
+    const createRes = await app.inject({
+      method: 'POST',
+      url: '/branch-tasks',
+      payload: {
+        deviceId: 'test-device-pipeline-001',
+        episodeId: 'ep_001_23',
+        userPrompt: '测试流水线字段',
+      },
+    });
+    const taskId = createRes.json().data.id;
+
+    await prisma.branchTask.update({
+      where: { id: taskId },
+      data: {
+        branchType: 'custom',
+        pipelineStage: 'story_generated',
+        promptPackageJson: JSON.stringify({ systemPrompt: 'test' }),
+        storyExpansionJson: JSON.stringify({ direction: 'romance' }),
+        shotPromptJson: JSON.stringify({
+          contractVersion: 'branch-image-story-v1',
+          storyTitle: 'test clip',
+          readingMode: 'vertical_comic',
+          shots: [{ scene: 1, imagePrompt: 'scene1' }],
+        }),
+        storyboardImagesJson: JSON.stringify([{ shotId: 1, imagePrompt: 'scene1' }]),
+        storyboardManifestJson: JSON.stringify({ readingMode: 'vertical_comic', cards: [] }),
+        narrationPayloadJson: JSON.stringify({ narrationText: 'test narration' }),
+        referenceAssetsJson: JSON.stringify({ characterRefs: [] }),
+        imageTaskStatus: 'skipped',
+      },
+    });
+
+    const res = await app.inject({
+      method: 'GET',
+      url: `/branch-tasks/${taskId}`,
+    });
+    expect(res.statusCode).toBe(200);
+
+    const body = res.json();
+    expect(body.data.branchType).toBe('custom');
+    expect(body.data.pipelineStage).toBe('story_generated');
+    expect(JSON.parse(body.data.promptPackageJson)).toEqual({ systemPrompt: 'test' });
+    expect(JSON.parse(body.data.storyExpansionJson)).toEqual({ direction: 'romance' });
+    expect(JSON.parse(body.data.shotPromptJson)).toEqual({
+      contractVersion: 'branch-image-story-v1',
+      storyTitle: 'test clip',
+      readingMode: 'vertical_comic',
+      shots: [{ scene: 1, imagePrompt: 'scene1' }],
+    });
+    expect(JSON.parse(body.data.storyboardImagesJson)).toEqual([{ shotId: 1, imagePrompt: 'scene1' }]);
+    expect(JSON.parse(body.data.storyboardManifestJson)).toEqual({ readingMode: 'vertical_comic', cards: [] });
+    expect(JSON.parse(body.data.narrationPayloadJson)).toEqual({ narrationText: 'test narration' });
+    expect(JSON.parse(body.data.referenceAssetsJson)).toEqual({ characterRefs: [] });
+    expect(body.data.imageTaskStatus).toBe('skipped');
   });
 });
 

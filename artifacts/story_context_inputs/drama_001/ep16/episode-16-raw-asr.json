@@ -1,0 +1,222 @@
+{
+  "backend": "bcut",
+  "audio_file": "/Users/a0000/Desktop/项目文件/drama-pulse/artifacts/story_context_inputs/drama_001/ep16/episode-16.mp3",
+  "segment_count": 43,
+  "segments": [
+    {
+      "text": "苏丹跟娘出来一下",
+      "start_time": 0,
+      "end_time": 2040
+    },
+    {
+      "text": "齐达说的是真的",
+      "start_time": 4500,
+      "end_time": 5920
+    },
+    {
+      "text": "你要真的为了她奏了成章",
+      "start_time": 5920,
+      "end_time": 7980
+    },
+    {
+      "text": "可是娘不是最喜欢成招了吗",
+      "start_time": 8060,
+      "end_time": 10060
+    },
+    {
+      "text": "小孩子说的话多少有点夸张",
+      "start_time": 10060,
+      "end_time": 12220
+    },
+    {
+      "text": "可能只是稍微训斥了一下",
+      "start_time": 12420,
+      "end_time": 14580
+    },
+    {
+      "text": "不管怎么样",
+      "start_time": 15530,
+      "end_time": 16530
+    },
+    {
+      "text": "娘至少再也没有把吃的送去给程家了",
+      "start_time": 16650,
+      "end_time": 19350
+    },
+    {
+      "text": "这是天大的好事",
+      "start_time": 19350,
+      "end_time": 20570
+    },
+    {
+      "text": "去把粟米煮了吧",
+      "start_time": 21090,
+      "end_time": 23530
+    },
+    {
+      "text": "嗯，四蛋，这里呢，是五文钱",
+      "start_time": 23660,
+      "end_time": 26360
+    },
+    {
+      "text": "你去老屋那边带根萝卜回来",
+      "start_time": 26360,
+      "end_time": 28340
+    },
+    {
+      "text": "兔肉炖萝卜可香了",
+      "start_time": 28420,
+      "end_time": 30240
+    },
+    {
+      "text": "想吃吗",
+      "start_time": 30240,
+      "end_time": 31100
+    },
+    {
+      "text": "哦，不香",
+      "start_time": 31100,
+      "end_time": 32340
+    },
+    {
+      "text": "兔兔是我的好朋友",
+      "start_time": 32590,
+      "end_time": 34350
+    },
+    {
+      "text": "不能吃的",
+      "start_time": 34350,
+      "end_time": 35430
+    },
+    {
+      "text": "嗯",
+      "start_time": 35430,
+      "end_time": 35950
+    },
+    {
+      "text": "娘，我这就去",
+      "start_time": 36630,
+      "end_time": 38870
+    },
+    {
+      "text": "阿呆：诶，四达你咋来了",
+      "start_time": 47880,
+      "end_time": 51240
+    },
+    {
+      "text": "阿乃，你要让我带一个萝卜回去",
+      "start_time": 51880,
+      "end_time": 55360
+    },
+    {
+      "text": "娘，这大嫂也太过分了",
+      "start_time": 56660,
+      "end_time": 58860
+    },
+    {
+      "text": "当时她说要分家",
+      "start_time": 58860,
+      "end_time": 60140
+    },
+    {
+      "text": "还立了字据",
+      "start_time": 60140,
+      "end_time": 61170
+    },
+    {
+      "text": "现在竟然让小儿子过来找我们伸手要吃的",
+      "start_time": 61170,
+      "end_time": 63940
+    },
+    {
+      "text": "这天底下哪有脸皮这么厚的人啊",
+      "start_time": 63940,
+      "end_time": 66260
+    },
+    {
+      "text": "我说你娘就是个懒货",
+      "start_time": 66260,
+      "end_time": 67960
+    },
+    {
+      "text": "开春的时候家家户户都种萝卜",
+      "start_time": 68180,
+      "end_time": 70420
+    },
+    {
+      "text": "就你娘懒得种",
+      "start_time": 70420,
+      "end_time": 71700
+    },
+    {
+      "text": "现在别人家多多少少都有点余粮",
+      "start_time": 71700,
+      "end_time": 74100
+    },
+    {
+      "text": "就你家还得挖小娃菜吃",
+      "start_time": 74100,
+      "end_time": 75980
+    },
+    {
+      "text": "不是，刚刚才送了袋送笔过去",
+      "start_time": 76040,
+      "end_time": 78220
+    },
+    {
+      "text": "咋还有脸来要萝卜呢",
+      "start_time": 78220,
+      "end_time": 79780
+    },
+    {
+      "text": "就你那不要脸",
+      "start_time": 79780,
+      "end_time": 81000
+    },
+    {
+      "text": "去去去，看着都碍眼",
+      "start_time": 82300,
+      "end_time": 85220
+    },
+    {
+      "text": "大嫂都这么过分了",
+      "start_time": 85300,
+      "end_time": 87140
+    },
+    {
+      "text": "娘居然还蹦着他一家人",
+      "start_time": 87420,
+      "end_time": 89580
+    },
+    {
+      "text": "不就是大嫂能生儿子吗",
+      "start_time": 89940,
+      "end_time": 92420
+    },
+    {
+      "text": "谢谢阿乃",
+      "start_time": 92860,
+      "end_time": 94180
+    },
+    {
+      "text": "哦",
+      "start_time": 95580,
+      "end_time": 96260
+    },
+    {
+      "text": "哪来的铜板",
+      "start_time": 97090,
+      "end_time": 98230
+    },
+    {
+      "text": "娘说要用铜板来换萝卜",
+      "start_time": 98230,
+      "end_time": 102050
+    },
+    {
+      "text": "什么",
+      "start_time": 102210,
+      "end_time": 102850
+    }
+  ]
+}

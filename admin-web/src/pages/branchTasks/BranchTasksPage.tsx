@@ -9,7 +9,7 @@ import { LoadingBlock } from '../../components/ui/LoadingBlock';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { toast } from '../../components/ui/Toast';
-import type { BranchTask, BranchTaskDetail, PaginatedData } from '../../shared/types';
+import type { BranchOption, BranchTask, BranchTaskDetail, Episode, PaginatedData } from '../../shared/types';
 
 const PAGE_SIZE = 20;
 
@@ -36,6 +36,8 @@ export function BranchTasksPage() {
   const [applied, setApplied] = useState<FilterDraft & { page: number }>({ ...initialDraft, page: 1 });
   const [retryTarget, setRetryTarget] = useState<BranchTask | null>(null);
   const [detailTarget, setDetailTarget] = useState<BranchTask | null>(null);
+  const [fixedDetailTarget, setFixedDetailTarget] = useState<Episode | null>(null);
+  const [fixedOptionDetailTarget, setFixedOptionDetailTarget] = useState<BranchOption | null>(null);
 
   const filters: Record<string, string> = { page: String(applied.page), pageSize: String(PAGE_SIZE) };
   if (applied.status) filters.status = applied.status;
@@ -54,6 +56,20 @@ export function BranchTasksPage() {
     queryKey: detailTarget ? queryKeys.branchTaskDetail(detailTarget.id) : ['admin', 'branchTask', 'empty'],
     queryFn: () => apiRequest<BranchTaskDetail>(`/admin/branch-tasks/${detailTarget?.id ?? ''}`),
     enabled: detailTarget !== null,
+  });
+
+  const finalEpisodesQuery = useQuery({
+    queryKey: ['admin', 'episodes', 'branchable'],
+    queryFn: () => apiRequest<Episode[]>('/admin/episodes'),
+  });
+
+  const finalEpisodes = (finalEpisodesQuery.data ?? []).filter((episode) => episode.isFinalEpisode && episode.hasBranch);
+  const fixedEpisodeId = fixedDetailTarget?.id || '';
+
+  const fixedBranchesQuery = useQuery({
+    queryKey: ['admin', 'fixedBranchOptions', fixedEpisodeId],
+    queryFn: () => apiRequest<BranchOption[]>(`/episodes/${fixedEpisodeId}/branch-options`),
+    enabled: fixedEpisodeId.length > 0,
   });
 
   const retryMutation = useMutation({
@@ -114,9 +130,92 @@ export function BranchTasksPage() {
     setApplied({ ...initialDraft, page: 1 });
   };
 
+  const renderPrettyJson = (raw: string) => {
+    if (!raw || raw === '[]' || raw === '{}') return '-';
+    try {
+      return JSON.stringify(JSON.parse(raw), null, 2);
+    } catch {
+      return raw;
+    }
+  };
+
+  const summarizeText = (value: string, maxLength = 90) => {
+    const normalized = value.replace(/\s+/g, ' ').trim();
+    if (!normalized) return '-';
+    return normalized.length > maxLength ? `${normalized.slice(0, maxLength)}...` : normalized;
+  };
+
+  const hasStructuredPayload = (raw: string) => {
+    return Boolean(raw && raw !== '[]' && raw !== '{}');
+  };
+
   return (
     <>
       <PageHeader title="分支任务" />
+
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">固定分支条目</h2>
+            <p className="mt-1 text-sm text-gray-500">按短剧尾集查看固定分支。主页只保留条目摘要，点击后查看完整分支详情。</p>
+          </div>
+          <div className="text-xs text-gray-400">共 {finalEpisodes.length} 个可分支尾集</div>
+        </div>
+
+        <div className="mt-5">
+          {finalEpisodesQuery.isLoading ? (
+            <LoadingBlock />
+          ) : finalEpisodes.length > 0 ? (
+            <div className="overflow-hidden rounded-lg border border-gray-200">
+              <table className="w-full min-w-[920px] text-sm bg-white">
+                <thead>
+                  <tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-500">
+                    <th className="px-4 py-3 font-medium">短剧</th>
+                    <th className="px-4 py-3 font-medium">尾集</th>
+                    <th className="px-4 py-3 font-medium">状态</th>
+                    <th className="px-4 py-3 font-medium">分支数</th>
+                    <th className="px-4 py-3 font-medium">说明</th>
+                    <th className="px-4 py-3 font-medium">操作</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {finalEpisodes.map((episode) => (
+                    <tr key={episode.id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-gray-900">{episode.drama?.title ?? episode.dramaId}</div>
+                        <div className="mt-1 text-xs text-gray-500 font-mono">{episode.dramaId}</div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="text-gray-900">E{episode.episodeNo} {episode.title}</div>
+                        <div className="mt-1 text-xs text-gray-500 font-mono">{episode.id}</div>
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs text-emerald-700">
+                          已启用固定分支
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-gray-700">2 个</td>
+                      <td className="px-4 py-3 text-gray-500">
+                        点击后查看完整的 Hook、正文、分镜和 Shot Prompt
+                      </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => setFixedDetailTarget(episode)}
+                          className="text-sm text-blue-600 hover:underline cursor-pointer"
+                        >
+                          查看详情
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <EmptyState message="当前还没有可展示的固定分支条目" />
+          )}
+        </div>
+      </div>
 
       <div className="flex items-center gap-2 mb-4 flex-wrap">
         {STATUS_OPTIONS.map((opt) => (
@@ -168,7 +267,7 @@ export function BranchTasksPage() {
         <>
           {isFetching && <p className="mb-3 text-xs text-gray-400">正在刷新数据…</p>}
           <div className="bg-white border border-gray-200 rounded-lg overflow-x-auto">
-            <table className="w-full min-w-[1360px] text-sm">
+            <table className="w-full min-w-[1560px] text-sm">
               <thead>
                 <tr className="border-b border-gray-200 bg-gray-50 text-left text-gray-500">
                   <th className="px-4 py-3 font-medium">ID</th>
@@ -176,6 +275,7 @@ export function BranchTasksPage() {
                   <th className="px-4 py-3 font-medium">剧集</th>
                   <th className="px-4 py-3 font-medium">Prompt</th>
                   <th className="px-4 py-3 font-medium">状态</th>
+                  <th className="px-4 py-3 font-medium">流水线阶段</th>
                   <th className="px-4 py-3 font-medium">结果标题</th>
                   <th className="px-4 py-3 font-medium">互动</th>
                   <th className="px-4 py-3 font-medium">失败原因</th>
@@ -201,6 +301,11 @@ export function BranchTasksPage() {
                     </td>
                     <td className="px-4 py-3">
                       <StatusBadge status={task.status} />
+                    </td>
+                    <td className="px-4 py-3">
+                      {task.pipelineStage ? (
+                        <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">{task.pipelineStage}</span>
+                      ) : '-'}
                     </td>
                     <td className="px-4 py-3">{task.resultTitle || '-'}</td>
                     <td className="px-4 py-3 text-xs text-gray-600">
@@ -381,10 +486,30 @@ export function BranchTasksPage() {
                     </div>
                   </div>
 
+                  <div className="rounded-lg border border-gray-200 p-4">
+                    <div className="text-xs text-gray-500 mb-2">流水线信息</div>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div><span className="text-gray-500">分支类型：</span>{detailQuery.data.task.branchType || '-'}</div>
+                      <div><span className="text-gray-500">流水线阶段：</span>{detailQuery.data.task.pipelineStage || '-'}</div>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 gap-4">
                     <div className="rounded-lg border border-gray-200 p-4">
                       <div className="text-xs text-gray-500 mb-2">Storyboard JSON</div>
                       <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.storyboardJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Prompt Package</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.promptPackageJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Story Expansion</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.storyExpansionJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Shot Prompts</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.shotPromptJson)}</pre>
                     </div>
                     <div className="rounded-lg border border-gray-200 p-4">
                       <div className="text-xs text-gray-500 mb-2">结果标签</div>
@@ -397,6 +522,180 @@ export function BranchTasksPage() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {fixedDetailTarget && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/30">
+          <div className="h-full w-full max-w-4xl overflow-y-auto bg-white shadow-xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">固定分支详情</h3>
+                <p className="mt-1 text-xs text-gray-500">
+                  {fixedDetailTarget.drama?.title ?? fixedDetailTarget.dramaId} / E{fixedDetailTarget.episodeNo} {fixedDetailTarget.title}
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setFixedDetailTarget(null);
+                  setFixedOptionDetailTarget(null);
+                }}
+                className="text-sm text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                关闭
+              </button>
+            </div>
+
+            <div className="p-6">
+              {fixedBranchesQuery.isLoading ? (
+                <LoadingBlock />
+              ) : fixedBranchesQuery.data && fixedBranchesQuery.data.length > 0 ? (
+                <div className="space-y-4">
+                  {fixedBranchesQuery.data.map((option) => (
+                    <div key={option.id} className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                      <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-3">
+                            <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+                              固定分支 {option.sortIndex}
+                            </span>
+                            <span className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs text-gray-600">
+                              {option.status}
+                            </span>
+                          </div>
+                          <h4 className="mt-3 text-2xl font-semibold tracking-tight text-gray-900">{option.title}</h4>
+                          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
+                            <span>{option.generatedAt ? `生成于 ${new Date(option.generatedAt).toLocaleString('zh-CN')}` : '尚未生成时间'}</span>
+                            <span>尾集固定走向</span>
+                          </div>
+                        </div>
+
+                        <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-4 lg:max-w-xs">
+                          <div className="text-xs font-medium tracking-wide text-gray-500">生成状态</div>
+                          <div className="mt-3 space-y-2 text-sm text-gray-700">
+                            <div className="flex items-center justify-between gap-3">
+                              <span>分镜</span>
+                              <span className={hasStructuredPayload(option.storyboardJson) ? 'text-emerald-600' : 'text-gray-400'}>
+                                {hasStructuredPayload(option.storyboardJson) ? '已生成' : '未生成'}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span>Shot Prompt</span>
+                              <span className={hasStructuredPayload(option.shotPromptJson) ? 'text-emerald-600' : 'text-gray-400'}>
+                                {hasStructuredPayload(option.shotPromptJson) ? '已生成' : '未生成'}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span>结果标签</span>
+                              <span className={hasStructuredPayload(option.resultTagsJson) ? 'text-emerald-600' : 'text-gray-400'}>
+                                {hasStructuredPayload(option.resultTagsJson) ? '已生成' : '未生成'}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => setFixedOptionDetailTarget(option)}
+                            className="mt-4 inline-flex w-full items-center justify-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700 cursor-pointer"
+                          >
+                            查看完整详情
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="mt-5 rounded-xl bg-slate-50 px-4 py-3">
+                        <div className="text-xs font-medium tracking-wide text-slate-500">一句话概览</div>
+                        <div className="mt-2 text-sm leading-6 text-slate-800">
+                          {option.description || '-'}
+                        </div>
+                      </div>
+
+                      <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-[1.2fr_1fr]">
+                        <div className="rounded-xl border border-gray-200 p-4">
+                          <div className="text-xs font-medium tracking-wide text-gray-500">看点 Hook</div>
+                          <div className="mt-2 text-base leading-7 text-gray-900">
+                            {option.resultHook || '-'}
+                          </div>
+                        </div>
+
+                        <div className="rounded-xl border border-gray-200 p-4">
+                          <div className="text-xs font-medium tracking-wide text-gray-500">剧情摘要</div>
+                          <div className="mt-2 text-sm leading-7 text-gray-700">
+                            {summarizeText(option.resultStory, 140)}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState message="当前尾集还没有可展示的固定分支内容" />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {fixedOptionDetailTarget && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/40 p-6">
+          <div className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">固定分支完整详情</h3>
+                <p className="mt-1 text-xs text-gray-500">
+                  {fixedOptionDetailTarget.title} / {fixedOptionDetailTarget.id}
+                </p>
+              </div>
+              <button
+                onClick={() => setFixedOptionDetailTarget(null)}
+                className="text-sm text-gray-500 hover:text-gray-800 cursor-pointer"
+              >
+                关闭
+              </button>
+            </div>
+
+            <div className="space-y-4 p-6">
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">分支概述</div>
+                <div className="text-sm text-gray-800 whitespace-pre-wrap leading-6">
+                  {fixedOptionDetailTarget.description || '-'}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">结果 Hook</div>
+                <div className="text-sm text-gray-800 whitespace-pre-wrap leading-6">
+                  {fixedOptionDetailTarget.resultHook || '-'}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">结果正文</div>
+                <div className="text-sm text-gray-800 whitespace-pre-wrap leading-7">
+                  {fixedOptionDetailTarget.resultStory || '-'}
+                </div>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Storyboard JSON</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.storyboardJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Shot Prompts</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.shotPromptJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">结果标签</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.resultTagsJson)}
+                </pre>
+              </div>
             </div>
           </div>
         </div>

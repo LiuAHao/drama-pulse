@@ -1,0 +1,31 @@
+{
+  "dramaId": "drama_001",
+  "episodeId": "ep_001_01",
+  "episodeNo": 1,
+  "episodeTitle": "第1集",
+  "mainGenre": "爽文",
+  "generator": "llm",
+  "summary": "程中安以盛路公司新任领导身份亮相，接受采访时坦承自己的动力来自金钱和众多男性，暗示其野心与情感需求。",
+  "keyEvents": [
+    "程中安在众人簇拥下登场，被称为程总、成功",
+    "程中安自我介绍：33岁，未婚未孕，年轻有为",
+    "被问及动力来源，程中安回答‘当然是钱，和很多男人’"
+  ],
+  "characterChanges": [],
+  "newReveals": [
+    "程中安年龄33岁，未婚未孕",
+    "程中安的动力是追求金钱和众多男性"
+  ],
+  "openQuestions": [
+    "程中安与‘很多男人’的关系具体指什么？",
+    "程中安进入盛路公司后的第一件事会是什么？"
+  ],
+  "episodeEndingState": "程中安强势亮相并公开其个人动机，留下悬念。",
+  "focusCharacters": [
+    "程中安"
+  ],
+  "rawTranscriptStats": {
+    "segmentCount": 59,
+    "durationMs": 155920
+  }
+}

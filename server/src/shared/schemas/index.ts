@@ -65,7 +65,7 @@ export const upsertWatchProgressSchema = z.object({
 });
 
 const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'funny', 'suspense', 'emotion_burst'] as const;
-const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock'] as const;
+const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock', 'boost_action'] as const;
 
 export const updateHighlightSchema = z.object({
   startTimeMs: z.number().int().min(0).optional(),
@@ -108,6 +108,9 @@ export const adminBranchTaskFilterSchema = z.object({
   status: z.string().optional(),
   episodeId: z.string().optional(),
   dramaId: z.string().optional(),
+  branchType: z.string().optional(),
+  pipelineStage: z.string().optional(),
+  imageTaskStatus: z.string().optional(),
 }).merge(paginationSchema);
 
 export const adminFavoriteFilterSchema = z.object({

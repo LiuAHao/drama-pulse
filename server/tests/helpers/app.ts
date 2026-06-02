@@ -21,6 +21,7 @@ process.env.PORT = '8787';
 process.env.VIDEOS_ROOT = '../videos';
 process.env.ASSETS_ROOT = '../assets';
 process.env.EXPORTS_ROOT = '../data/exports';
+process.env.BRANCH_TASK_DISABLE_LLM = '1';
 
 function syncTestDatabaseSchema() {
   execFileSync(

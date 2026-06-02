@@ -12,7 +12,13 @@ class FakeBranchRepository : BranchRepository {
                 description = "主角收获温暖关系与圆满收场",
                 resultType = "video",
                 coverUrl = "",
-                resultContentUrl = ""
+                resultContentUrl = "",
+                resultHook = "她终于决定把真话说给最该听的人。",
+                resultStory = "这是一个预设固定分支的示例故事。",
+                storyboard = listOf(
+                    StoryboardScene(1, "她鼓起勇气开口", 4),
+                    StoryboardScene(2, "所有人第一次站到她这一边", 6)
+                )
             ),
             BranchOptionModel(
                 id = "bo-2",
@@ -20,7 +26,13 @@ class FakeBranchRepository : BranchRepository {
                 description = "一个意想不到的结局",
                 resultType = "video",
                 coverUrl = "",
-                resultContentUrl = ""
+                resultContentUrl = "",
+                resultHook = "她没有照着所有人的预期落子。",
+                resultStory = "这是另一个预设固定分支的示例故事。",
+                storyboard = listOf(
+                    StoryboardScene(1, "她故意示弱", 4),
+                    StoryboardScene(2, "真正的反击在暗处开始", 6)
+                )
             )
         )
     }
@@ -34,6 +46,7 @@ class FakeBranchRepository : BranchRepository {
             resultHook = "",
             resultStory = "",
             storyboard = emptyList(),
+            storyboardImages = emptyList(),
             likeCount = 0,
             commentCount = 0
         )
@@ -52,6 +65,7 @@ class FakeBranchRepository : BranchRepository {
                 StoryboardScene(2, "转折：意外发生", 8),
                 StoryboardScene(3, "结局：圆满收场", 6)
             ),
+            storyboardImages = emptyList(),
             likeCount = 12,
             commentCount = 5
         )
