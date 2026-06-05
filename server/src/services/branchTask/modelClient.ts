@@ -1,12 +1,4 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const REPO_ROOT = path.resolve(fileURLToPath(new URL('../../../../', import.meta.url)));
-const DEFAULT_ENV_FILES = [
-  path.join(REPO_ROOT, '.env'),
-  path.join(REPO_ROOT, 'server', '.env'),
-];
+import { loadEnvFiles } from './env.js';
 
 interface ModelEnv {
   apiKey: string;
@@ -22,26 +14,12 @@ export interface JsonChatRequest {
   defaultModel?: string;
 }
 
-function loadEnvFiles(paths: string[]): Record<string, string> {
-  const env: Record<string, string> = {};
-  for (const filePath of paths) {
-    if (!fs.existsSync(filePath)) continue;
-    for (const rawLine of fs.readFileSync(filePath, 'utf-8').split(/\r?\n/)) {
-      const line = rawLine.trim();
-      if (!line || line.startsWith('#') || !line.includes('=')) continue;
-      const [key, ...rest] = line.split('=');
-      env[key.trim()] = rest.join('=').trim().replace(/^"|"$/g, '');
-    }
-  }
-  return env;
-}
-
 function getModelEnv(modelEnvKeys: string[] = [], defaultModel = 'deepseek-v4-flash'): ModelEnv {
   if (process.env.BRANCH_TASK_DISABLE_LLM === '1') {
     throw new Error('branch-task-llm-disabled');
   }
 
-  const fileEnv = loadEnvFiles(DEFAULT_ENV_FILES);
+  const fileEnv = loadEnvFiles();
   const apiKey =
     process.env.DEEPSEEK_API_KEY ||
     fileEnv.DEEPSEEK_API_KEY ||

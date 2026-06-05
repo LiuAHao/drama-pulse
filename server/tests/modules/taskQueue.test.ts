@@ -138,6 +138,7 @@ describe('taskQueue staged executor pipeline', () => {
     expect(updated.resultHook).toBeTruthy();
     expect(updated.resultStory).toBeTruthy();
     expect(updated.resultStory).toContain('江青纸');
+    expect(updated.resultStory).not.toContain('用户提出的');
 
     const promptPackage = JSON.parse(updated.promptPackageJson);
     expect(promptPackage.originalPrompt).toContain('误会解开后的反转结局');
@@ -173,6 +174,7 @@ describe('taskQueue staged executor pipeline', () => {
     expect(shotPromptPackage.shots[0].assetCarryNotes).toBeTruthy();
     expect(shotPromptPackage.shots[0].negativePrompt).toBeTruthy();
     expect(shotPromptPackage.shots[0].referenceTaskImages).toBeTruthy();
+    expect(shotPromptPackage.shots[0].imagePrompt).not.toContain('用户提出的');
 
     const manifest = JSON.parse(updated.storyboardManifestJson);
     expect(manifest.readingMode).toBe('vertical_comic');

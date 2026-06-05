@@ -131,6 +131,17 @@ export interface BranchTask {
   promptPackageJson: string;
   storyExpansionJson: string;
   shotPromptJson: string;
+  storyContextJson: string;
+  storyContextVersion: string;
+  storyContextAssetPath: string;
+  tailStateSnapshotJson: string;
+  characterBibleJson: string;
+  referenceAssetsJson: string;
+  storyboardImagesJson: string;
+  storyboardManifestJson: string;
+  narrationPayloadJson: string;
+  imageTaskStatus: string;
+  imageTaskPayloadJson: string;
   failReason: string;
   retryCount: number;
   episode?: Episode | null;
@@ -183,6 +194,10 @@ export interface BranchOption {
   resultHook: string;
   resultStory: string;
   storyboardJson: string;
+  storyboardImagesJson: string;
+  storyboardManifestJson: string;
+  narrationPayloadJson: string;
+  referenceAssetsJson: string;
   shotPromptJson: string;
   resultTagsJson: string;
   sortIndex: number;

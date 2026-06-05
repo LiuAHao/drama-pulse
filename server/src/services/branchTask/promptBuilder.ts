@@ -121,6 +121,7 @@ export function buildStoryboardSystemPrompt(): string {
   return `你是短剧图文分镜导演助手。
 
 你要把一个尾集分支剧情，拆成可直接生图、可直接展示在“上下滑漫画 / 带图小说”页面中的分镜结果。
+注意：页面是上下滑阅读，但每一张分镜图本身必须优先生成“横屏卡面”效果，方便在手机里以图片在上、长文案在下的方式展示，避免生成过长的竖图。
 
 输出要求：
 1. 只输出一个 JSON 对象，不要附带解释。
@@ -163,6 +164,7 @@ export function buildStoryboardSystemPrompt(): string {
    - 光线
    - 情绪
    - 风格
+   - 明确说明这是横屏分镜卡面，适合手机端图上文下展示
 6. requiredCharacters 不能只写名字，要说明 roleInShot 和 mustAppear。
 7. narrationText 默认是图下长文案，信息量要明显高于 dialogueText。
 8. 最后一张必须明显具有结局收口作用。`;
@@ -313,7 +315,9 @@ function normalizeReferenceTaskImages(raw: unknown): ReferenceTaskImageSet {
 }
 
 function normalizeCharacterRequirements(raw: unknown, mustAppear: boolean, fallbackNames: string[]): ShotCharacterRequirement[] {
-  const list = Array.isArray(raw) ? raw : fallbackNames.map((name) => ({ characterName: name, roleInShot: '关键角色', mustAppear }));
+  const list = Array.isArray(raw) && raw.length > 0
+    ? raw
+    : fallbackNames.map((name) => ({ characterName: name, roleInShot: '关键角色', mustAppear }));
   return list
     .map((item) => {
       if (!item || typeof item !== 'object') return null;
@@ -375,6 +379,17 @@ function buildGlobalSceneNotes(shots: ShotPrompt[]): string[] {
         '场景光线、时间段和关键道具尽量前后呼应',
       ]
     : ['场景光线、时间段和关键道具尽量前后呼应'];
+}
+
+function sanitizeNarrativeMoment(text: string): string {
+  return text
+    .replace(/用户提出的“[^”]+”/g, '人物做出了新的选择')
+    .replace(/用户提出的"[^"]+"/g, '人物做出了新的选择')
+    .replace(/要求承接原剧事实[^，。]*/g, '')
+    .replace(/尾集固定分支结局/g, '分支结局')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 140);
 }
 
 export function normalizeStoryboardResult(
@@ -450,9 +465,9 @@ export function normalizeStoryboardResult(
       sceneVisualNotes: typeof rawShot.sceneVisualNotes === 'string' && rawShot.sceneVisualNotes.trim()
         ? rawShot.sceneVisualNotes.trim()
         : '保持关键空间识别度，不要做成空背景。',
-      compositionNotes: typeof rawShot.compositionNotes === 'string' && rawShot.compositionNotes.trim()
+        compositionNotes: typeof rawShot.compositionNotes === 'string' && rawShot.compositionNotes.trim()
         ? rawShot.compositionNotes.trim()
-        : (index === targetCardCount - 1 ? '结局画面要有明显收束感。' : '竖屏人物关系构图要清楚。'),
+        : (index === targetCardCount - 1 ? '横屏结局卡面要有明显收束感，适合图上文下展示。' : '横屏分镜卡面的人物关系构图要清楚，适合手机端图上文下展示。'),
       imagePrompt: typeof rawShot.imagePrompt === 'string' && rawShot.imagePrompt.trim()
         ? rawShot.imagePrompt.trim()
         : '',
@@ -470,9 +485,9 @@ export function normalizeStoryboardResult(
       location,
     } satisfies ShotPrompt;
   }).map((shot) => ({
-    ...shot,
-    imagePrompt: shot.imagePrompt || [
-      'vertical cinematic storyboard frame',
+      ...shot,
+      imagePrompt: shot.imagePrompt || [
+      'landscape cinematic storyboard card frame for mobile reading',
       `${shot.requiredScene}`,
       shot.requiredCharacters.length > 0
         ? `characters: ${shot.requiredCharacters.map((character) => character.characterName).join(', ')}`
@@ -481,7 +496,8 @@ export function normalizeStoryboardResult(
       shot.sceneVisualNotes,
       shot.compositionNotes,
       `emotion: ${shot.emotion}`,
-      `narrative moment: ${shot.description}`,
+      `narrative moment: ${sanitizeNarrativeMoment(shot.description)}`,
+      'horizontal composition, image on top with long narration text below in the final mobile layout, avoid extra tall portrait framing',
       `style: ${storyExpansion.visualStyle}`,
     ].filter(Boolean).join(', '),
   }));

@@ -426,6 +426,7 @@ export function BranchTasksPage() {
                         <div><span className="text-gray-500">开始时间：</span>{formatDate(detailQuery.data.task.startedAt)}</div>
                         <div><span className="text-gray-500">结束时间：</span>{formatDate(detailQuery.data.task.finishedAt)}</div>
                         <div><span className="text-gray-500">执行耗时：</span>{detailQuery.data.durationMs === null ? '-' : formatDuration(detailQuery.data.task.startedAt, detailQuery.data.task.finishedAt)}</div>
+                        <div><span className="text-gray-500">配图状态：</span>{detailQuery.data.task.imageTaskStatus || '-'}</div>
                         <div><span className="text-gray-500">失败原因：</span>{detailQuery.data.task.failReason || '-'}</div>
                       </div>
                     </div>
@@ -512,6 +513,26 @@ export function BranchTasksPage() {
                       <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.shotPromptJson)}</pre>
                     </div>
                     <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Storyboard Images</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.storyboardImagesJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Storyboard Manifest</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.storyboardManifestJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Reference Assets</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.referenceAssetsJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Narration Payload</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.narrationPayloadJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
+                      <div className="text-xs text-gray-500 mb-2">Image Task Payload</div>
+                      <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.imageTaskPayloadJson)}</pre>
+                    </div>
+                    <div className="rounded-lg border border-gray-200 p-4">
                       <div className="text-xs text-gray-500 mb-2">结果标签</div>
                       <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">{prettyJson(detailQuery.data.task.resultTagsJson)}</pre>
                     </div>
@@ -579,6 +600,18 @@ export function BranchTasksPage() {
                               <span>分镜</span>
                               <span className={hasStructuredPayload(option.storyboardJson) ? 'text-emerald-600' : 'text-gray-400'}>
                                 {hasStructuredPayload(option.storyboardJson) ? '已生成' : '未生成'}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span>图文 Manifest</span>
+                              <span className={hasStructuredPayload(option.storyboardManifestJson) ? 'text-emerald-600' : 'text-gray-400'}>
+                                {hasStructuredPayload(option.storyboardManifestJson) ? '已生成' : '未生成'}
+                              </span>
+                            </div>
+                            <div className="flex items-center justify-between gap-3">
+                              <span>分镜配图信息</span>
+                              <span className={hasStructuredPayload(option.storyboardImagesJson) ? 'text-emerald-600' : 'text-gray-400'}>
+                                {hasStructuredPayload(option.storyboardImagesJson) ? '已生成' : '未生成'}
                               </span>
                             </div>
                             <div className="flex items-center justify-between gap-3">
@@ -687,6 +720,34 @@ export function BranchTasksPage() {
                 <div className="text-xs text-gray-500 mb-2">Shot Prompts</div>
                 <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
                   {renderPrettyJson(fixedOptionDetailTarget.shotPromptJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Storyboard Images</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.storyboardImagesJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Storyboard Manifest</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.storyboardManifestJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Reference Assets</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.referenceAssetsJson)}
+                </pre>
+              </div>
+
+              <div className="rounded-lg border border-gray-200 p-4">
+                <div className="text-xs text-gray-500 mb-2">Narration Payload</div>
+                <pre className="overflow-x-auto rounded-md bg-gray-50 p-3 text-xs text-gray-700">
+                  {renderPrettyJson(fixedOptionDetailTarget.narrationPayloadJson)}
                 </pre>
               </div>
 

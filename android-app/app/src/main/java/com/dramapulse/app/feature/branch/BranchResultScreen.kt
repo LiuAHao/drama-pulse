@@ -11,19 +11,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.ui.PlayerView
 import coil.compose.AsyncImage
 import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.model.BranchTaskModel
+import com.dramapulse.app.core.model.StoryboardCard
 import com.dramapulse.app.ui.component.EmptyPanel
 import com.dramapulse.app.ui.component.ErrorPanel
 import com.dramapulse.app.ui.component.LoadingPanel
@@ -202,6 +198,22 @@ private fun BranchTaskResult(
     modifier: Modifier = Modifier
 ) {
     if (task == null && fixedOption == null) return
+    val taskStoryboardCards = task?.let { activeTask ->
+        activeTask.storyboardCards.ifEmpty {
+            activeTask.storyboard.map { scene ->
+                val image = activeTask.storyboardImages.find { it.scene == scene.scene }
+                StoryboardCard(
+                    scene = scene.scene,
+                    sceneTitle = "场景 ${scene.scene}",
+                    imageUrl = image?.imageUrl.orEmpty(),
+                    narrationText = scene.description,
+                    dialogueText = "",
+                    order = scene.scene,
+                    endingCard = false
+                )
+            }
+        }
+    } ?: emptyList()
 
     LazyColumn(
         modifier = modifier
@@ -242,42 +254,16 @@ private fun BranchTaskResult(
                 }
             }
 
-            if (task.storyboard.isNotEmpty()) {
+            if (taskStoryboardCards.isNotEmpty()) {
                 item {
                     Text(
-                        text = "分镜",
+                        text = "图文分镜",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-                items(task.storyboard) { scene ->
-                    val image = task.storyboardImages.find { it.scene == scene.scene }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(MaterialTheme.colorScheme.surface)
-                            .padding(12.dp)
-                    ) {
-                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                            Text(
-                                text = "场景 ${scene.scene}：${scene.description}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
-                            if (image != null) {
-                                AsyncImage(
-                                    model = image.imageUrl,
-                                    contentDescription = "分镜场景 ${scene.scene}",
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(180.dp)
-                                        .clip(RoundedCornerShape(8.dp)),
-                                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
-                                )
-                            }
-                        }
-                    }
+                items(taskStoryboardCards) { card ->
+                    StoryboardComicCard(card = card)
                 }
             }
         }
@@ -373,26 +359,25 @@ private fun BranchTaskResult(
 private fun FixedBranchResult(
     option: BranchOptionModel
 ) {
-    val context = LocalContext.current
     val storyParagraphs = remember(option.resultStory) {
         option.resultStory
             .split(Regex("\\n\\s*\\n"))
             .map { it.trim() }
             .filter { it.isNotBlank() }
     }
-    val player = remember(option.resultContentUrl) {
-        ExoPlayer.Builder(context).build().apply {
-            if (option.resultContentUrl.isNotBlank()) {
-                setMediaItem(MediaItem.fromUri(option.resultContentUrl))
-                prepare()
-                playWhenReady = true
+    val storyboardCards = remember(option.storyboardCards, option.storyboard) {
+        option.storyboardCards.ifEmpty {
+            option.storyboard.map { scene ->
+                StoryboardCard(
+                    scene = scene.scene,
+                    sceneTitle = "场景 ${scene.scene}",
+                    imageUrl = "",
+                    narrationText = scene.description,
+                    dialogueText = "",
+                    order = scene.scene,
+                    endingCard = false
+                )
             }
-        }
-    }
-
-    DisposableEffect(player) {
-        onDispose {
-            player.release()
         }
     }
 
@@ -402,23 +387,6 @@ private fun FixedBranchResult(
             style = MaterialTheme.typography.headlineLarge,
             color = Accent
         )
-        if (option.resultContentUrl.isNotBlank()) {
-            AndroidView(
-                factory = { ctx ->
-                    PlayerView(ctx).apply {
-                        useController = true
-                        this.player = player
-                    }
-                },
-                update = { view ->
-                    view.player = player
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-                    .clip(RoundedCornerShape(16.dp))
-            )
-        }
         if (option.description.isNotBlank()) {
             ResultSectionCard(
                 title = "分支概述",
@@ -447,38 +415,66 @@ private fun FixedBranchResult(
                 }
             }
         }
-        if (option.storyboard.isNotEmpty()) {
+        if (storyboardCards.isNotEmpty()) {
             Text(
-                text = "分镜",
+                text = "图文分镜",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            option.storyboard.forEach { scene ->
-                Box(
+            storyboardCards.forEach { card ->
+                StoryboardComicCard(card = card)
+            }
+        }
+    }
+}
+
+@Composable
+private fun StoryboardComicCard(
+    card: StoryboardCard,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 1.dp,
+                color = Divider.copy(alpha = 0.6f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .padding(12.dp)
+    ) {
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text(
+                text = card.sceneTitle.ifBlank { "场景 ${card.scene}" },
+                style = MaterialTheme.typography.labelLarge,
+                color = Accent
+            )
+            if (card.imageUrl.isNotBlank()) {
+                AsyncImage(
+                    model = card.imageUrl,
+                    contentDescription = card.sceneTitle.ifBlank { "分镜场景 ${card.scene}" },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clip(RoundedCornerShape(8.dp))
-                        .background(MaterialTheme.colorScheme.surface)
-                        .border(
-                            width = 1.dp,
-                            color = Divider.copy(alpha = 0.6f),
-                            shape = RoundedCornerShape(8.dp)
-                        )
-                        .padding(12.dp)
-                ) {
-                    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                        Text(
-                            text = "场景 ${scene.scene}",
-                            style = MaterialTheme.typography.labelLarge,
-                            color = Accent
-                        )
-                        Text(
-                            text = scene.description,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                    }
-                }
+                        .height(220.dp)
+                        .clip(RoundedCornerShape(12.dp)),
+                    contentScale = androidx.compose.ui.layout.ContentScale.Crop
+                )
+            }
+            if (card.dialogueText.isNotBlank()) {
+                Text(
+                    text = card.dialogueText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Accent
+                )
+            }
+            if (card.narrationText.isNotBlank()) {
+                Text(
+                    text = card.narrationText,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
         }
     }

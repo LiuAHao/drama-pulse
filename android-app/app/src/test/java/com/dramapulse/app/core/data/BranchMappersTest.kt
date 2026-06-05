@@ -13,8 +13,8 @@ class BranchMappersTest {
             id = "bo-fixed-1",
             title = "联手反击线",
             description = "基于尾集上下文预生成的固定分支",
-            resultType = "video",
-            resultContentPath = "https://example.com/video.mp4",
+            resultType = "image_story",
+            resultContentPath = "https://example.com/manifest.json",
             coverPath = "https://example.com/cover.jpg",
             generatedPayloadPath = "https://example.com/fixed.json",
             generatedAt = "2026-05-31T12:00:00Z",
@@ -24,6 +24,23 @@ class BranchMappersTest {
               {"scene":1,"description":"她把证据拍在桌上","duration":4},
               {"scene":2,"description":"两人短暂联手","duration":6}
             ]""",
+            storyboardImagesJson = """[
+              {"shotId":1,"imageAssetPath":"https://example.com/scene-1.png"}
+            ]""",
+            storyboardManifestJson = """{
+              "readingMode":"vertical_comic",
+              "cards":[
+                {
+                  "scene":1,
+                  "sceneTitle":"分支起点",
+                  "imageAssetPath":"https://example.com/scene-1.png",
+                  "narrationText":"她先亮出证据。",
+                  "dialogueText":"先别急着动手。",
+                  "order":1,
+                  "endingCard":false
+                }
+              ]
+            }""",
             shotPromptJson = """[{"scene":1,"prompt":"close-up dramatic light"}]"""
         )
 
@@ -35,6 +52,9 @@ class BranchMappersTest {
         assertTrue(model.resultStory.contains("真正的敌人"))
         assertEquals(2, model.storyboard.size)
         assertEquals("她把证据拍在桌上", model.storyboard[0].description)
+        assertEquals(1, model.storyboardCards.size)
+        assertEquals("分支起点", model.storyboardCards[0].sceneTitle)
+        assertEquals("https://example.com/scene-1.png", model.storyboardCards[0].imageUrl)
         assertEquals("""[{"scene":1,"prompt":"close-up dramatic light"}]""", model.shotPromptJson)
     }
 }

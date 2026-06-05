@@ -1,5 +1,9 @@
 import type { ImageClient } from './imageClient.js';
 import type { ShotPrompt, StoryboardImageItem } from './types.js';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const REPO_ROOT = path.resolve(fileURLToPath(new URL('../../../../', import.meta.url)));
 
 export interface ImageGenerationSummary {
   total: number;
@@ -58,8 +62,12 @@ export async function generateStoryboardImages(
 
   for (const shot of shots) {
     try {
+      const referenceImagePaths = shot.referenceTaskImages.characterRefs
+        .filter((item) => item.source === 'local')
+        .map((item) => path.resolve(REPO_ROOT, item.assetPath));
       const result = await imageClient.generateImage({
         prompt: shot.imagePrompt,
+        referenceImagePaths,
       });
       images.push({
         shotId: shot.scene,

@@ -1,9 +1,24 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import type { EpisodeContext, ReferenceAssetItem, StoryExpansion, StoryboardResult } from './types.js';
+import type { EpisodeContext, ReferenceAssetItem, ReferenceTaskImageSet, StoryExpansion, StoryboardResult } from './types.js';
 
 const REPO_ROOT = path.resolve(fileURLToPath(new URL('../../../../', import.meta.url)));
+
+const CHARACTER_FILE_ALIASES: Record<string, Record<string, string[]>> = {
+  drama_001: {
+    '程中安（娘）': ['chengzhongan-niang'],
+    '程中安': ['chengzhongan-niang'],
+    '大山': ['dashan'],
+    '二狗': ['ergou'],
+    '三牛': ['sanniu'],
+    '四蛋（四代）': ['sidan'],
+    '四蛋': ['sidan'],
+    '昭儿': ['zhaoer'],
+    '程家舅母刘氏': ['chengjia-elder-woman'],
+    '刘氏': ['chengjia-elder-woman'],
+  },
+};
 
 function slugifyCharacterName(name: string): string {
   return name
@@ -25,10 +40,14 @@ async function fileExists(targetPath: string): Promise<boolean> {
 async function findCharacterReference(dramaId: string, characterName: string): Promise<ReferenceAssetItem | null> {
   const dir = path.join(REPO_ROOT, 'assets', 'reference', 'branch-characters', dramaId);
   const slug = slugifyCharacterName(characterName);
-  const candidates = [
-    `${slug}-three-view-v1.png`,
-    `${slug}-three-view-v1.jpg`,
-  ];
+  const aliasSlugs = CHARACTER_FILE_ALIASES[dramaId]?.[characterName] ?? [];
+  const candidates = Array.from(new Set([
+    slug,
+    ...aliasSlugs,
+  ])).flatMap((candidateSlug) => [
+    `${candidateSlug}-three-view-v1.png`,
+    `${candidateSlug}-three-view-v1.jpg`,
+  ]);
 
   for (const fileName of candidates) {
     const assetPath = path.join(dir, fileName);
@@ -77,6 +96,38 @@ export interface CollectedReferenceAssets {
   carryNotes: string;
 }
 
+function uniqueReferenceAssets(items: ReferenceAssetItem[]): ReferenceAssetItem[] {
+  const seen = new Set<string>();
+  return items.filter((item) => {
+    const key = `${item.assetType}:${item.assetPath}:${item.displayName}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function mergeReferenceTaskImages(
+  existing: ReferenceTaskImageSet,
+  merged: Partial<ReferenceTaskImageSet>,
+  fallbackCarryNotes: string,
+): ReferenceTaskImageSet {
+  return {
+    characterRefs: uniqueReferenceAssets([
+      ...(existing.characterRefs ?? []),
+      ...(merged.characterRefs ?? []),
+    ]),
+    sceneRefs: uniqueReferenceAssets([
+      ...(existing.sceneRefs ?? []),
+      ...(merged.sceneRefs ?? []),
+    ]),
+    styleRefs: uniqueReferenceAssets([
+      ...(existing.styleRefs ?? []),
+      ...(merged.styleRefs ?? []),
+    ]),
+    carryNotes: existing.carryNotes || merged.carryNotes || fallbackCarryNotes,
+  };
+}
+
 export async function collectReferenceAssets(
   context: EpisodeContext,
   story: StoryExpansion,
@@ -100,5 +151,57 @@ export async function collectReferenceAssets(
     sceneRefs,
     styleRefs: [],
     carryNotes: '优先复用角色三视图；场景图不足时先记录为推断场景参考，后续再补真实资产。',
+  };
+}
+
+export function applyReferenceAssetsToStoryboard(
+  storyboard: StoryboardResult,
+  referenceAssets: CollectedReferenceAssets,
+): StoryboardResult {
+  const characterRefMap = new Map(referenceAssets.characterRefs.map((item) => [item.displayName, item]));
+  const sceneRefMap = new Map(referenceAssets.sceneRefs.map((item) => [item.displayName, item]));
+
+  const shots = storyboard.shots.map((shot) => {
+    const characterNames = Array.from(new Set([
+      ...shot.requiredCharacters.map((character) => character.characterName),
+      ...shot.assetReferences.requiredCharacterRefs,
+    ].filter(Boolean)));
+    const requiredCharacterRefs = uniqueReferenceAssets(
+      characterNames
+        .map((name) => characterRefMap.get(name))
+        .filter((item): item is ReferenceAssetItem => Boolean(item)),
+    );
+    const sceneNames = Array.from(new Set([
+      shot.requiredScene,
+      shot.location,
+      ...shot.assetReferences.optionalEnvironmentRefs,
+    ].filter(Boolean)));
+    const sceneRefs = uniqueReferenceAssets(
+      sceneNames
+        .map((name) => sceneRefMap.get(name))
+        .filter((item): item is ReferenceAssetItem => Boolean(item)),
+    );
+
+    return {
+      ...shot,
+      referenceTaskImages: mergeReferenceTaskImages(
+        shot.referenceTaskImages,
+        {
+          characterRefs: requiredCharacterRefs,
+          sceneRefs,
+          styleRefs: referenceAssets.styleRefs,
+          carryNotes: referenceAssets.carryNotes,
+        },
+        shot.assetCarryNotes,
+      ),
+    };
+  });
+
+  return {
+    shots,
+    shotPromptPackage: {
+      ...storyboard.shotPromptPackage,
+      shots,
+    },
   };
 }

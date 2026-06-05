@@ -103,6 +103,23 @@ fun BranchOptionDto.toModel(): BranchOptionModel {
     } catch (_: Exception) {
         emptyList()
     }
+    val cards = try {
+        json.decodeFromString<StoryboardManifestDto>(storyboardManifestJson).cards
+            .sortedBy { it.order }
+            .map {
+                StoryboardCard(
+                    scene = it.scene,
+                    sceneTitle = it.sceneTitle,
+                    imageUrl = it.imageAssetPath,
+                    narrationText = it.narrationText,
+                    dialogueText = it.dialogueText,
+                    order = it.order,
+                    endingCard = it.endingCard
+                )
+            }
+    } catch (_: Exception) {
+        emptyList()
+    }
     return BranchOptionModel(
         id = id,
         title = title,
@@ -115,6 +132,7 @@ fun BranchOptionDto.toModel(): BranchOptionModel {
         resultHook = resultHook,
         resultStory = resultStory,
         storyboard = scenes,
+        storyboardCards = cards,
         shotPromptJson = shotPromptJson
     )
 }
@@ -126,9 +144,26 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
     } catch (_: Exception) {
         emptyList()
     }
+    val cards = try {
+        json.decodeFromString<StoryboardManifestDto>(storyboardManifestJson).cards
+            .sortedBy { it.order }
+            .map {
+                StoryboardCard(
+                    scene = it.scene,
+                    sceneTitle = it.sceneTitle,
+                    imageUrl = it.imageAssetPath,
+                    narrationText = it.narrationText,
+                    dialogueText = it.dialogueText,
+                    order = it.order,
+                    endingCard = it.endingCard
+                )
+            }
+    } catch (_: Exception) {
+        emptyList()
+    }
     val images = try {
         json.decodeFromString<List<StoryboardImageDto>>(storyboardImagesJson)
-            .map { StoryboardImage(scene = it.scene, imageUrl = it.imageUrl) }
+            .map { StoryboardImage(scene = it.shotId, imageUrl = it.imageAssetPath) }
     } catch (_: Exception) {
         emptyList()
     }
@@ -140,6 +175,7 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
         resultHook = resultHook,
         resultStory = resultStory,
         storyboard = scenes,
+        storyboardCards = cards,
         storyboardImages = images,
         likeCount = count?.likes ?: 0,
         commentCount = count?.comments ?: 0
@@ -150,13 +186,29 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
 private data class StoryboardSceneDto(
     val scene: Int,
     val description: String,
-    val duration: Int
+    val duration: Int = 0
 )
 
 @kotlinx.serialization.Serializable
 private data class StoryboardImageDto(
+    val shotId: Int,
+    val imageAssetPath: String = ""
+)
+
+@kotlinx.serialization.Serializable
+private data class StoryboardManifestDto(
+    val cards: List<StoryboardCardDto> = emptyList()
+)
+
+@kotlinx.serialization.Serializable
+private data class StoryboardCardDto(
     val scene: Int,
-    val imageUrl: String = ""
+    val sceneTitle: String = "",
+    val imageAssetPath: String = "",
+    val narrationText: String = "",
+    val dialogueText: String = "",
+    val order: Int = 0,
+    val endingCard: Boolean = false
 )
 
 fun BranchCommentDto.toModel(): BranchCommentModel {

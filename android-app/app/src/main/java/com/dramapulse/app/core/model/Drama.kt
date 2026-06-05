@@ -148,6 +148,7 @@ data class BranchOptionModel(
     val resultHook: String = "",
     val resultStory: String = "",
     val storyboard: List<StoryboardScene> = emptyList(),
+    val storyboardCards: List<StoryboardCard> = emptyList(),
     val shotPromptJson: String = "[]"
 )
 
@@ -159,6 +160,7 @@ data class BranchTaskModel(
     val resultHook: String,
     val resultStory: String,
     val storyboard: List<StoryboardScene>,
+    val storyboardCards: List<StoryboardCard> = emptyList(),
     val storyboardImages: List<StoryboardImage>,
     val likeCount: Int,
     val commentCount: Int
@@ -182,6 +184,16 @@ data class StoryboardScene(
     val scene: Int,
     val description: String,
     val duration: Int
+)
+
+data class StoryboardCard(
+    val scene: Int,
+    val sceneTitle: String,
+    val imageUrl: String,
+    val narrationText: String,
+    val dialogueText: String,
+    val order: Int,
+    val endingCard: Boolean
 )
 
 data class StoryboardImage(
