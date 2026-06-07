@@ -88,26 +88,28 @@ function buildFallbackStoryboard(
               mustAppear: false,
             }]
           : [],
-        characterVisualNotes: `${primary}站在视觉中心，神情和肢体要有明显的情绪推进。${support ? `${support}负责承接关系张力。` : ''}`,
-        requiredScene: locationBase,
-        sceneVisualNotes: '场景要有明确空间识别度，避免做成空背景。',
+        characterVisualNotes: '严格参考人物三视图，保持人物一致。',
+        requiredScene: '',
+        sceneVisualNotes: '',
         compositionNotes: isEnding
-          ? '竖屏中近景或特写收束，形成明确结局感。'
-          : '竖屏人物关系构图清晰，主角占据画面视觉重心。',
+          ? '收束镜头，结局感明确。'
+          : index === 0
+            ? '起势镜头，人物关系清楚。'
+            : '人物关系镜头，避免重复构图。',
         imagePrompt: '',
-        negativePrompt: 'modern clothes, extra fingers, deformed face, western architecture, ad-style pose, empty background',
+        negativePrompt: 'text, subtitles, caption, watermark, border, comic panel, poster layout, extra fingers, deformed face, blurry face, exaggerated pose',
         referenceTaskImages: {
           characterRefs: [],
           sceneRefs: [],
           styleRefs: [],
-          carryNotes: '延续上一张图的人物服装、表情和环境关系。',
+          carryNotes: '只参考角色三视图，保持脸型、发型、服装一致。',
         },
         assetReferences: {
           requiredCharacterRefs: mustCharacters.map((character) => character.characterName),
-          optionalEnvironmentRefs: [locationBase],
-          continuityNotes: ['同一角色脸部保持一致', '同一套服装和发型保持连续', '关键道具和光线不要跳变'],
+          optionalEnvironmentRefs: [],
+          continuityNotes: ['严格参考人物三视图。', '保持同一套服装、发型和年龄状态。', '相邻分镜不要重复同一构图。', '画面中不要出现任何文字。'],
         },
-        assetCarryNotes: '优先携带主角参考图和当前关键场景参考图。',
+        assetCarryNotes: '只参考角色三视图，保持脸型、发型、服装一致。',
         emotion: isEnding ? '余波未止的收束' : promptPackage.tone,
         location: locationBase,
       };

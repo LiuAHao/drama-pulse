@@ -24,7 +24,7 @@ function buildStoryboard(): StoryboardResult {
         requiredScene: '老宅院门口',
         sceneVisualNotes: '黄昏土墙院落。',
         compositionNotes: '竖屏中心构图。',
-        imagePrompt: 'vertical cinematic storyboard frame...',
+        imagePrompt: '古代院门口双人对峙，横构图，自然光，画面中不要出现任何文字。',
         negativePrompt: 'modern clothes',
         referenceTaskImages: {
           characterRefs: [],
@@ -77,19 +77,9 @@ function buildReferenceAssets(): CollectedReferenceAssets {
         source: 'local',
       },
     ],
-    sceneRefs: [
-      {
-        assetId: 'drama_001:scene:laozhai-yuanmenkou',
-        assetType: 'scene',
-        assetPath: 'assets/reference/branch-scenes/drama_001/laozhai-yuanmenkou.png',
-        displayName: '老宅院门口',
-        usage: '场景氛围与空间连续性',
-        priority: 'recommended',
-        source: 'inferred',
-      },
-    ],
+    sceneRefs: [],
     styleRefs: [],
-    carryNotes: '优先复用角色三视图。',
+    carryNotes: '只参考角色三视图，保持脸型、发型、服装一致。',
   };
 }
 
@@ -98,8 +88,9 @@ describe('applyReferenceAssetsToStoryboard', () => {
     const result = applyReferenceAssetsToStoryboard(buildStoryboard(), buildReferenceAssets());
 
     expect(result.shots[0].referenceTaskImages.characterRefs).toHaveLength(2);
-    expect(result.shots[0].referenceTaskImages.sceneRefs).toHaveLength(1);
+    expect(result.shots[0].referenceTaskImages.sceneRefs).toHaveLength(0);
     expect(result.shots[0].referenceTaskImages.characterRefs[0].source).toBe('local');
+    expect(result.shots[0].referenceTaskImages.carryNotes).toBe('只参考角色三视图，保持脸型、发型、服装一致。');
     expect(result.shotPromptPackage.shots[0].referenceTaskImages.characterRefs).toHaveLength(2);
   });
 });

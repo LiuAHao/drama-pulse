@@ -363,11 +363,11 @@ function buildGlobalCharacterNotes(shots: ShotPrompt[]): string[] {
     shots.flatMap((shot) => shot.requiredCharacters.map((character) => character.characterName)),
   ));
   if (characterRefs.length === 0) {
-    return ['保持同一角色脸部、发型、服装和年龄感连续一致'];
+    return ['严格参考人物三视图，保持脸型、发型、服装一致。'];
   }
   return [
-    `保持 ${characterRefs.join('、')} 的脸部、发型、服装和年龄感连续一致`,
-    '同一角色的情绪推进要前后连贯，不能突然跳变',
+    `严格参考${characterRefs.join('、')}三视图，保持脸型、发型、服装一致。`,
+    '相邻分镜保持同一人物状态连续。',
   ];
 }
 
@@ -375,10 +375,11 @@ function buildGlobalSceneNotes(shots: ShotPrompt[]): string[] {
   const locations = Array.from(new Set(shots.map((shot) => shot.location).filter(Boolean)));
   return locations.length > 0
     ? [
-        `优先保持这些关键场景的空间关系稳定：${locations.join('、')}`,
-        '场景光线、时间段和关键道具尽量前后呼应',
+        `整体保持同一时间段和同一空间关系：${locations.join('、')}。`,
+        '相邻分镜避免重复同一构图和同一动作。',
+        '画面中不要出现任何文字。',
       ]
-    : ['场景光线、时间段和关键道具尽量前后呼应'];
+    : ['整体保持同一时间段和空间关系。', '相邻分镜避免重复同一构图和同一动作。', '画面中不要出现任何文字。'];
 }
 
 function sanitizeNarrativeMoment(text: string): string {
@@ -458,48 +459,47 @@ export function normalizeStoryboardResult(
       optionalCharacters,
       characterVisualNotes: typeof rawShot.characterVisualNotes === 'string' && rawShot.characterVisualNotes.trim()
         ? rawShot.characterVisualNotes.trim()
-        : '主角保持画面重心，配角负责承接关系和情绪反应。',
+        : '严格参考人物三视图，保持人物一致。',
       requiredScene: typeof rawShot.requiredScene === 'string' && rawShot.requiredScene.trim()
         ? rawShot.requiredScene.trim()
-        : location,
+        : '',
       sceneVisualNotes: typeof rawShot.sceneVisualNotes === 'string' && rawShot.sceneVisualNotes.trim()
         ? rawShot.sceneVisualNotes.trim()
-        : '保持关键空间识别度，不要做成空背景。',
-        compositionNotes: typeof rawShot.compositionNotes === 'string' && rawShot.compositionNotes.trim()
+        : '',
+      compositionNotes: typeof rawShot.compositionNotes === 'string' && rawShot.compositionNotes.trim()
         ? rawShot.compositionNotes.trim()
-        : (index === targetCardCount - 1 ? '横屏结局卡面要有明显收束感，适合图上文下展示。' : '横屏分镜卡面的人物关系构图要清楚，适合手机端图上文下展示。'),
+        : (index === 0
+          ? '起势镜头，人物关系清楚。'
+          : index === targetCardCount - 1
+            ? '收束镜头，结局感明确。'
+            : '人物关系镜头，避免重复构图。'),
       imagePrompt: typeof rawShot.imagePrompt === 'string' && rawShot.imagePrompt.trim()
         ? rawShot.imagePrompt.trim()
         : '',
       negativePrompt: typeof rawShot.negativePrompt === 'string' && rawShot.negativePrompt.trim()
         ? rawShot.negativePrompt.trim()
-        : 'modern clothes, extra fingers, deformed face, empty background, western architecture, ad-style pose',
+        : 'text, subtitles, caption, watermark, border, comic panel, poster layout, extra fingers, deformed face, blurry face, exaggerated pose',
       referenceTaskImages,
       assetReferences,
       assetCarryNotes: typeof rawShot.assetCarryNotes === 'string' && rawShot.assetCarryNotes.trim()
         ? rawShot.assetCarryNotes.trim()
-        : '保持人物脸部、服装、场景和关键道具连续一致。',
+        : '只参考角色三视图，保持脸型、发型、服装一致。',
       emotion: typeof rawShot.emotion === 'string' && rawShot.emotion.trim()
         ? rawShot.emotion.trim()
         : (index === targetCardCount - 1 ? '收束后的余波' : promptPackage.tone),
       location,
     } satisfies ShotPrompt;
   }).map((shot) => ({
-      ...shot,
-      imagePrompt: shot.imagePrompt || [
-      'landscape cinematic storyboard card frame for mobile reading',
-      `${shot.requiredScene}`,
+    ...shot,
+    imagePrompt: shot.imagePrompt || [
+      shot.location || shot.requiredScene,
       shot.requiredCharacters.length > 0
-        ? `characters: ${shot.requiredCharacters.map((character) => character.characterName).join(', ')}`
+        ? `${shot.requiredCharacters.map((character) => character.characterName).join('、')}`
         : '',
-      shot.characterVisualNotes,
-      shot.sceneVisualNotes,
-      shot.compositionNotes,
-      `emotion: ${shot.emotion}`,
-      `narrative moment: ${sanitizeNarrativeMoment(shot.description)}`,
-      'horizontal composition, image on top with long narration text below in the final mobile layout, avoid extra tall portrait framing',
-      `style: ${storyExpansion.visualStyle}`,
-    ].filter(Boolean).join(', '),
+      sanitizeNarrativeMoment(shot.description),
+      storyExpansion.visualStyle,
+      '横构图，自然光，人物清晰，画面中不要出现任何文字。',
+    ].filter(Boolean).join('，'),
   }));
 
   return {

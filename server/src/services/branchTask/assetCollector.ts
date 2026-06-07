@@ -143,14 +143,11 @@ export async function collectReferenceAssets(
     characterNames.map((name) => findCharacterReference(context.dramaId, name)),
   )).filter((item): item is ReferenceAssetItem => Boolean(item));
 
-  const sceneNames = Array.from(new Set(storyboard.shots.map((shot) => shot.requiredScene || shot.location))).filter(Boolean);
-  const sceneRefs = sceneNames.map((sceneName) => inferSceneReference(context.dramaId, sceneName));
-
   return {
     characterRefs,
-    sceneRefs,
+    sceneRefs: [],
     styleRefs: [],
-    carryNotes: '优先复用角色三视图；场景图不足时先记录为推断场景参考，后续再补真实资产。',
+    carryNotes: '只参考角色三视图，保持脸型、发型、服装一致。',
   };
 }
 
@@ -159,8 +156,6 @@ export function applyReferenceAssetsToStoryboard(
   referenceAssets: CollectedReferenceAssets,
 ): StoryboardResult {
   const characterRefMap = new Map(referenceAssets.characterRefs.map((item) => [item.displayName, item]));
-  const sceneRefMap = new Map(referenceAssets.sceneRefs.map((item) => [item.displayName, item]));
-
   const shots = storyboard.shots.map((shot) => {
     const characterNames = Array.from(new Set([
       ...shot.requiredCharacters.map((character) => character.characterName),
@@ -171,24 +166,13 @@ export function applyReferenceAssetsToStoryboard(
         .map((name) => characterRefMap.get(name))
         .filter((item): item is ReferenceAssetItem => Boolean(item)),
     );
-    const sceneNames = Array.from(new Set([
-      shot.requiredScene,
-      shot.location,
-      ...shot.assetReferences.optionalEnvironmentRefs,
-    ].filter(Boolean)));
-    const sceneRefs = uniqueReferenceAssets(
-      sceneNames
-        .map((name) => sceneRefMap.get(name))
-        .filter((item): item is ReferenceAssetItem => Boolean(item)),
-    );
-
     return {
       ...shot,
       referenceTaskImages: mergeReferenceTaskImages(
         shot.referenceTaskImages,
         {
           characterRefs: requiredCharacterRefs,
-          sceneRefs,
+          sceneRefs: [],
           styleRefs: referenceAssets.styleRefs,
           carryNotes: referenceAssets.carryNotes,
         },

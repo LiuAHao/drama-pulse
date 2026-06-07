@@ -159,6 +159,7 @@ data class BranchTaskModel(
     val resultTitle: String,
     val resultHook: String,
     val resultStory: String,
+    val failReason: String = "",
     val storyboard: List<StoryboardScene>,
     val storyboardCards: List<StoryboardCard> = emptyList(),
     val storyboardImages: List<StoryboardImage>,

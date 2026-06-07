@@ -24,7 +24,11 @@ afterAll(async () => {
 
 describe('GET /episodes/:episodeId/branch-options', () => {
   it('should return branch options for final episode', async () => {
-    const res = await app.inject({ method: 'GET', url: '/episodes/ep_001_23/branch-options' });
+    const res = await app.inject({
+      method: 'GET',
+      url: '/episodes/ep_001_23/branch-options',
+      headers: { host: '192.168.1.88:8787' },
+    });
     expect(res.statusCode).toBe(200);
 
     const body = res.json();
@@ -63,19 +67,23 @@ describe('GET /episodes/:episodeId/branch-options', () => {
     );
     const raw = await fs.readFile(artifactPath, 'utf-8');
     const artifact = JSON.parse(raw);
-    artifact.branchOptionUpdatedAtSnapshot = '1999-01-01T00:00:00.000Z';
-    artifact.resultStory = 'stale-sidecar-should-not-be-used';
-    await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
+    try {
+      artifact.branchOptionUpdatedAtSnapshot = '1999-01-01T00:00:00.000Z';
+      artifact.resultStory = 'stale-sidecar-should-not-be-used';
+      await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
 
-    const res = await app.inject({
-      method: 'GET',
-      url: '/episodes/ep_002_23/branch-options',
-      headers: { host: '192.168.1.88:8787' },
-    });
-    expect(res.statusCode).toBe(200);
-    const body = res.json();
-    expect(body.data[0].resultStory).toBe('');
-    expect(body.data[0].generatedPayloadPath).toBe('');
+      const res = await app.inject({
+        method: 'GET',
+        url: '/episodes/ep_002_23/branch-options',
+        headers: { host: '192.168.1.88:8787' },
+      });
+      expect(res.statusCode).toBe(200);
+      const body = res.json();
+      expect(body.data[0].resultStory).toBe('');
+      expect(body.data[0].generatedPayloadPath).toBe('');
+    } finally {
+      await fs.writeFile(artifactPath, raw, 'utf-8');
+    }
   });
 
   it('should ignore sidecar artifacts that fail signature validation', async () => {
@@ -95,18 +103,22 @@ describe('GET /episodes/:episodeId/branch-options', () => {
     );
     const raw = await fs.readFile(artifactPath, 'utf-8');
     const artifact = JSON.parse(raw);
-    artifact.candidatePrompt = `${artifact.candidatePrompt} 篡改`;
-    await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
+    try {
+      artifact.candidatePrompt = `${artifact.candidatePrompt} 篡改`;
+      await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
 
-    const res = await app.inject({
-      method: 'GET',
-      url: '/episodes/ep_002_23/branch-options',
-      headers: { host: '192.168.1.88:8787' },
-    });
-    expect(res.statusCode).toBe(200);
-    const body = res.json();
-    expect(body.data[0].resultHook).toBe('');
-    expect(body.data[0].generatedPayloadPath).toBe('');
+      const res = await app.inject({
+        method: 'GET',
+        url: '/episodes/ep_002_23/branch-options',
+        headers: { host: '192.168.1.88:8787' },
+      });
+      expect(res.statusCode).toBe(200);
+      const body = res.json();
+      expect(body.data[0].resultHook).toBe('');
+      expect(body.data[0].generatedPayloadPath).toBe('');
+    } finally {
+      await fs.writeFile(artifactPath, raw, 'utf-8');
+    }
   });
 });
 

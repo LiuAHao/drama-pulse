@@ -22,7 +22,7 @@ function buildShot(): ShotPrompt {
     requiredScene: '老宅院门口',
     sceneVisualNotes: '黄昏土墙院落。',
     compositionNotes: '竖屏中心构图。',
-    imagePrompt: 'vertical cinematic storyboard frame...',
+    imagePrompt: '古代院门口人物回身，横构图，自然光，画面中不要出现任何文字。',
     negativePrompt: 'modern clothes',
     referenceTaskImages: {
       characterRefs: [

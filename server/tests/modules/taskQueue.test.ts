@@ -168,7 +168,7 @@ describe('taskQueue staged executor pipeline', () => {
     expect(Array.isArray(shotPromptPackage.shots[0].requiredCharacters)).toBe(true);
     expect(shotPromptPackage.shots[0].requiredCharacters.length).toBeGreaterThan(0);
     expect(shotPromptPackage.shots[0].emotion).toBeTruthy();
-    expect(shotPromptPackage.shots[0].requiredScene).toBeTruthy();
+    expect(shotPromptPackage.shots[0].requiredScene).toBe('');
     expect(shotPromptPackage.shots[0].compositionNotes).toBeTruthy();
     expect(shotPromptPackage.shots[0].dialogueText).toBeTruthy();
     expect(shotPromptPackage.shots[0].assetCarryNotes).toBeTruthy();

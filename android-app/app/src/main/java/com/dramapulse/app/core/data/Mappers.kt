@@ -174,6 +174,7 @@ fun BranchTaskDto.toModel(): BranchTaskModel {
         resultTitle = resultTitle,
         resultHook = resultHook,
         resultStory = resultStory,
+        failReason = failReason,
         storyboard = scenes,
         storyboardCards = cards,
         storyboardImages = images,

@@ -18,6 +18,69 @@ const DEFAULT_HIGHLIGHT_STATS = {
   topOption: '',
 };
 
+function normalizeStoryboardManifestJson(raw: string, baseUrl: string): string {
+  try {
+    const parsed = JSON.parse(raw) as {
+      coverImage?: string;
+      cards?: Array<{
+        imageAssetPath?: string;
+        [key: string]: unknown;
+      }>;
+      [key: string]: unknown;
+    };
+    if (!Array.isArray(parsed.cards) && !('coverImage' in parsed)) {
+      return raw || '{}';
+    }
+
+    const normalized: Record<string, unknown> = { ...parsed };
+
+    if ('coverImage' in parsed) {
+      normalized.coverImage = pathToUrl(parsed.coverImage ?? '', baseUrl);
+    }
+
+    if (Array.isArray(parsed.cards)) {
+      normalized.cards = parsed.cards.map((card) => (
+        'imageAssetPath' in card
+          ? {
+              ...card,
+              imageAssetPath: pathToUrl(String(card.imageAssetPath ?? ''), baseUrl),
+            }
+          : card
+      ));
+    }
+
+    return JSON.stringify(normalized);
+  } catch {
+    return raw || '{}';
+  }
+}
+
+function normalizeStoryboardImagesJson(raw: string, baseUrl: string): string {
+  try {
+    const parsed = JSON.parse(raw) as Array<{
+      imageAssetPath?: string;
+      [key: string]: unknown;
+    }>;
+
+    if (!Array.isArray(parsed)) {
+      return raw || '[]';
+    }
+
+    return JSON.stringify(
+      parsed.map((item) => (
+        'imageAssetPath' in item
+          ? {
+              ...item,
+              imageAssetPath: pathToUrl(String(item.imageAssetPath ?? ''), baseUrl),
+            }
+          : item
+      )),
+    );
+  } catch {
+    return raw || '[]';
+  }
+}
+
 export function toClientDrama(drama: Drama, baseUrl: string) {
   return {
     ...drama,
@@ -99,6 +162,15 @@ export function toClientBranchOption(
   generatedArtifact?: FixedBranchArtifact | null,
   generatedPayloadPath?: string | null,
 ) {
+  const storyboardImagesJson = normalizeStoryboardImagesJson(
+    generatedArtifact?.storyboardImagesJson ?? '[]',
+    baseUrl,
+  );
+  const storyboardManifestJson = normalizeStoryboardManifestJson(
+    generatedArtifact?.storyboardManifestJson ?? '{}',
+    baseUrl,
+  );
+
   return {
     ...option,
     resultContentPath: pathToUrl(option.resultContentPath, baseUrl),
@@ -109,8 +181,8 @@ export function toClientBranchOption(
     resultStory: generatedArtifact?.resultStory ?? '',
     storyboardJson: generatedArtifact?.storyboardJson ?? '[]',
     shotPromptJson: generatedArtifact?.shotPromptJson ?? '[]',
-    storyboardImagesJson: generatedArtifact?.storyboardImagesJson ?? '[]',
-    storyboardManifestJson: generatedArtifact?.storyboardManifestJson ?? '{}',
+    storyboardImagesJson,
+    storyboardManifestJson,
     narrationPayloadJson: generatedArtifact?.narrationPayloadJson ?? '{}',
     referenceAssetsJson: generatedArtifact?.referenceAssetsJson ?? '{}',
     resultTagsJson: generatedArtifact?.resultTagsJson ?? '[]',
@@ -136,6 +208,14 @@ export function toClientBranchTask(task: BranchTaskLike, baseUrl: string) {
     : task.episode?.drama
       ? toClientDrama(task.episode.drama, baseUrl)
       : null;
+  const storyboardImagesJson = normalizeStoryboardImagesJson(
+    (task as any).storyboardImagesJson ?? '[]',
+    baseUrl,
+  );
+  const storyboardManifestJson = normalizeStoryboardManifestJson(
+    (task as any).storyboardManifestJson ?? '{}',
+    baseUrl,
+  );
 
   return {
     id: task.id,
@@ -159,8 +239,8 @@ export function toClientBranchTask(task: BranchTaskLike, baseUrl: string) {
     tailStateSnapshotJson: (task as any).tailStateSnapshotJson ?? '{}',
     characterBibleJson: (task as any).characterBibleJson ?? '[]',
     referenceAssetsJson: (task as any).referenceAssetsJson ?? '{}',
-    storyboardImagesJson: (task as any).storyboardImagesJson ?? '[]',
-    storyboardManifestJson: (task as any).storyboardManifestJson ?? '{}',
+    storyboardImagesJson,
+    storyboardManifestJson,
     narrationPayloadJson: (task as any).narrationPayloadJson ?? '{}',
     imageTaskStatus: (task as any).imageTaskStatus ?? 'not_started',
     imageTaskPayloadJson: (task as any).imageTaskPayloadJson ?? '{}',

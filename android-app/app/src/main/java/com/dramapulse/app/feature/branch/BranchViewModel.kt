@@ -111,7 +111,11 @@ class BranchViewModel(
 
                 _uiState.value = when (mode) {
                     "fixed" -> {
-                        val selected = options.firstOrNull { it.id == optionId } ?: options.firstOrNull()
+                        val selected = if (optionId.isNullOrBlank()) {
+                            options.firstOrNull()
+                        } else {
+                            options.firstOrNull { it.id == optionId }
+                        }
                         if (selected != null) {
                             baseState.copy(
                                 screenState = BranchScreenState.TASK_SUCCESS,
@@ -120,7 +124,7 @@ class BranchViewModel(
                         } else {
                             baseState.copy(
                                 screenState = BranchScreenState.TASK_FAILED,
-                                errorMessage = "未找到分支内容"
+                                errorMessage = if (optionId.isNullOrBlank()) "未找到分支内容" else "指定分支不存在或已失效"
                             )
                         }
                     }
@@ -210,14 +214,33 @@ class BranchViewModel(
                             return@launch
                         }
                         BranchTaskStatus.FAILED, BranchTaskStatus.TIMEOUT, BranchTaskStatus.BLOCKED -> {
-                            _uiState.update { it.copy(screenState = BranchScreenState.TASK_FAILED) }
+                            _uiState.update {
+                                it.copy(
+                                    screenState = BranchScreenState.TASK_FAILED,
+                                    errorMessage = task.failReason.ifBlank { failureMessageFor(task.status) }
+                                )
+                            }
                             return@launch
                         }
                         else -> {}
                     }
                 } catch (_: Exception) {}
             }
-            _uiState.update { it.copy(screenState = BranchScreenState.TASK_FAILED) }
+            _uiState.update {
+                it.copy(
+                    screenState = BranchScreenState.TASK_FAILED,
+                    errorMessage = "生成超时，请稍后重试"
+                )
+            }
+        }
+    }
+
+    private fun failureMessageFor(status: BranchTaskStatus): String {
+        return when (status) {
+            BranchTaskStatus.TIMEOUT -> "生成超时，请稍后重试"
+            BranchTaskStatus.BLOCKED -> "生成流程被阻塞，请稍后重试"
+            BranchTaskStatus.FAILED -> "生成失败"
+            else -> "生成失败"
         }
     }
 

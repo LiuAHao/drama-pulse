@@ -24,7 +24,7 @@ import com.dramapulse.app.ui.component.EmptyPanel
 import com.dramapulse.app.ui.component.ErrorPanel
 import com.dramapulse.app.ui.component.LoadingPanel
 import com.dramapulse.app.ui.theme.Accent
-import com.dramapulse.app.ui.theme.Divider
+import com.dramapulse.app.ui.theme.Divider as DividerColor
 import com.dramapulse.app.ui.theme.PageBackground
 import com.dramapulse.app.ui.theme.TextPrimary
 import com.dramapulse.app.ui.theme.TextSecondary
@@ -169,7 +169,7 @@ private fun BranchOptionsContent(
                     focusedTextColor = TextPrimary,
                     unfocusedTextColor = TextPrimary,
                     focusedBorderColor = Accent,
-                    unfocusedBorderColor = Divider
+                    unfocusedBorderColor = DividerColor
                 ),
                 maxLines = 3
             )
@@ -214,6 +214,7 @@ private fun BranchTaskResult(
             }
         }
     } ?: emptyList()
+    val shouldShowTaskStoryBody = task != null && taskStoryboardCards.isEmpty() && task.resultStory.isNotEmpty()
 
     LazyColumn(
         modifier = modifier
@@ -236,20 +237,19 @@ private fun BranchTaskResult(
 
             if (task.resultHook.isNotEmpty()) {
                 item {
-                    Text(
-                        text = task.resultHook,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                    ResultSectionCard(
+                        title = "钩子",
+                        body = task.resultHook,
+                        emphasize = true
                     )
                 }
             }
 
-            if (task.resultStory.isNotEmpty()) {
+            if (shouldShowTaskStoryBody) {
                 item {
-                    Text(
-                        text = task.resultStory,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    ResultSectionCard(
+                        title = "剧情正文",
+                        body = task.resultStory
                     )
                 }
             }
@@ -257,7 +257,7 @@ private fun BranchTaskResult(
             if (taskStoryboardCards.isNotEmpty()) {
                 item {
                     Text(
-                        text = "图文分镜",
+                        text = "图文剧情",
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -300,7 +300,7 @@ private fun BranchTaskResult(
                             focusedTextColor = TextPrimary,
                             unfocusedTextColor = TextPrimary,
                             focusedBorderColor = Accent,
-                            unfocusedBorderColor = Divider
+                            unfocusedBorderColor = DividerColor
                         )
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -365,21 +365,11 @@ private fun FixedBranchResult(
             .map { it.trim() }
             .filter { it.isNotBlank() }
     }
-    val storyboardCards = remember(option.storyboardCards, option.storyboard) {
-        option.storyboardCards.ifEmpty {
-            option.storyboard.map { scene ->
-                StoryboardCard(
-                    scene = scene.scene,
-                    sceneTitle = "场景 ${scene.scene}",
-                    imageUrl = "",
-                    narrationText = scene.description,
-                    dialogueText = "",
-                    order = scene.scene,
-                    endingCard = false
-                )
-            }
-        }
+    val hasGeneratedPayload = option.generatedPayloadUrl.isNotBlank()
+    val storyboardCards = remember(option.storyboardCards) {
+        option.storyboardCards
     }
+    val shouldShowStoryBody = storyboardCards.isEmpty() && storyParagraphs.isNotEmpty()
 
     Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
         Text(
@@ -400,7 +390,7 @@ private fun FixedBranchResult(
                 emphasize = true
             )
         }
-        if (storyParagraphs.isNotEmpty()) {
+        if (shouldShowStoryBody) {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                 Text(
                     text = "剧情正文",
@@ -417,12 +407,29 @@ private fun FixedBranchResult(
         }
         if (storyboardCards.isNotEmpty()) {
             Text(
-                text = "图文分镜",
+                text = "图文剧情",
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
             storyboardCards.forEach { card ->
                 StoryboardComicCard(card = card)
+            }
+        } else if (hasGeneratedPayload) {
+            ResultSectionCard(
+                title = "图文分镜",
+                body = "分镜素材加载失败，请返回重试或重新刷新固定分支产物。"
+            )
+        } else if (option.storyboard.isNotEmpty()) {
+            Text(
+                text = "图文剧情",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            option.storyboard.forEach { scene ->
+                ResultSectionCard(
+                    title = "场景 ${scene.scene}",
+                    body = scene.description
+                )
             }
         }
     }
@@ -440,7 +447,7 @@ private fun StoryboardComicCard(
             .background(MaterialTheme.colorScheme.surface)
             .border(
                 width = 1.dp,
-                color = Divider.copy(alpha = 0.6f),
+                color = DividerColor.copy(alpha = 0.6f),
                 shape = RoundedCornerShape(16.dp)
             )
             .padding(12.dp)
@@ -472,8 +479,8 @@ private fun StoryboardComicCard(
             if (card.narrationText.isNotBlank()) {
                 Text(
                     text = card.narrationText,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -493,7 +500,7 @@ private fun ResultSectionCard(
             .background(MaterialTheme.colorScheme.surface)
             .border(
                 width = 1.dp,
-                color = if (emphasize) Accent.copy(alpha = 0.35f) else Divider.copy(alpha = 0.6f),
+                color = if (emphasize) Accent.copy(alpha = 0.35f) else DividerColor.copy(alpha = 0.6f),
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(14.dp)
