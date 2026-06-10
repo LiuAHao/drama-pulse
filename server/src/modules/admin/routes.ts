@@ -19,7 +19,13 @@ import {
 } from '../../shared/schemas/index.js';
 import { getBaseUrlFromRequest, getResourceConfigPath, getResourceRoots, pathToUrl, getResourceRoots as getRoots } from '../../services/resource/index.js';
 import { toClientBranchTask, toClientDrama, toClientEpisode, toClientWatchProgress } from '../../services/clientPayload/index.js';
-import { refreshFixedBranchOptionsForEpisode } from '../../services/branchTask/fixedBranchGenerator.js';
+import {
+  inspectFixedBranchArtifact,
+  refreshFixedBranchOptionsForEpisode,
+  type FixedBranchArtifactInspectionStatus,
+} from '../../services/branchTask/fixedBranchGenerator.js';
+import { toClientBranchOption } from '../../services/clientPayload/index.js';
+import { normalizeHighlightConfig } from '../../services/highlight/config.js';
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
@@ -170,15 +176,21 @@ function toStageOneCandidatePayload(highlight: {
     }
   };
 
+  const normalizedConfig = normalizeHighlightConfig({
+    type: highlight.type,
+    intensity: highlight.intensity,
+    templateId: highlight.templateId,
+  });
+
   return {
     episodeId: highlight.episodeId,
     startTimeMs: highlight.startTimeMs,
     endTimeMs: highlight.endTimeMs,
-    highlightType: highlight.type,
+    highlightType: normalizedConfig.type,
     title: highlight.title,
     description: highlight.description,
-    intensity: highlight.intensity,
-    templateId: highlight.templateId,
+    intensity: normalizedConfig.intensity,
+    templateId: normalizedConfig.templateId,
     interactionOptions: parseArray(highlight.interactionOptionsJson),
     reason: highlight.reason,
     confidence: highlight.confidence,
@@ -187,6 +199,51 @@ function toStageOneCandidatePayload(highlight: {
     targetCharacterGuess: highlight.targetCharacterGuess || undefined,
     mentionedCharacters: parseArray(highlight.mentionedCharactersJson),
     characterGuessConfidence: highlight.characterGuessConfidence,
+  };
+}
+
+function toAdminHighlightPayload(highlight: {
+  id: string;
+  episodeId: string;
+  startTimeMs: number;
+  endTimeMs: number;
+  interactionStartMs: number | null;
+  interactionAppearMs: number | null;
+  interactionEndMs: number | null;
+  type: string;
+  title: string;
+  description: string;
+  intensity: number;
+  templateId: string;
+  interactionOptionsJson: string;
+  visualEffectType: string;
+  source: string;
+  confidence: number;
+  status: string;
+  reason: string;
+  supportingSegmentIdsJson: string;
+  speakerGuess: string | null;
+  targetCharacterGuess: string | null;
+  mentionedCharactersJson: string;
+  characterGuessConfidence: number | null;
+  createdAt: Date;
+  updatedAt: Date;
+}) {
+  const normalizedConfig = normalizeHighlightConfig({
+    type: highlight.type,
+    intensity: highlight.intensity,
+    templateId: highlight.templateId,
+  });
+
+  return {
+    ...highlight,
+    type: normalizedConfig.type,
+    intensity: normalizedConfig.intensity,
+    templateId: normalizedConfig.templateId,
+    displayMode: normalizedConfig.displayMode,
+    resolvedInteractionType: normalizedConfig.resolvedInteractionType,
+    soundEnabled: normalizedConfig.soundEnabled,
+    singleUse: normalizedConfig.singleUse,
   };
 }
 
@@ -310,6 +367,12 @@ async function applyApprovedAiReview(
     };
   }
 
+  const normalizedConfig = normalizeHighlightConfig({
+    type: String(final.highlightType || ''),
+    intensity: Number(final.intensity),
+    templateId: String(final.templateId || '').trim(),
+  });
+
   const updated = await prisma.highlight.update({
     where: { id: highlight.id },
     data: {
@@ -318,11 +381,11 @@ async function applyApprovedAiReview(
       interactionStartMs: Number(final.interactionStartMs),
       interactionAppearMs: Number(final.interactionAppearMs),
       interactionEndMs: Number(final.interactionEndMs),
-      type: String(final.highlightType),
+      type: normalizedConfig.type,
       title: String(final.title || '').trim(),
       description: String(final.description || '').trim(),
-      intensity: Number(final.intensity),
-      templateId: String(final.templateId || '').trim(),
+      intensity: normalizedConfig.intensity,
+      templateId: normalizedConfig.templateId,
       interactionOptionsJson: JSON.stringify(final.interactionOptions || [], null, 0),
       visualEffectType: String(final.visualEffectType || '').trim(),
       confidence: Number(final.confidence ?? highlight.confidence),
@@ -501,6 +564,29 @@ function toAdminDanmaku(
 }
 
 export async function adminRoutes(fastify: FastifyInstance) {
+  function formatFixedBranchArtifactStatus(status: FixedBranchArtifactInspectionStatus): string {
+    switch (status) {
+      case 'valid':
+        return 'artifact 有效，前后台都可正常读取';
+      case 'missing_manifest':
+        return '缺少 manifest，后台无法确认这一批固定分支属于当前尾集';
+      case 'missing_artifact':
+        return 'manifest 存在，但对应的固定分支详情文件缺失';
+      case 'invalid_artifact':
+        return '固定分支详情文件存在，但 JSON 已损坏或格式不合法';
+      case 'content_version_mismatch':
+        return 'artifact 版本与当前服务要求不一致';
+      case 'option_not_in_manifest':
+        return 'manifest 里没有登记这个固定分支';
+      case 'snapshot_mismatch':
+        return 'artifact 与数据库里的 branch option 快照时间不一致，前台接口会隐藏它';
+      case 'signature_mismatch':
+        return 'artifact 的签名与当前数据库字段不一致，前台接口会隐藏它';
+      default:
+        return 'artifact 状态未知';
+    }
+  }
+
   fastify.addHook('onRequest', async (request) => {
     const auth = request.headers.authorization;
     if (!auth?.startsWith('Bearer ')) throw new AuthError();
@@ -573,7 +659,12 @@ export async function adminRoutes(fastify: FastifyInstance) {
       prisma.highlight.count({ where }),
     ]);
 
-    reply.send(success({ items, total, page, pageSize }));
+    reply.send(success({
+      items: items.map((item) => toAdminHighlightPayload(item)),
+      total,
+      page,
+      pageSize,
+    }));
   });
 
   // PATCH /admin/highlights/:highlightId - update highlight fields
@@ -645,17 +736,26 @@ export async function adminRoutes(fastify: FastifyInstance) {
       return;
     }
 
+    const normalizedConfig = normalizeHighlightConfig({
+      type: body.type ?? highlight.type,
+      intensity: body.intensity ?? highlight.intensity,
+      templateId: body.templateId ?? highlight.templateId,
+    });
+
     const updated = await prisma.highlight.update({
       where: { id: highlightId },
       data: {
         ...body,
+        type: normalizedConfig.type,
+        intensity: normalizedConfig.intensity,
+        templateId: normalizedConfig.templateId,
         interactionStartMs,
         interactionAppearMs,
         interactionEndMs,
       },
     });
 
-    reply.send(success(updated));
+    reply.send(success(toAdminHighlightPayload(updated)));
   });
 
   // GET /admin/highlights/:highlightId - get single highlight detail with episode + drama
@@ -681,7 +781,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
     const { drama, ...episodeData } = episode;
 
     reply.send(success({
-      ...highlightData,
+      ...toAdminHighlightPayload(highlightData),
       episode: {
         ...episodeData,
         videoUrl: pathToUrl(episodeData.videoPath, baseUrl),
@@ -758,7 +858,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
 
     reply.send(success({
       highlight: {
-        ...highlightData,
+        ...toAdminHighlightPayload(highlightData),
         episode: {
           ...episodeData,
           videoUrl: pathToUrl(episodeData.videoPath, baseUrl),
@@ -1268,6 +1368,61 @@ export async function adminRoutes(fastify: FastifyInstance) {
         generatedPayloadPath: pathToUrl(option.generatedPayloadPath, baseUrl),
       })),
     }));
+  });
+
+  // GET /admin/episodes/:episodeId/branch-options - inspect fixed branch options with artifact diagnostics
+  fastify.get('/admin/episodes/:episodeId/branch-options', async (request, reply) => {
+    const baseUrl = getBaseUrlFromRequest(request);
+    const { episodeId } = episodeIdParamSchema.parse(request.params);
+
+    const episode = await prisma.episode.findUnique({
+      where: { id: episodeId },
+    });
+
+    if (!episode) {
+      reply.status(404).send({ code: 40004, message: 'episode not found', data: null });
+      return;
+    }
+
+    if (!episode.isFinalEpisode) {
+      reply.send(success([]));
+      return;
+    }
+
+    const branchOptions = await prisma.branchOption.findMany({
+      where: {
+        episodeId,
+        status: 'active',
+      },
+      orderBy: { sortIndex: 'asc' },
+    });
+
+    const inspections = await Promise.all(branchOptions.map((option) => inspectFixedBranchArtifact(option)));
+
+    reply.send(success(
+      branchOptions.map((option, index) => {
+        const inspection = inspections[index];
+        return {
+          ...toClientBranchOption(
+            option,
+            baseUrl,
+            inspection.artifact,
+            inspection.relativePath || null,
+          ),
+          artifactStatus: inspection.status,
+          artifactValid: inspection.isValid,
+          artifactValidationMessage: formatFixedBranchArtifactStatus(inspection.status),
+          artifactDiagnosticsJson: JSON.stringify({
+            optionUpdatedAt: inspection.optionUpdatedAt,
+            manifestSnapshot: inspection.manifestSnapshot,
+            artifactSnapshot: inspection.artifactSnapshot,
+            expectedSignature: inspection.expectedSignature,
+            manifestSignature: inspection.manifestSignature,
+            artifactSignature: inspection.artifactSignature,
+          }),
+        };
+      }),
+    ));
   });
 
   // POST /admin/demo/reset - reset runtime data

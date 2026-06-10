@@ -71,6 +71,19 @@ describe('GET /episodes/:episodeId/highlights', () => {
     });
   });
 
+  it('should normalize strong emotion button highlights into full interaction payloads', async () => {
+    const res = await app.inject({ method: 'GET', url: '/episodes/ep_001_01/highlights' });
+
+    expect(res.statusCode).toBe(200);
+    const firstHighlight = res.json().data[0];
+    expect(firstHighlight.intensity).toBe(4);
+    expect(firstHighlight.templateId).toBe('boost_action');
+    expect(firstHighlight.displayMode).toBe('interactive_component');
+    expect(firstHighlight.resolvedInteractionType).toBe('boost_action');
+    expect(firstHighlight.soundEnabled).toBe(true);
+    expect(firstHighlight.singleUse).toBe(false);
+  });
+
   it('should return empty array for episode with no confirmed highlights', async () => {
     // ep_001_03 has no highlights in seed data
     const res = await app.inject({ method: 'GET', url: '/episodes/ep_001_03/highlights' });

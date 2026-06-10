@@ -64,7 +64,7 @@ export const upsertWatchProgressSchema = z.object({
   progressMs: z.number().int().min(0),
 });
 
-const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'funny', 'suspense', 'emotion_burst'] as const;
+const HIGHLIGHT_TYPES = ['feel_good', 'reversal', 'conflict', 'sweet', 'funny'] as const;
 const TEMPLATE_IDS = ['emotion_button', 'vote_side', 'suspense_lock', 'boost_action'] as const;
 
 export const updateHighlightSchema = z.object({

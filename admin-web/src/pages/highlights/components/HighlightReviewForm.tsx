@@ -3,16 +3,17 @@ import { TimeAdjustControls } from './TimeAdjustControls';
 
 const TYPE_OPTIONS = [
   { value: 'feel_good', label: 'feel_good (爽点)' },
+  { value: 'funny', label: 'funny (搞笑)' },
   { value: 'reversal', label: 'reversal (反转)' },
   { value: 'conflict', label: 'conflict (冲突)' },
   { value: 'sweet', label: 'sweet (甜蜜)' },
-  { value: 'suspense', label: 'suspense (悬念)' },
 ];
 
 const TEMPLATE_OPTIONS = [
   { value: 'emotion_button', label: 'emotion_button' },
   { value: 'vote_side', label: 'vote_side' },
   { value: 'suspense_lock', label: 'suspense_lock' },
+  { value: 'boost_action', label: 'boost_action' },
 ];
 
 export interface ReviewFormState {

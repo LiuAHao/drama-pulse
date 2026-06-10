@@ -61,6 +61,10 @@ export interface Highlight {
   description: string;
   intensity: number;
   templateId: string;
+  displayMode?: string;
+  resolvedInteractionType?: string;
+  soundEnabled?: boolean;
+  singleUse?: boolean;
   interactionOptionsJson: string;
   visualEffectType: string;
   source: string;
@@ -202,6 +206,10 @@ export interface BranchOption {
   resultTagsJson: string;
   sortIndex: number;
   status: string;
+  artifactStatus?: string;
+  artifactValid?: boolean;
+  artifactValidationMessage?: string;
+  artifactDiagnosticsJson?: string;
 }
 
 export interface FavoriteRecord {

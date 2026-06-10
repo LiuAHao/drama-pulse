@@ -174,9 +174,7 @@ fun HighlightOverlay(
                     interactionEnabled = interactionEnabled,
                     consumedOptionText = quickPromptConsumedOption,
                     onClick = { option ->
-                        if (soundPlayer.playIfIdle(highlight.type)) {
-                            onInteractionClick(highlight.id, option)
-                        }
+                        onInteractionClick(highlight.id, option)
                     }
                 )
             }

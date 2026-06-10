@@ -1,17 +1,17 @@
 {
   "episodeId": "ep_002_23",
-  "publishedAt": "2026-06-10T13:14:17.848Z",
+  "publishedAt": "2026-06-10T14:32:40.469Z",
   "contentVersion": 2,
   "optionIds": [
     "bo_002_01",
     "bo_002_02"
   ],
   "optionUpdatedAtSnapshots": {
-    "bo_002_01": "2026-06-10T13:14:17.847Z",
-    "bo_002_02": "2026-06-10T13:14:17.848Z"
+    "bo_002_01": "2026-06-10T14:32:40.461Z",
+    "bo_002_02": "2026-06-10T14:32:40.461Z"
   },
   "artifactSignatures": {
-    "bo_002_01": "56e1b429fc319f1df28b9d55829aa4de4bd7f9d9",
-    "bo_002_02": "770db536ac0b0a73ccdd08ead24c1f55cf3f8aa5"
+    "bo_002_01": "e49caf18e28fea8392bf8ffc5d9c36f4a23776bc",
+    "bo_002_02": "03e3d84d3c01c911d3a298e3c132de3e1e85366c"
   }
 }

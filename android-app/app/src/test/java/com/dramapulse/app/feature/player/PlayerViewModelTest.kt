@@ -22,6 +22,8 @@ import com.dramapulse.app.core.model.HighlightModel
 import com.dramapulse.app.core.model.HighlightOption
 import com.dramapulse.app.core.model.HighlightType
 import com.dramapulse.app.core.model.HighlightStatsModel
+import com.dramapulse.app.core.model.HIGHLIGHT_TEMPLATE_BOOST_ACTION
+import com.dramapulse.app.core.model.HIGHLIGHT_TEMPLATE_EMOTION_BUTTON
 import com.dramapulse.app.core.player.PlaybackUiState
 import com.dramapulse.app.core.player.PlayerController
 import com.dramapulse.app.testutil.MainDispatcherRule
@@ -350,6 +352,120 @@ class PlayerViewModelTest {
     }
 
     @Test
+    fun `strong emotion button highlight still uses full interaction instead of quick prompt`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val highlight = buildHighlight(
+            id = "hl-strong-emotion",
+            episodeId = episode1.id,
+            interactionAppearMs = 15_600,
+            interactionStartMs = 16_000,
+            interactionEndMs = 19_500,
+            intensity = 4,
+            templateId = HIGHLIGHT_TEMPLATE_EMOTION_BUTTON
+        )
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(highlight))
+            )
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            repos.playerController.emitPlayback(positionMs = 16_100)
+            advanceTimeBy(600)
+            runCurrent()
+
+            assertEquals("hl-strong-emotion", viewModel.uiState.value.highlight.activeHighlight?.id)
+            assertEquals(false, viewModel.uiState.value.highlight.activeHighlight?.isQuickPrompt)
+            assertEquals(
+                HIGHLIGHT_TEMPLATE_BOOST_ACTION,
+                viewModel.uiState.value.highlight.activeHighlight?.compatibilityInteractionType()
+            )
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
+    fun `downgraded quick prompt highlight submits quick interaction and appends danmaku`() = runTest {
+        val dramaId = "drama-1"
+        val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
+        val first = buildHighlight(
+            id = "hl-1",
+            episodeId = episode1.id,
+            interactionAppearMs = 10_000,
+            interactionStartMs = 10_200,
+            interactionEndMs = 13_500,
+            intensity = 5
+        )
+        val second = buildHighlight(
+            id = "hl-2",
+            episodeId = episode1.id,
+            interactionAppearMs = 15_500,
+            interactionStartMs = 15_800,
+            interactionEndMs = 18_500,
+            intensity = 4,
+            type = HighlightType.CONFLICT,
+            templateId = HIGHLIGHT_TEMPLATE_BOOST_ACTION
+        )
+        val interactionRepository = FakeInteractionRepositoryForTest()
+        val repos = TestPlayerDependencies(
+            contentRepository = FakeContentRepositoryForTest(
+                episodes = listOf(episode1),
+                episodeDetails = mapOf(episode1.id to episode1),
+                highlightsByEpisodeId = mapOf(episode1.id to listOf(first, second))
+            ),
+            interactionRepository = interactionRepository
+        )
+        val viewModel = PlayerViewModel(
+            contentRepository = repos.contentRepository,
+            progressRepository = repos.progressRepository,
+            interactionRepository = repos.interactionRepository,
+            branchRepository = repos.branchRepository,
+            playerUiRepository = repos.playerUiRepository,
+            playerController = repos.playerController
+        )
+
+        try {
+            viewModel.onEvent(PlayerEvent.EnterScreen(dramaId = dramaId, episodeId = episode1.id))
+            runCurrent()
+
+            repos.playerController.emitPlayback(positionMs = 10_500)
+            advanceTimeBy(600)
+            runCurrent()
+            repos.playerController.emitPlayback(positionMs = 14_000, isPlaying = false)
+            advanceTimeBy(600)
+            runCurrent()
+            repos.playerController.emitPlayback(positionMs = 15_900)
+            advanceTimeBy(600)
+            runCurrent()
+
+            viewModel.onEvent(PlayerEvent.OnInteractionClick("hl-2", "烧起来了"))
+            runCurrent()
+
+            assertEquals(HIGHLIGHT_TEMPLATE_EMOTION_BUTTON, interactionRepository.submissions.single().interactionType)
+            assertEquals("烧起来了", interactionRepository.submissions.single().optionText)
+            assertEquals(1, viewModel.uiState.value.social.danmakuMessages.size)
+            assertEquals(false, viewModel.uiState.value.highlight.activeInteractionEnabled)
+        } finally {
+            viewModel.forceClearForTest()
+        }
+    }
+
+    @Test
     fun `reset highlight triggers allows same episode to trigger again after re-enter`() = runTest {
         val dramaId = "drama-1"
         val episode1 = buildEpisode(id = "ep-1", dramaId = dramaId, episodeNo = 1)
@@ -620,12 +736,20 @@ class PlayerViewModelTest {
     }
 
     private class FakeInteractionRepositoryForTest : InteractionRepository {
+        val submissions = mutableListOf<InteractionSubmission>()
+
         override suspend fun submitInteraction(
             episodeId: String,
             highlightId: String,
             interactionType: String,
             optionText: String
         ): HighlightStatsModel {
+            submissions += InteractionSubmission(
+                episodeId = episodeId,
+                highlightId = highlightId,
+                interactionType = interactionType,
+                optionText = optionText
+            )
             return HighlightStatsModel(
                 totalCount = 1,
                 uniqueDeviceCount = 1,
@@ -642,6 +766,13 @@ class PlayerViewModelTest {
             return HighlightHeatReportResult(reportId = "fake-report", status = "ok")
         }
     }
+
+    private data class InteractionSubmission(
+        val episodeId: String,
+        val highlightId: String,
+        val interactionType: String,
+        val optionText: String
+    )
 
     private class FailingPlayerUiRepository : PlayerUiRepository {
         override suspend fun isFavorite(dramaId: String): Boolean = false
@@ -741,7 +872,8 @@ class PlayerViewModelTest {
         interactionStartMs: Long,
         interactionEndMs: Long,
         intensity: Int = 3,
-        type: HighlightType = HighlightType.FEEL_GOOD
+        type: HighlightType = HighlightType.FEEL_GOOD,
+        templateId: String = ""
     ): HighlightModel {
         return HighlightModel(
             id = id,
@@ -755,6 +887,7 @@ class PlayerViewModelTest {
             title = "高光测试",
             description = "",
             intensity = intensity,
+            templateId = templateId,
             interactionOptions = listOf(
                 HighlightOption(text = type.fallbackOptionText())
             ),

@@ -118,7 +118,7 @@ describe('PATCH /admin/highlights/:highlightId', () => {
   it('should update highlight fields', async () => {
     const original = await prisma.highlight.findUniqueOrThrow({
       where: { id: 'hl_001_01' },
-      select: { title: true, intensity: true },
+      select: { title: true, intensity: true, templateId: true, type: true },
     });
     const res = await app.inject({
       method: 'PATCH',
@@ -130,9 +130,36 @@ describe('PATCH /admin/highlights/:highlightId', () => {
     const body = res.json();
     expect(body.data.title).toBe('更新后的标题');
     expect(body.data.intensity).toBe(5);
+    expect(body.data.templateId).toBe('boost_action');
+    expect(body.data.displayMode).toBe('interactive_component');
 
     await prisma.highlight.update({
       where: { id: 'hl_001_01' },
+      data: original,
+    });
+  });
+
+  it('should normalize low intensity highlights back to quick prompt template', async () => {
+    const original = await prisma.highlight.findUniqueOrThrow({
+      where: { id: 'hl_001_02' },
+      select: { intensity: true, templateId: true, type: true },
+    });
+    const res = await app.inject({
+      method: 'PATCH',
+      url: '/admin/highlights/hl_001_02',
+      headers: ADMIN_AUTH,
+      payload: { intensity: 2, templateId: 'vote_side' },
+    });
+    expect(res.statusCode).toBe(200);
+    const body = res.json();
+    expect(body.data.intensity).toBe(2);
+    expect(body.data.templateId).toBe('emotion_button');
+    expect(body.data.displayMode).toBe('quick_prompt');
+    expect(body.data.soundEnabled).toBe(false);
+    expect(body.data.singleUse).toBe(true);
+
+    await prisma.highlight.update({
+      where: { id: 'hl_001_02' },
       data: original,
     });
   });
@@ -758,6 +785,53 @@ describe('POST /admin/episodes/:episodeId/branch-options/refresh', () => {
     expect(artifactA.resultHook).not.toBe(artifactB.resultHook);
     expect(artifactA.resultStory).not.toBe(artifactB.resultStory);
     expect(artifactA.storyboardJson).not.toBe(artifactB.storyboardJson);
+  });
+});
+
+describe('GET /admin/episodes/:episodeId/branch-options', () => {
+  it('should return artifact diagnostics and preserve detail payloads even when public validation fails', async () => {
+    const refreshRes = await app.inject({
+      method: 'POST',
+      url: '/admin/episodes/ep_002_23/branch-options/refresh',
+      headers: {
+        ...ADMIN_AUTH,
+        host: '192.168.1.88:8787',
+      },
+    });
+    expect(refreshRes.statusCode).toBe(200);
+
+    const artifactPath = path.resolve(
+      process.cwd(),
+      '../assets/generated/fixed-branches/ep_002_23/bo_002_01.json',
+    );
+    const raw = await fs.readFile(artifactPath, 'utf-8');
+    const artifact = JSON.parse(raw);
+
+    try {
+      artifact.branchOptionUpdatedAtSnapshot = '1999-01-01T00:00:00.000Z';
+      await fs.writeFile(artifactPath, JSON.stringify(artifact, null, 2) + '\n', 'utf-8');
+
+      const res = await app.inject({
+        method: 'GET',
+        url: '/admin/episodes/ep_002_23/branch-options',
+        headers: {
+          ...ADMIN_AUTH,
+          host: '192.168.1.88:8787',
+        },
+      });
+      expect(res.statusCode).toBe(200);
+
+      const body = res.json();
+      expect(body.code).toBe(0);
+      expect(body.data[0].artifactValid).toBe(false);
+      expect(body.data[0].artifactStatus).toBe('snapshot_mismatch');
+      expect(body.data[0].artifactValidationMessage).toContain('快照时间不一致');
+      expect(body.data[0].generatedPayloadPath).toContain('/static/assets/generated/fixed-branches/ep_002_23/');
+      expect(body.data[0].resultStory).toContain('江青纸');
+      expect(body.data[0].shotPromptJson).toContain('江青纸');
+    } finally {
+      await fs.writeFile(artifactPath, raw, 'utf-8');
+    }
   });
 });
 

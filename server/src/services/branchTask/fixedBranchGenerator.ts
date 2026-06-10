@@ -53,6 +53,29 @@ interface FixedBranchManifest {
   artifactSignatures: Record<string, string>;
 }
 
+export type FixedBranchArtifactInspectionStatus =
+  | 'valid'
+  | 'missing_manifest'
+  | 'missing_artifact'
+  | 'invalid_artifact'
+  | 'content_version_mismatch'
+  | 'option_not_in_manifest'
+  | 'snapshot_mismatch'
+  | 'signature_mismatch';
+
+export interface FixedBranchArtifactInspection {
+  status: FixedBranchArtifactInspectionStatus;
+  isValid: boolean;
+  relativePath: string;
+  artifact: FixedBranchArtifact | null;
+  optionUpdatedAt: string;
+  manifestSnapshot: string;
+  artifactSnapshot: string;
+  expectedSignature: string;
+  manifestSignature: string;
+  artifactSignature: string;
+}
+
 export interface RefreshedFixedBranchOption {
   optionId: string;
   title: string;
@@ -249,12 +272,39 @@ async function readManifest(episodeId: string): Promise<FixedBranchManifest | nu
 export async function loadFixedBranchArtifact(
   option: BranchOption,
 ): Promise<{ relativePath: string; artifact: FixedBranchArtifact } | null> {
-  const manifest = await readManifest(option.episodeId);
-  if (!manifest) {
+  const inspection = await inspectFixedBranchArtifact(option);
+  if (!inspection.isValid || !inspection.artifact) {
     return null;
   }
 
+  return {
+    relativePath: inspection.relativePath,
+    artifact: inspection.artifact,
+  };
+}
+
+export async function inspectFixedBranchArtifact(
+  option: BranchOption,
+): Promise<FixedBranchArtifactInspection> {
+  const manifest = await readManifest(option.episodeId);
   const relativePath = buildArtifactRelativePath(option.episodeId, option.id);
+  const optionUpdatedAt = option.updatedAt.toISOString();
+
+  if (!manifest) {
+    return {
+      status: 'missing_manifest',
+      isValid: false,
+      relativePath,
+      artifact: null,
+      optionUpdatedAt,
+      manifestSnapshot: '',
+      artifactSnapshot: '',
+      expectedSignature: '',
+      manifestSignature: '',
+      artifactSignature: '',
+    };
+  }
+
   const absolutePath = buildArtifactAbsolutePath(relativePath);
 
   try {
@@ -268,27 +318,73 @@ export async function loadFixedBranchArtifact(
       candidateKey: artifact.candidateKey,
       candidatePrompt: artifact.candidatePrompt,
     });
+    const manifestSnapshot = manifest.optionUpdatedAtSnapshots[option.id] ?? '';
+    const artifactSnapshot = artifact.branchOptionUpdatedAtSnapshot ?? '';
+    const manifestSignature = manifest.artifactSignatures[option.id] ?? '';
+    const artifactSignature = artifact.artifactSignature ?? '';
+
+    let status: FixedBranchArtifactInspectionStatus = 'valid';
 
     if (
       typeof artifact.contentVersion !== 'number' ||
       artifact.contentVersion < 1 ||
-      manifest.contentVersion !== artifact.contentVersion ||
-      !manifest.optionIds.includes(option.id) ||
-      manifest.optionUpdatedAtSnapshots[option.id] !== option.updatedAt.toISOString() ||
-      manifest.artifactSignatures[option.id] !== expectedSignature ||
-      artifact.branchOptionUpdatedAtSnapshot !== option.updatedAt.toISOString() ||
-      artifact.artifactSignature !== expectedSignature
+      manifest.contentVersion !== artifact.contentVersion
     ) {
-      return null;
+      status = 'content_version_mismatch';
+    } else if (!manifest.optionIds.includes(option.id)) {
+      status = 'option_not_in_manifest';
+    } else if (
+      manifestSnapshot !== optionUpdatedAt
+      || artifactSnapshot !== optionUpdatedAt
+    ) {
+      status = 'snapshot_mismatch';
+    } else if (
+      manifestSignature !== expectedSignature
+      || artifactSignature !== expectedSignature
+    ) {
+      status = 'signature_mismatch';
     }
 
     return {
+      status,
+      isValid: status === 'valid',
       relativePath,
       artifact,
+      optionUpdatedAt,
+      manifestSnapshot,
+      artifactSnapshot,
+      expectedSignature,
+      manifestSignature,
+      artifactSignature,
     };
   } catch (error: any) {
     if (error?.code === 'ENOENT') {
-      return null;
+      return {
+        status: 'missing_artifact',
+        isValid: false,
+        relativePath,
+        artifact: null,
+        optionUpdatedAt,
+        manifestSnapshot: manifest.optionUpdatedAtSnapshots[option.id] ?? '',
+        artifactSnapshot: '',
+        expectedSignature: '',
+        manifestSignature: manifest.artifactSignatures[option.id] ?? '',
+        artifactSignature: '',
+      };
+    }
+    if (error instanceof SyntaxError) {
+      return {
+        status: 'invalid_artifact',
+        isValid: false,
+        relativePath,
+        artifact: null,
+        optionUpdatedAt,
+        manifestSnapshot: manifest.optionUpdatedAtSnapshots[option.id] ?? '',
+        artifactSnapshot: '',
+        expectedSignature: '',
+        manifestSignature: manifest.artifactSignatures[option.id] ?? '',
+        artifactSignature: '',
+      };
     }
     throw error;
   }
@@ -401,6 +497,7 @@ export async function refreshFixedBranchOptionsForEpisode(episodeId: string): Pr
   const candidates = await generateFixedBranchCandidates(context, Math.max(3, options.length + 1));
   const prepared = await Promise.all(options.map((option, index) => prepareFixedBranchOption(option, candidates[index] ?? candidates[0])));
   const tempManifestPath = `${buildManifestRelativePath(episodeId)}.${randomUUID()}.tmp`;
+  const snapshotAt = new Date();
 
   for (const item of prepared) {
     await writeArtifact(item.tempPayloadPath, item.artifact);
@@ -416,13 +513,23 @@ export async function refreshFixedBranchOptionsForEpisode(episodeId: string): Pr
     }> = [];
 
     for (const item of prepared) {
-      const option = await tx.branchOption.update({
+      await tx.branchOption.update({
         where: { id: item.option.id },
         data: {
           title: item.title,
           description: item.description,
           resultType: 'image_story',
         },
+      });
+      // Prisma may keep updatedAt unchanged when values remain identical, so
+      // stamp the snapshot explicitly to keep DB, manifest and artifact aligned.
+      await tx.$executeRaw`
+        UPDATE branch_options
+        SET updated_at = ${snapshotAt}
+        WHERE id = ${item.option.id}
+      `;
+      const option = await tx.branchOption.findUniqueOrThrow({
+        where: { id: item.option.id },
       });
       updated.push(option);
     }

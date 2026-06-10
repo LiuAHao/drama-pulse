@@ -11,7 +11,9 @@ import com.dramapulse.app.core.data.PlayerUiRepository
 import com.dramapulse.app.core.data.ProgressRepository
 import com.dramapulse.app.core.model.BranchOptionModel
 import com.dramapulse.app.core.model.EpisodeModel
+import com.dramapulse.app.core.model.HIGHLIGHT_TEMPLATE_EMOTION_BUTTON
 import com.dramapulse.app.core.model.HighlightModel
+import com.dramapulse.app.core.model.HighlightDisplayMode
 import com.dramapulse.app.core.player.PlaybackState
 import com.dramapulse.app.core.player.PlaybackUiState
 import com.dramapulse.app.core.player.PlayerController
@@ -584,7 +586,9 @@ class PlayerViewModel(
     private fun submitInteraction(highlightId: String, optionText: String) {
         val meta = _uiState.value.meta
         val episodeId = meta.currentEpisode?.id ?: return
-        val highlight = _uiState.value.highlight.highlights.firstOrNull { it.id == highlightId } ?: return
+        val highlight = _uiState.value.highlight.activeHighlight?.takeIf { it.id == highlightId }
+            ?: _uiState.value.highlight.highlights.firstOrNull { it.id == highlightId }
+            ?: return
         val clickCount = _uiState.value.highlight.interactionClickCountByHighlightId[highlightId] ?: 0
         val currentPositionMs = _uiState.value.playback.currentPositionMs
 
@@ -625,6 +629,7 @@ class PlayerViewModel(
                             activeHighlight = it.highlight.activeHighlight?.let { active ->
                                 if (active.id == highlightId) active.copy(stats = stats) else active
                             },
+                            activeInteractionEnabled = if (highlight.isQuickPrompt) false else it.highlight.activeInteractionEnabled,
                             triggeredHighlightIds = it.highlight.triggeredHighlightIds + highlightId,
                             interactionClickCountByHighlightId = it.highlight.interactionClickCountByHighlightId +
                                 (highlightId to (clickCount + 1)),
@@ -712,7 +717,9 @@ class PlayerViewModel(
                     )
                 }
             } else {
-                val interactable = currentActive.isInteractableAt(position)
+                val quickPromptConsumed = currentActive.isQuickPrompt &&
+                    _uiState.value.highlight.quickPromptConsumedOptionByHighlightId.containsKey(currentActive.id)
+                val interactable = currentActive.isInteractableAt(position) && !quickPromptConsumed
                 if (interactable != _uiState.value.highlight.activeInteractionEnabled) {
                     _uiState.update {
                         it.copy(
@@ -769,7 +776,13 @@ class PlayerViewModel(
                 (sourceHighlight.interactionAppearMs - previous.interactionEndMs) <= STRONG_HIGHLIGHT_FOLLOWUP_DOWNGRADE_WINDOW_MS
         }
         val effectiveHighlight = if (shouldDowngradeToQuickPrompt) {
-            sourceHighlight.copy(intensity = QUICK_PROMPT_DOWNGRADED_INTENSITY)
+            sourceHighlight.copy(
+                intensity = QUICK_PROMPT_DOWNGRADED_INTENSITY,
+                displayMode = HighlightDisplayMode.QUICK_PROMPT,
+                resolvedInteractionType = HIGHLIGHT_TEMPLATE_EMOTION_BUTTON,
+                soundEnabled = false,
+                singleUse = true,
+            )
         } else {
             sourceHighlight
         }

@@ -68,7 +68,7 @@ export function BranchTasksPage() {
 
   const fixedBranchesQuery = useQuery({
     queryKey: ['admin', 'fixedBranchOptions', fixedEpisodeId],
-    queryFn: () => apiRequest<BranchOption[]>(`/episodes/${fixedEpisodeId}/branch-options`),
+    queryFn: () => apiRequest<BranchOption[]>(`/admin/episodes/${fixedEpisodeId}/branch-options`),
     enabled: fixedEpisodeId.length > 0,
   });
 

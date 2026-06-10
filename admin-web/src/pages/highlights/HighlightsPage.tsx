@@ -23,6 +23,7 @@ const TYPE_OPTIONS = [
 const TEMPLATE_OPTIONS = [
   { value: 'emotion_button', label: 'emotion_button' },
   { value: 'vote_side', label: 'vote_side' },
+  { value: 'suspense_lock', label: 'suspense_lock' },
   { value: 'boost_action', label: 'boost_action' },
 ];
 

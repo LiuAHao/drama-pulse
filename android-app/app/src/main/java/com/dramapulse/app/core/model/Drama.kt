@@ -42,6 +42,14 @@ data class HighlightModel(
     val description: String,
     val intensity: Int,
     val templateId: String = "",
+    val displayMode: HighlightDisplayMode = if (intensity <= QUICK_PROMPT_MAX_INTENSITY) {
+        HighlightDisplayMode.QUICK_PROMPT
+    } else {
+        HighlightDisplayMode.INTERACTIVE_COMPONENT
+    },
+    val resolvedInteractionType: String = "",
+    val soundEnabled: Boolean = displayMode != HighlightDisplayMode.QUICK_PROMPT,
+    val singleUse: Boolean = displayMode == HighlightDisplayMode.QUICK_PROMPT,
     val visualEffectType: String = "",
     val source: String = "manual",
     val confidence: Double = 1.0,
@@ -52,7 +60,7 @@ data class HighlightModel(
     val stats: HighlightStatsModel?
 ) {
     val isQuickPrompt: Boolean
-        get() = templateId == HIGHLIGHT_TEMPLATE_EMOTION_BUTTON || intensity <= 2
+        get() = displayMode == HighlightDisplayMode.QUICK_PROMPT
 
     fun isVisibleAt(positionMs: Long): Boolean =
         positionMs in interactionAppearMs..interactionEndMs
@@ -61,12 +69,14 @@ data class HighlightModel(
         positionMs in interactionStartMs..interactionEndMs
 
     fun compatibilityInteractionType(): String =
+        resolvedInteractionType.ifBlank {
         when (templateId) {
-            HIGHLIGHT_TEMPLATE_EMOTION_BUTTON,
             HIGHLIGHT_TEMPLATE_VOTE_SIDE,
             HIGHLIGHT_TEMPLATE_SUSPENSE_LOCK -> templateId
+            HIGHLIGHT_TEMPLATE_EMOTION_BUTTON -> if (isQuickPrompt) HIGHLIGHT_TEMPLATE_EMOTION_BUTTON else HIGHLIGHT_TEMPLATE_BOOST_ACTION
             else -> if (isQuickPrompt) HIGHLIGHT_TEMPLATE_EMOTION_BUTTON else HIGHLIGHT_TEMPLATE_BOOST_ACTION
         }
+    }
 
     fun isClientDisplayable(): Boolean =
         status == "confirmed"
@@ -95,6 +105,22 @@ data class HighlightModel(
             return title.ifBlank { type.fallbackOptionText() }
         }
         return interactionOptions[clickIndex.mod(interactionOptions.size)].text
+    }
+}
+
+private const val QUICK_PROMPT_MAX_INTENSITY = 2
+
+enum class HighlightDisplayMode {
+    QUICK_PROMPT,
+    INTERACTIVE_COMPONENT;
+
+    companion object {
+        fun from(raw: String, intensity: Int): HighlightDisplayMode =
+            when (raw) {
+                "quick_prompt" -> QUICK_PROMPT
+                "interactive_component" -> INTERACTIVE_COMPONENT
+                else -> if (intensity <= QUICK_PROMPT_MAX_INTENSITY) QUICK_PROMPT else INTERACTIVE_COMPONENT
+            }
     }
 }
 

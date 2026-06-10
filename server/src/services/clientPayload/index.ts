@@ -10,6 +10,7 @@ import type {
 } from '@prisma/client';
 import { pathToUrl } from '../resource/index.js';
 import type { FixedBranchArtifact } from '../branchTask/fixedBranchGenerator.js';
+import { normalizeHighlightConfig } from '../highlight/config.js';
 
 const DEFAULT_HIGHLIGHT_STATS = {
   totalCount: 0,
@@ -102,6 +103,11 @@ export function toClientHighlight(
   stats?: HighlightStats | null
 ) {
   const normalizedInteractionOptionsJson = normalizeHighlightOptionsJson(highlight.interactionOptionsJson);
+  const normalizedConfig = normalizeHighlightConfig({
+    type: highlight.type,
+    intensity: highlight.intensity,
+    templateId: highlight.templateId,
+  });
   return {
     id: highlight.id,
     episodeId: highlight.episodeId,
@@ -110,11 +116,15 @@ export function toClientHighlight(
     interactionStartMs: highlight.interactionStartMs ?? highlight.startTimeMs,
     interactionAppearMs: highlight.interactionAppearMs ?? highlight.interactionStartMs ?? highlight.startTimeMs,
     interactionEndMs: highlight.interactionEndMs ?? (highlight.endTimeMs + 1500),
-    type: highlight.type,
+    type: normalizedConfig.type,
     title: highlight.title,
     description: highlight.description,
-    intensity: highlight.intensity,
-    templateId: highlight.templateId,
+    intensity: normalizedConfig.intensity,
+    templateId: normalizedConfig.templateId,
+    displayMode: normalizedConfig.displayMode,
+    resolvedInteractionType: normalizedConfig.resolvedInteractionType,
+    soundEnabled: normalizedConfig.soundEnabled,
+    singleUse: normalizedConfig.singleUse,
     interactionOptionsJson: normalizedInteractionOptionsJson,
     visualEffectType: highlight.visualEffectType,
     source: highlight.source,

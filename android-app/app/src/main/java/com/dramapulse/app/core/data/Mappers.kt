@@ -57,6 +57,7 @@ fun HighlightDto.toModel(): HighlightModel {
     } catch (_: Exception) {
         emptyList()
     }
+    val resolvedDisplayMode = HighlightDisplayMode.from(displayMode, intensity)
     return HighlightModel(
         id = id,
         episodeId = episodeId,
@@ -70,6 +71,10 @@ fun HighlightDto.toModel(): HighlightModel {
         description = description,
         intensity = intensity,
         templateId = templateId,
+        displayMode = resolvedDisplayMode,
+        resolvedInteractionType = resolvedInteractionType,
+        soundEnabled = soundEnabled ?: resolvedDisplayMode != HighlightDisplayMode.QUICK_PROMPT,
+        singleUse = singleUse ?: resolvedDisplayMode == HighlightDisplayMode.QUICK_PROMPT,
         visualEffectType = visualEffectType,
         source = source,
         confidence = confidence,
