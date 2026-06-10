@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ep_001_23 / bo_001_01 分镜预览</title>
+  <style>
+    :root {
+      --bg: #f5efe7;
+      --panel: #fffaf4;
+      --line: #d9c8b5;
+      --text: #34281f;
+      --muted: #786554;
+      --accent: #8f5d3b;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(143, 93, 59, 0.12), transparent 36%),
+        linear-gradient(180deg, #f8f1e8 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .wrap {
+      width: min(1100px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 32px 0 48px;
+    }
+    .hero {
+      background: rgba(255, 250, 244, 0.92);
+      border: 1px solid rgba(143, 93, 59, 0.16);
+      border-radius: 24px;
+      padding: 24px;
+      box-shadow: 0 18px 48px rgba(70, 45, 24, 0.08);
+      margin-bottom: 20px;
+    }
+    .eyebrow {
+      color: var(--accent);
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.2;
+    }
+    .hook {
+      margin: 14px 0 0;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+    .meta {
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(70, 45, 24, 0.06);
+    }
+    .card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #eadfce;
+    }
+    .card-body {
+      padding: 14px 14px 16px;
+    }
+    .scene {
+      color: var(--accent);
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    .scene-title {
+      margin: 0 0 8px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+    .narration {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.75;
+      color: var(--text);
+    }
+    .dialogue {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <div class="eyebrow">客户端图文分镜预览 / ep_001_23 / bo_001_01</div>
+      <h1>荒年全村啃树皮，我有系统满仓肉：程中安（娘）的情绪兑现结局</h1>
+      <p class="hook">比输赢更先落地的，是程中安（娘）终于把那句压到最后都没说出口的话说了出来。</p>
+      <div class="meta">当前预览使用客户端会拿到的固定分支产物数据顺序渲染，scene 6-9 已替换为最新图片。</div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_01_landscape_v1.png" alt="scene 1">
+        <div class="card-body">
+          <div class="scene">Scene 1</div>
+          <h2 class="scene-title">分支起点</h2>
+          <p class="narration">程家的人堵到院门口时，程中安（娘）没有再躲，直接站到最前面把局面拦了下来。</p>
+          <div class="dialogue">这回谁也别想再压着我。</div>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_02_landscape_v1.png" alt="scene 2">
+        <div class="card-body">
+          <div class="scene">Scene 2</div>
+          <h2 class="scene-title">推进 2</h2>
+          <p class="narration">大山守在她身后，两个人第一次像站在同一边，把这场上门逼问硬生生稳住。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_03_landscape_v1.png" alt="scene 3">
+        <div class="card-body">
+          <div class="scene">Scene 3</div>
+          <h2 class="scene-title">推进 3</h2>
+          <p class="narration">程中安（娘）没有再跟对方硬吵，而是转头追问大山，要把一直没人说透的那层话挑开。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_04_landscape_v1.png" alt="scene 4">
+        <div class="card-body">
+          <div class="scene">Scene 4</div>
+          <h2 class="scene-title">推进 4</h2>
+          <p class="narration">话到嘴边时她短暂沉住气，大山也第一次没有躲开她的目光，气氛一下压了下来。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_05_landscape_v1.png" alt="scene 5">
+        <div class="card-body">
+          <div class="scene">Scene 5</div>
+          <h2 class="scene-title">推进 5</h2>
+          <p class="narration">那句最关键的话终于被点破后，大山的神情明显变了，原本僵着的关系开始松动。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_06_landscape_v1.png" alt="scene 6">
+        <div class="card-body">
+          <div class="scene">Scene 6</div>
+          <h2 class="scene-title">推进 6</h2>
+          <p class="narration">程中安（娘）站在原地没动，大山却第一次主动朝她靠近，像是终于愿意站到她这一边。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_07_landscape_v1.png" alt="scene 7">
+        <div class="card-body">
+          <div class="scene">Scene 7</div>
+          <h2 class="scene-title">推进 7</h2>
+          <p class="narration">门内短暂停住时，程中安（娘）回身看向大山，把真正的决定亲口说给他听；大山第一次正面接住了这句话。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_08_landscape_v1.png" alt="scene 8">
+        <div class="card-body">
+          <div class="scene">Scene 8</div>
+          <h2 class="scene-title">推进 8</h2>
+          <p class="narration">话一落定，两人没有再守在门里门外对峙，而是一前一后迈出门槛，朝同一个方向走去。</p>
+        </div>
+      </article>
+
+      <article class="card">
+        <img src="http://127.0.0.1:8787/static/assets/generated/manual-storyboard-tests/ep_001_23_bo_001_01_scene_09_landscape_v1.png" alt="scene 9">
+        <div class="card-body">
+          <div class="scene">Scene 9</div>
+          <h2 class="scene-title">结局收口</h2>
+          <p class="narration">走到村路口时，程中安（娘）终于停下脚步，大山稳稳站在她身侧，这一次局势真的被她扳了回来。</p>
+          <div class="dialogue">往后这条路，我们自己走。</div>
+        </div>
+      </article>
+    </section>
+  </main>
+</body>
+</html>

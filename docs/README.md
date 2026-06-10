@@ -42,6 +42,7 @@
 
 ## 5. 交付素材
 
+- [交付素材说明](/Users/a0000/Desktop/项目文件/drama-pulse/docs/submission-assets/README.md)
 - 截图目录：[screenshots](/Users/a0000/Desktop/项目文件/drama-pulse/docs/submission-assets/screenshots)
 - 录屏目录：[videos](/Users/a0000/Desktop/项目文件/drama-pulse/docs/submission-assets/videos)
 

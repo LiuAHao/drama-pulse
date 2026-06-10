@@ -26,6 +26,7 @@ Drama Pulse 是一个面向短剧场景的互动播放器项目。
 - `尾集分支`：固定分支与自定义分支结果已经统一到 `image_story + storyboardCards` 的图文消费结构
 - `本地部署`：服务端默认监听 `0.0.0.0:8787`，支持本机与局域网联调
 - `交付素材`：截图与录屏素材统一放在 `docs/submission-assets/`
+- `APK 归档`：当前可安装 debug APK 已归档到 `docs/submission-assets/apk/`
 
 ## 仓库结构
 
@@ -41,6 +42,7 @@ assets/generated/manual-storyboard-tests/
 videos/                      本地原始短剧视频资源
 docs/                        产品、技术、交付、启动与专项实施文档
 docs/submission-assets/      交付截图与录屏素材
+docs/submission-assets/apk/  归档 APK
 data/                        导出与 seed 辅助数据
 server/data/                 服务端运行库与测试库
 tmp/                         本地预览与同步临时文件
@@ -101,6 +103,7 @@ cd /Users/a0000/Desktop/项目文件/drama-pulse/android-app
 - [项目交付文档-飞书提交版](/Users/a0000/Desktop/项目文件/drama-pulse/docs/项目交付文档-飞书提交版.md)
 - [本地启动与后台登录说明](/Users/a0000/Desktop/项目文件/drama-pulse/docs/本地启动与后台登录说明.md)
 - [项目结构说明](/Users/a0000/Desktop/项目文件/drama-pulse/docs/项目结构说明.md)
+- [交付素材说明](/Users/a0000/Desktop/项目文件/drama-pulse/docs/submission-assets/README.md)
 
 核心技术文档：
 
